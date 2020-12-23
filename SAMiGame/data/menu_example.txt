@@ -1,0 +1,17 @@
+width (number)
+height (number)
+color-red (0-255)
+color-green (0-255)
+color-blue (0-255)
+direction (number[Left=0, Right=1, Up=2, Down=3])
+number of buttons (number)
+number of submenus (number)
+<For each button:>
+number of lines (number, usually 3)
+width (number)
+height (number)
+fontsize (number, in pixels)
+text (string)
+<for each menu:>
+number of lines (number, usually >= 8)
+<same format as the rest of this page>

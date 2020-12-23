@@ -1,0 +1,68 @@
+Json File -> In-Game Menu
+
+Menu behavior (description):
+all items are stacked along the specified direction, firsly buttons, then submenus.Items are cut off if they're too long perpendicular to the direction, but scroll bars appear parallel to the direction.
+
+Menu behavior:
+size = (22,11)
+direction = down
+buttons = [(3,3),(6,2)]
+submenus = [(12,12)]
+
++------------------+-+
+|        +-+       | |
+|        | |       |S|
+|        +-+       |C|
+|                  |R|
+|      +----+      |O|
+|      +----+      |L|
+|                  |L|
+|   +----------+   | |
++------------------+-+
+
+Menu behavior:
+size=(24,12);
+direction = down;
+submenus = [
+	{size=(22,3),direction=right,buttons=[(1,1),(1,1),(1,1),(1,1),(2,1),(1,1),(1,1)]},
+	{size=(22,7),direction=down,buttons=[(10,1),(40,1),(10,1)]}
+	]
++----------------------+
+|+--------------------+|
+|| + + + + ++ + +     ||
+|+--------------------+|
+|+--------------------+|
+||     +--------+     ||
+||                    ||
+||--------------------||
+||                    ||
+||     +--------+     ||
+|+--------------------+|
++----------------------+
+
+
+class MenuMaster
+{
+Menu menus[]
+enum menuOptions {exit=0, ...}
+}
+
+class Menu
+{
+Submenu submenus[]
+FixedMenubutton buttons[]
+Rect size
+enum direction {up, down, left, right}
+// other stuff relating to how it looks
+string imagePath
+int borderThickness
+int itemSeparationDistance
+}
+
+class MenuButton
+{
+Rect size
+int menuOption // refers to the MenuMaster
+int shortcut // optional keyboard shortcut
+// MenuButtons are going to have to have some way of figuring out frames from a spritesheet + frame file.
+}

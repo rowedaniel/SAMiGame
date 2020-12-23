@@ -1,0 +1,66 @@
+﻿  Game.cpp
+  main.cpp
+  MainMenu.cpp
+  Menu.cpp
+  MenuButton.cpp
+c:\users\bob joe\source\repos\samigame\samigame\menus\menubutton.cpp(46): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\bob joe\source\repos\samigame\samigame\menus\menubutton.cpp(101): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\bob joe\source\repos\samigame\samigame\menus\menubutton.cpp(100): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+  MenuItem.cpp
+c:\users\bob joe\source\repos\samigame\samigame\menus\menuitem.cpp(83): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\bob joe\source\repos\samigame\samigame\menus\menuitem.cpp(88): warning C4244: 'argument': conversion from 'const int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\bob joe\source\repos\samigame\samigame\menus\menuitem.cpp(90): warning C4244: 'argument': conversion from 'const int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\bob joe\source\repos\samigame\samigame\menus\menuitem.cpp(197): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\bob joe\source\repos\samigame\samigame\menus\menuitem.cpp(196): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\bob joe\source\repos\samigame\samigame\menus\menuitem.cpp(223): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\bob joe\source\repos\samigame\samigame\menus\menuitem.cpp(222): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+  SplashScreen.cpp
+  stdafx.cpp
+  Tile.cpp
+  TileManager.cpp
+c:\users\bob joe\source\repos\samigame\samigame\tilemanager.cpp(50): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  VisualGameObject.cpp
+  Generating code
+  All 578 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  0302.vcxproj -> C:\Users\Bob Joe\source\repos\SAMiGame\Release\SAMiGame.exe
