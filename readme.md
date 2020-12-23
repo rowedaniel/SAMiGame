@@ -8,3 +8,5 @@ Compile with VisualStudio 2017
 
 ============== Credits ==============   
 Development of this C++ suite of codes was done by Daniel Neshyba-Rowe and is freely available. Please share any suggestions for improvement.
+
+SFML is owned by their respective owners (not Daniel).
