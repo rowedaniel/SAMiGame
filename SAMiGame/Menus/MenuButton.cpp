@@ -50,6 +50,9 @@ void MenuButton::getFileLineData(int i, std::string line, LoadInfo & loadInfo)
 {
 	// TODO: copy parts of this into menu button class
 	MenuItem::getFileLineData(i, line, loadInfo.oldInfo);
+	if (i < 6) { // don't bother for early stuff
+		return;
+	}
 	switch (i) {
 	case 6:
 	{

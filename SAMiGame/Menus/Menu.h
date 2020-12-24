@@ -20,6 +20,8 @@ public:
 	void updatePos(sf::Vector2f pos);
 	void updateItemPos();
 
+	int id;
+
 
 private:
 	Menu::Direction direction;
@@ -34,6 +36,7 @@ private:
 	{
 	public:
 		MenuItem::LoadInfo oldInfo;
+		int id = 0;
 		int numberOfButtons = 0;
 		int numberOfSubmenus = 0;
 		int extraLines = 0;

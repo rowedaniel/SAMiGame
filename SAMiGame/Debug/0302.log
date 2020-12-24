@@ -1,6 +1,5 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (0302.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   Game.cpp
-  main.cpp
   MainMenu.cpp
   Menu.cpp
   MenuButton.cpp
@@ -9,57 +8,15 @@ c:\users\bob joe\source\repos\samigame\samigame\menus\menubutton.cpp(46): warnin
           [
               T=float
           ]
-c:\users\bob joe\source\repos\samigame\samigame\menus\menubutton.cpp(101): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+c:\users\bob joe\source\repos\samigame\samigame\menus\menubutton.cpp(104): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\bob joe\source\repos\samigame\samigame\menus\menubutton.cpp(100): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+c:\users\bob joe\source\repos\samigame\samigame\menus\menubutton.cpp(103): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-  MenuItem.cpp
-c:\users\bob joe\source\repos\samigame\samigame\menus\menuitem.cpp(83): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\bob joe\source\repos\samigame\samigame\menus\menuitem.cpp(88): warning C4244: 'argument': conversion from 'const int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\bob joe\source\repos\samigame\samigame\menus\menuitem.cpp(90): warning C4244: 'argument': conversion from 'const int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\bob joe\source\repos\samigame\samigame\menus\menuitem.cpp(197): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\bob joe\source\repos\samigame\samigame\menus\menuitem.cpp(196): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\bob joe\source\repos\samigame\samigame\menus\menuitem.cpp(223): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\bob joe\source\repos\samigame\samigame\menus\menuitem.cpp(222): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-  SplashScreen.cpp
-  stdafx.cpp
-  Tile.cpp
-  TileManager.cpp
-c:\users\bob joe\source\repos\samigame\samigame\tilemanager.cpp(50): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  VisualGameObject.cpp
   Generating Code...
   0302.vcxproj -> C:\Users\Bob Joe\source\repos\SAMiGame\Debug\SAMiGame.exe

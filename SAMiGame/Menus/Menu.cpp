@@ -164,27 +164,31 @@ void Menu::getFileLineData(int i, std::string line, LoadInfo & loadInfo)
 {
 	// TODO: copy parts of this into menu button class
 	MenuItem::getFileLineData(i, line, loadInfo.oldInfo);
+	if (i < 6) { // don't bother for early stuff
+		return;
+	}
 	switch (i) {
-	case 6:
+	case 6: 
+	{
+		loadInfo.id = std::stoi(line);
+	}
+	case 7:
 	{
 		loadInfo.dir = std::stoi(line);
 		break;
 	}
-	case 7:
+	case 8:
 	{
 		loadInfo.numberOfButtons = std::stoi(line);
 		break;
 	}
-	case 8:
+	case 9:
 	{
 		loadInfo.numberOfSubmenus = std::stoi(line);
 		break;
 	}
 	default:
 	{
-		if (i < 8) {
-			break;
-		}
 		if (loadInfo.numberOfButtons > 0) {
 			if (loadInfo.extraLines <= 0) {
 				loadInfo.extraLines = std::stoi(line);
