@@ -1,6 +1,7 @@
 #pragma once
 #include "../stdafx.h"
 #include "MenuItem.h"
+#include "MenuText.h"
 #include "MenuButton.h"
 
 
@@ -20,7 +21,11 @@ public:
 	void updatePos(sf::Vector2f pos);
 	void updateItemPos();
 
-	int id;
+
+	void checkMouseDown(sf::Vector2f pos);
+	std::tuple<int, int> checkMouseUp(sf::Vector2f pos);
+
+	int id = 0;
 
 
 private:
@@ -28,6 +33,7 @@ private:
 	sf::Texture texture;// TODO: move all textures to a resource manager of some sort
 
 	std::list<Menu> menus;
+	std::list<MenuText> texts;
 	std::list<MenuButton> buttons;
 
 
@@ -37,10 +43,12 @@ private:
 	public:
 		MenuItem::LoadInfo oldInfo;
 		int id = 0;
+		int numberOfTexts = 0;
 		int numberOfButtons = 0;
 		int numberOfSubmenus = 0;
 		int extraLines = 0;
-		int dir;
+		int dir = 0;
+		std::list<std::string> textText;
 		std::list<std::string> buttonText;
 		std::list<std::string> submenuText;
 	};

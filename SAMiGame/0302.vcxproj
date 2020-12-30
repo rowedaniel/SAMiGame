@@ -130,6 +130,8 @@
     <ClCompile Include="Menus\Menu.cpp" />
     <ClCompile Include="Menus\MenuButton.cpp" />
     <ClCompile Include="Menus\MenuItem.cpp" />
+    <ClCompile Include="Menus\MenuManager.cpp" />
+    <ClCompile Include="Menus\MenuText.cpp" />
     <ClCompile Include="SplashScreen.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Tile.cpp" />
@@ -142,6 +144,8 @@
     <ClInclude Include="Menus\Menu.h" />
     <ClInclude Include="Menus\MenuButton.h" />
     <ClInclude Include="Menus\MenuItem.h" />
+    <ClInclude Include="Menus\MenuManager.h" />
+    <ClInclude Include="Menus\MenuText.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SplashScreen.h" />
     <ClInclude Include="stdafx.h" />

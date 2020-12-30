@@ -54,6 +54,12 @@
     <ClCompile Include="Menus\MenuItem.cpp">
       <Filter>Source Files\Menus</Filter>
     </ClCompile>
+    <ClCompile Include="Menus\MenuManager.cpp">
+      <Filter>Source Files\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="Menus\MenuText.cpp">
+      <Filter>Source Files\Menus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -87,6 +93,12 @@
       <Filter>Header Files\Menus</Filter>
     </ClInclude>
     <ClInclude Include="Menus\MenuItem.h">
+      <Filter>Header Files\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\MenuManager.h">
+      <Filter>Header Files\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\MenuText.h">
       <Filter>Header Files\Menus</Filter>
     </ClInclude>
   </ItemGroup>

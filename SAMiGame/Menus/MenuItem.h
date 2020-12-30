@@ -14,10 +14,13 @@ public:
 
 	int getWidth();
 	int getHeight();
+	void isLoaded();
 	void updatePos(sf::Vector2f pos);
 
 
 protected:
+	bool loaded = false;
+
 	sf::Texture texture;// TODO: move all textures to a resource manager of some sort
 
 	// position and size go in here:

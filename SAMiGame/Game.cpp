@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Game.h"
-#include "Menus/Menu.h"
-#include "Menus/MenuButton.h"
+#include "Menus/MenuManager.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -100,31 +99,54 @@ void Game::showMenu()
 	std::list<int> test[2];
 
 
-	Menu menu = Menu(6, 6);
+	MenuManager mainMenu = MenuManager(6.0f, 6.0f);
 
 	std::fstream file;
 	file.open("data/menu.txt", std::ios::in);
 	if (file.is_open()) {
-		menu.load(file);
+		mainMenu.load(file);
 	}
 
-	sf::Event currentEvent;
+	sf::Event event;
 	while (_mainWindow.isOpen() && _gameState == Game::ShowingMenu)
 	{
 		// clear screen
 		_mainWindow.clear(sf::Color(0, 0, 0));
 		// draw stuff
-		menu.draw(_mainWindow);
+		mainMenu.draw(_mainWindow);
 		// paint screen
 		_mainWindow.display();
 		// events
-		while (_mainWindow.pollEvent(currentEvent))
+		while (_mainWindow.pollEvent(event))
 		{
-			if (currentEvent.type == sf::Event::Closed)
+			switch (event.type)
+			{
+			case (sf::Event::Closed):
 			{
 				_gameState = Game::Exiting;
 				_mainWindow.close();
+				return;
+			}
+			case (sf::Event::Resized):
+			{
+				std::cout << "new width: " << event.size.width << std::endl;
+				std::cout << "new height: " << event.size.height << std::endl;
 				break;
+			}
+			case (sf::Event::MouseButtonPressed):
+			{
+				if (event.mouseButton.button == sf::Mouse::Left) {
+					mainMenu.checkMouseDown(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
+				}
+				break;
+			}
+			case (sf::Event::MouseButtonReleased):
+			{
+				if (event.mouseButton.button == sf::Mouse::Left) {
+					mainMenu.checkMouseUp(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
+				}
+				break;
+			}
 			}
 		}
 	}

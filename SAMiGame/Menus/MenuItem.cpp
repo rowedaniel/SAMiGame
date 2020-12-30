@@ -19,7 +19,9 @@ void MenuItem::load(std::istream& file)
 	std::string line;
 	int i = 0;
 	while (getline(file, line)) {
-		std::cout << line << std::endl;
+		if (line.substr(0, 2) == "//") {
+			continue;
+		}
 		getFileLineData(++i, line, loadInfo);
 	}
 
@@ -72,6 +74,10 @@ int MenuItem::getWidth()
 int MenuItem::getHeight()
 {
 	return (int)boundingBox.height;
+}
+
+void MenuItem::isLoaded()
+{
 }
 
 void MenuItem::updatePos(sf::Vector2f pos)
@@ -139,7 +145,16 @@ void MenuItem::loadFileData(LoadInfo & loadInfo)
 	background.setSize(sf::Vector2f(boundingBox.width - borderSpriteSize, boundingBox.height - borderSpriteSize));
 
 	// menu color
-	background.setFillColor(sf::Color(loadInfo.red, loadInfo.green, loadInfo.blue));
+	sf::Color color = sf::Color(loadInfo.red, loadInfo.green, loadInfo.blue);
+	background.setFillColor(color);
+	tlCorner.setColor(color);
+	blCorner.setColor(color);
+	trCorner.setColor(color);
+	brCorner.setColor(color);
+	tEdge.setColor(color);
+	bEdge.setColor(color);
+	lEdge.setColor(color);
+	rEdge.setColor(color);
 }
 
 void MenuItem::loadTextureData()

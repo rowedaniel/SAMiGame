@@ -1,21 +1,41 @@
-width (number)
-height (number)
-color-red (0-255)
-color-green (0-255)
-color-blue (0-255)
-id (number)
-direction (number[Left=0, Right=1, Up=2, Down=3])
-number of buttons (number)
-number of submenus (number)
-<For each button:>
-number of lines (number, usually >= 7)
-width (number)
-height (number)
-color-red (0-255)
-color-green (0-255)
-color-blue (0-255)
-fontsize (number, in pixels)
-text (string)
-<for each menu:>
-number of lines (number, usually >= 9)
-<same format as the rest of this page>
+// = ignore this line
+// number of menus (number)
+//
+//
+// <for each menu:>
+// number of lines (number, usually >= 11)
+// width (number)
+// height (number)
+// color-red (0-255)
+// color-green (0-255)
+// color-blue (0-255)
+// id (number)
+// direction (number[Left=0, Right=1, Up=2, Down=3])
+// number of text boxes (number)
+// number of buttons (number)
+// number of submenus (number)
+//
+// <For each text box:>
+// number of lines (number, usually >= 7)
+// width (number)
+// height (number)
+// color-red (0-255)
+// color-green (0-255)
+// color-blue (0-255)
+// fontsize (number, in pixels)
+// text (string)
+// <For each button:>
+// number of lines (number, usually >= 9)
+// width (number)
+// height (number)
+// color-red (0-255)
+// color-green (0-255)
+// color-blue (0-255)
+// fontsize (number, in pixels)
+// text (string)
+// what the button does (number[Switch Menus=0])
+// what the button does it to, i.e. which menu it switches to (number)
+// 
+// <for each menu:>
+// number of lines (number, usually >= 9)
+// <same format as before>
