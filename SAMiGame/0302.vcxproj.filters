@@ -60,6 +60,9 @@
     <ClCompile Include="Menus\MenuText.cpp">
       <Filter>Source Files\Menus</Filter>
     </ClCompile>
+    <ClCompile Include="Menus\LevelMenu.cpp">
+      <Filter>Source Files\Menus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -99,6 +102,9 @@
       <Filter>Header Files\Menus</Filter>
     </ClInclude>
     <ClInclude Include="Menus\MenuText.h">
+      <Filter>Header Files\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\LevelMenu.h">
       <Filter>Header Files\Menus</Filter>
     </ClInclude>
   </ItemGroup>

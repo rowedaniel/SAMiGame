@@ -1,0 +1,7 @@
+Each world has a different gimmic:
+
+Community - 1 extra character 
+Empathy   - 
+Thinking  - characters are hidden at first
+Balance   - no gimmicks, tutorial world
+Adventure - no gimmicks, just really hard (bonus world)
