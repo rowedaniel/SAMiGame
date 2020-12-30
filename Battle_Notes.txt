@@ -1,0 +1,43 @@
+Battle system:
+
+Each person has 2 types:
+
+primary type:
+  - Groundcover
+  - Shrub
+  - Fern
+  - Tree
+
+Groundcover > Fern > Tree > Shrub > Groundcover
+
+Matchups (top=attacker, left=defender)
+Terms (0-0=tie, 1-1=trade, 2-0=win)
++---------------------------+
+|   |  G  |  F  |  T  |  S  |
++===========================+
+| G |  0  |  0  |  1  |  2  |
+| F |  2  |  0  |  0  |  1  |
+| T |  1  |  2  |  0  |  0  |
+| S |  0  |  1  |  2  |  0  |
++---------------------------+
+
+secondary type:
+  - Empathy
+  - Community
+  - Balance
+  - Thinking
+  - Adventure
+
+Empathy > Community > Balance > Thinking > Adventure > Empathy
+
+Matchups (top=attacker, left=defender)
+Terms (2-0=win, 1-1=trade, 0.5-1.5=counter)
++---------------------------------+
+|   |  E  |  C  |  B  |  T  |  A  |
++=================================+
+| E |  1  |  0  | 0.5 | 1.5 |  2  |
+| C |  2  |  1  |  0  | 0.5 | 1.5 |
+| B | 1.5 |  2  |  1  |  0  | 0.5 |
+| T | 0.5 | 1.5 |  2  |  1  |  0  |
+| A |  0  | 0.5 | 1.5 |  2  |  1  |
++---------------------------------+
