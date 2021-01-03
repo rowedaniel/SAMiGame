@@ -161,7 +161,7 @@ void MenuItem::loadTextureData()
 {
 	// load all the menu border images
 	// TODO: put parts of this into parent class for both menu buttons and menus
-	if (!texture.loadFromFile("images/sprites/button2.png")) {
+	if (!texture.loadFromFile("data/images/sprites/button2.png")) {
 		// error
 	}
 	texture.setSmooth(false);

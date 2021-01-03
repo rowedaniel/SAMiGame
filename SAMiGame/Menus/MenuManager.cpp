@@ -44,19 +44,40 @@ void MenuManager::load(std::istream & file)
 
 void MenuManager::draw(sf::RenderWindow & window)
 {
-	activeMenu->draw(window);
+	// TODO: figure out how to do this without the ugly if's
+	if (inLevel) {
+		activeLevel.draw(window);
+	}
+	else {
+		activeMenu->draw(window);
+	}
 }
 
 void MenuManager::checkMouseDown(sf::Vector2f pos)  // checks for buttons being clicked
 {
-	activeMenu->checkMouseDown(pos);
+
+	// TODO: figure out how to do this without the ugly if's
+	if (inLevel) {
+		//activeLevel.checkMouseDown(pos);
+	}
+	else {
+		activeMenu->checkMouseDown(pos);
+	}
 }
 
 
 void MenuManager::checkMouseUp(sf::Vector2f pos)  // checks for buttons being clicked
 {
 	int actionType, actionArg;
-	std::tie(actionType, actionArg) = activeMenu->checkMouseUp(pos);
+	// TODO: figure out how to do this without the ugly if's
+	if (inLevel) {
+		//std::tie(actionType, actionArg) = activeLevel.checkMouseUp(pos);
+		// TODO: make this work. For now, just quit.
+		return;
+	}
+	else {
+		std::tie(actionType, actionArg) = activeMenu->checkMouseUp(pos);
+	}
 	std::cout << "recieved actionType: " << actionType << ", actionArg: " << actionArg << std::endl;
 	executeButton(actionType, actionArg);
 }
@@ -69,11 +90,19 @@ void MenuManager::executeButton(int actionType, int actionArg)
 		swapMenus(actionArg);
 		break;
 	}
+	case MenuManager::StartLevel:
+	{
+		startLevel(actionArg);
+		break;
+	}
 	}
 }
 
 void MenuManager::swapMenus(int id)
 {
+	if (inLevel) {
+		std::cout << "Tried to swap menus while still in level. Not sure how to handle this." << std::endl;
+	}
 	for (std::list<Menu>::iterator it = menus.begin(); it != menus.end(); ++it) {
 		if (it->id == id) {
 			activeMenu = it;
@@ -84,6 +113,25 @@ void MenuManager::swapMenus(int id)
 			std::cout << "didn't swap, id is: " << it->id << std::endl;
 		}
 	}
+}
+
+void MenuManager::startLevel(int id)
+{
+	inLevel = true;
+	std::ostringstream filename;
+	filename << "data/levels/" << id << ".level";
+	std::fstream file;
+
+	file.open(filename.str(), std::ios::in);
+	if (file.is_open()) {
+		activeLevel.load(file);
+		std::cout << "loaded Level " << id << " filename: " << filename.str() << std::endl;
+	}
+}
+
+void MenuManager::stopLevel()
+{
+	inLevel = false;
 }
 
 void MenuManager::getFileLineData(int i, std::string line, LoadInfo & loadInfo)

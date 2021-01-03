@@ -1,12 +1,4 @@
-﻿  MenuText.cpp
-c:\users\bob joe\source\repos\samigame\samigame\menus\menutext.cpp(110): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\bob joe\source\repos\samigame\samigame\menus\menutext.cpp(109): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-  0302.vcxproj -> C:\Users\Bob Joe\source\repos\SAMiGame\Debug\SAMiGame.exe
+﻿  LevelMenu.cpp
+c:\users\daniel\documents\random stuff\samigame\samigame\menus\characterbutton.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\daniel\documents\random stuff\samigame\samigame\menus\characterbutton.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  0302.vcxproj -> C:\Users\Daniel\Documents\Random stuff\SAMiGame\Debug\SAMiGame.exe

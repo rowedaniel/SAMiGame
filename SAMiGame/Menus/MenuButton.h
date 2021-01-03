@@ -13,7 +13,7 @@ public:
 	MenuButton();
 	~MenuButton();
 
-	void load(std::istream& file); // TODO: make this work via istringstring
+	void load(std::istream& file);
 	void draw(sf::RenderWindow & window, sf::FloatRect boundBox);
 
 	void checkMouseDown(sf::Vector2f pos);

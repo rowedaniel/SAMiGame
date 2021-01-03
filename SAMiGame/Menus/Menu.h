@@ -30,7 +30,7 @@ public:
 
 private:
 	Menu::Direction direction;
-	sf::Texture texture;// TODO: move all textures to a resource manager of some sort
+	//sf::Texture texture;// TODO: move all textures to a resource manager of some sort
 
 	std::list<Menu> menus;
 	std::list<MenuText> texts;

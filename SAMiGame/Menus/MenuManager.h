@@ -1,6 +1,7 @@
 #pragma once
 #include "../stdafx.h"
 #include "Menu.h"
+#include "LevelMenu.h"
 
 
 class MenuManager
@@ -18,12 +19,17 @@ public:
 	void checkMouseUp(sf::Vector2f pos);
 	void executeButton(int actionType, int actionArg);
 	void swapMenus(int id);
+	void startLevel(int id);
+	void stopLevel();
 protected:
 	float top;
 	float left;
 
 	std::list<Menu> menus;
 	std::list<Menu>::iterator activeMenu;
+
+	LevelMenu activeLevel;
+	bool inLevel = false;
 
 	struct LoadInfo
 	{

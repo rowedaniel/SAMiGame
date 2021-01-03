@@ -83,7 +83,7 @@ void MenuText::loadFileData(LoadInfo & loadInfo)
 void MenuText::loadTextureData()
 {
 	MenuItem::loadTextureData();
-	if (!font.loadFromFile("fonts/arial-cufonfonts/ARIAL.ttf")) {
+	if (!font.loadFromFile("data/fonts/arial-cufonfonts/ARIAL.ttf")) {
 		// error handling
 	}
 	text.setFont(font);
