@@ -163,7 +163,7 @@
     <ClInclude Include="VisualGameObject.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="0302.rc" />
+    <ResourceCompile Include="SAMiGame.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

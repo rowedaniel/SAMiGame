@@ -163,6 +163,7 @@ void MenuItem::loadTextureData()
 	// TODO: put parts of this into parent class for both menu buttons and menus
 	if (!texture.loadFromFile("data/images/sprites/button2.png")) {
 		// error
+		return;
 	}
 	texture.setSmooth(false);
 	texture.setRepeated(true);

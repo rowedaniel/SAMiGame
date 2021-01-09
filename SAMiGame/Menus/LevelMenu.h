@@ -13,7 +13,7 @@ public:
 	void load(std::istream& file);
 	void draw(sf::RenderWindow & window);
 
-
+	void updatePos(sf::Vector2f pos);
 	void updateItemPos();
 
 private:
@@ -22,10 +22,13 @@ private:
 	{
 	public:
 		MenuItem::LoadInfo oldInfo;
+		int extraLines = 0;
+		int numberOfCharacters = 0; // 4, normally?
+		std::list<std::string> characterText;
 	};
 
 	void getFileLineData(int i, std::string line, LoadInfo & loadInfo);
 	void loadFileData(LoadInfo & loadInfo);
 
-	CharacterButton testButton;
+	std::list<CharacterButton> characters;
 };
