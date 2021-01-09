@@ -1,4 +1,4 @@
 ﻿  LevelMenu.cpp
-c:\users\daniel\documents\random stuff\samigame\samigame\menus\characterbutton.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-c:\users\daniel\documents\random stuff\samigame\samigame\menus\characterbutton.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  0302.vcxproj -> C:\Users\Daniel\Documents\Random stuff\SAMiGame\Debug\SAMiGame.exe
+c:\users\bob joe\source\repos\samigame\samigame\menus\characterbutton.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+c:\users\bob joe\source\repos\samigame\samigame\menus\characterbutton.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  0302.vcxproj -> C:\Users\Bob Joe\source\repos\SAMiGame\Debug\SAMiGame.exe

@@ -42,8 +42,16 @@ void LevelMenu::load(std::istream& file)
 void LevelMenu::updateItemPos()
 {
 	testButton.updatePos(sf::Vector2f(100.0f, 100.0f));
-	boundingBox.width = 1000;
-	boundingBox.height = 1000;
+}
+
+void LevelMenu::getFileLineData(int i, std::string line, LoadInfo & loadInfo)
+{
+	MenuItem::getFileLineData(i, line, loadInfo.oldInfo);
+}
+
+void LevelMenu::loadFileData(LoadInfo & loadInfo)
+{
+	// TODO: copy parts of this into menu button class
 }
 
 void LevelMenu::draw(sf::RenderWindow & window)
