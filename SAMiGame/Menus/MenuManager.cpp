@@ -117,15 +117,19 @@ void MenuManager::swapMenus(int id)
 
 void MenuManager::startLevel(int id)
 {
-	inLevel = true;
 	std::ostringstream filename;
 	filename << "data/levels/" << id << ".level";
 	std::fstream file;
 
 	file.open(filename.str(), std::ios::in);
 	if (file.is_open()) {
+		inLevel = true;
+		activeLevel.updatePos(sf::Vector2f(top, left));
 		activeLevel.load(file);
 		std::cout << "loaded Level " << id << " filename: " << filename.str() << std::endl;
+	}
+	else {
+		std::cout << "error opening file" << std::endl;
 	}
 }
 

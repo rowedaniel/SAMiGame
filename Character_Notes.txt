@@ -1,0 +1,24 @@
+Character Template Files:
+  - sprite data
+  - base stats
+      - attack
+      - defense?
+  - primary type
+  - secondary type
+  - ability (gonna have to figure out how this works)
+      - preattack
+      - postattack
+      - duration
+      - type (enum, perhaps?)
+
+Character Instance Files:
+  - character type (link to template file?)
+  - level
+  - items?
+      - special effects?
+      - just stat buffs?
+      - genshin artifacts?
+  - bonuses?
+      - level-specific bonuses might be prudent, but maybe put them somewhere else.
+
+  - xp drop
