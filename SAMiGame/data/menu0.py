@@ -5,7 +5,7 @@ mainMenuSize = (500, 372)
 mainMenuColor = (220, 220, 200)
 mainMenuDirection = 3
 
-menuTextSize = (200, 200)
+menuTextSize = (400, 200)
 menuTextColor = (0, 0, 0)
 menuTextFontSize = 48
 

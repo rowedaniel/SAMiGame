@@ -17,6 +17,8 @@ public:
 
 	void checkMouseDown(sf::Vector2f pos);
 	void checkMouseUp(sf::Vector2f pos);
+	void checkMouseMove(sf::Vector2f pos);
+
 	void executeButton(int actionType, int actionArg);
 	void swapMenus(int id);
 	void startLevel(int id);
@@ -25,8 +27,8 @@ protected:
 	float top;
 	float left;
 
-	std::list<Menu> menus;
-	std::list<Menu>::iterator activeMenu;
+	std::vector<Menu> menus;
+	std::vector<Menu>::iterator activeMenu;
 
 	LevelMenu activeLevel;
 	bool inLevel = false;
@@ -34,8 +36,9 @@ protected:
 	struct LoadInfo
 	{
 	public:
-		int numberOfMenus;
-		int extraLines;
+		int totalNumberOfMenus = 0;
+		int numberOfMenus = 0;
+		int extraLines = 0;
 		std::list<std::string> menuText;
 	};
 

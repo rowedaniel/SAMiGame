@@ -1,35 +1,38 @@
+// Level bg and shape
 500
 372
 40
 100
 140
+// character button bg and shape
+152
+40
+80
+160
+200
+// character info bg and shape
+436
+140
+40
+60
+100
+// character info text data - character name
+120
+40
+0
+0
+0
+20
+// character info text data - character description and attack.
+234
+60
+0
+0
+0
+11
 // 4 Characters
 4
-// number of lines
-5
-64
-64
-255
-100
-100
-// number of lines
-5
-64
-64
-255
-255
-255
-// number of lines
-5
-64
-64
-255
-0
-255
-// number of lines
-5
-64
-64
-200
-200
-200
+1
+2
+4
+1

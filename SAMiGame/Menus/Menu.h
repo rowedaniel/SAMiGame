@@ -24,6 +24,7 @@ public:
 
 	void checkMouseDown(sf::Vector2f pos);
 	std::tuple<int, int> checkMouseUp(sf::Vector2f pos);
+	void checkMouseMove(sf::Vector2f pos);
 
 	int id = 0;
 

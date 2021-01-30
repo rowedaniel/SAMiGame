@@ -16,9 +16,9 @@
 #include <SFML/Audio.hpp>
 
 #include <map>
-#include <iostream>
 #include <cassert>
 #include <list>
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <algorithm>

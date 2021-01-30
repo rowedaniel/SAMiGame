@@ -11,9 +11,10 @@ MenuItem::~MenuItem()
 {
 }
 
+
 void MenuItem::load(std::istream& file)
 {
-	MenuItem::LoadInfo loadInfo;
+	LoadInfo loadInfo;
 
 	// load text file
 	std::string line;

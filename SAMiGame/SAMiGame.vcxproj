@@ -129,11 +129,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Battle\Character.cpp" />
+    <ClCompile Include="Battle\CharacterTemplate.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menus\CharacterButton.cpp" />
+    <ClCompile Include="Menus\CharacterInfoDisplay.cpp" />
     <ClCompile Include="Menus\LevelMenu.cpp" />
-    <ClCompile Include="Menus\MainMenu.cpp" />
     <ClCompile Include="Menus\Menu.cpp" />
     <ClCompile Include="Menus\MenuButton.cpp" />
     <ClCompile Include="Menus\MenuItem.cpp" />
@@ -146,10 +148,12 @@
     <ClCompile Include="VisualGameObject.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Battle\Character.h" />
+    <ClInclude Include="Battle\CharacterTemplate.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Menus\CharacterButton.h" />
+    <ClInclude Include="Menus\CharacterInfoDisplay.h" />
     <ClInclude Include="Menus\LevelMenu.h" />
-    <ClInclude Include="Menus\MainMenu.h" />
     <ClInclude Include="Menus\Menu.h" />
     <ClInclude Include="Menus\MenuButton.h" />
     <ClInclude Include="Menus\MenuItem.h" />

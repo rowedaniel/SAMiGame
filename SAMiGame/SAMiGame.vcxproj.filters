@@ -19,6 +19,12 @@
     <Filter Include="Source Files\Menus">
       <UniqueIdentifier>{ccfb976a-47f3-499a-8513-fbc040762aa6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Battle">
+      <UniqueIdentifier>{dcdc6f19-ae62-4863-ba56-66057c60baf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Battle">
+      <UniqueIdentifier>{55cd0a42-931d-49fc-b342-44f033528dae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -38,9 +44,6 @@
     </ClCompile>
     <ClCompile Include="TileManager.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Menus\MainMenu.cpp">
-      <Filter>Source Files\Menus</Filter>
     </ClCompile>
     <ClCompile Include="Menus\Menu.cpp">
       <Filter>Source Files\Menus</Filter>
@@ -66,6 +69,15 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Battle\CharacterTemplate.cpp">
+      <Filter>Source Files\Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="Menus\CharacterInfoDisplay.cpp">
+      <Filter>Source Files\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="Battle\Character.cpp">
+      <Filter>Source Files\Battle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -89,9 +101,6 @@
     <ClInclude Include="TileManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Menus\MainMenu.h">
-      <Filter>Header Files\Menus</Filter>
-    </ClInclude>
     <ClInclude Include="Menus\Menu.h">
       <Filter>Header Files\Menus</Filter>
     </ClInclude>
@@ -112,6 +121,15 @@
     </ClInclude>
     <ClInclude Include="Menus\CharacterButton.h">
       <Filter>Header Files\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="Battle\CharacterTemplate.h">
+      <Filter>Header Files\Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\CharacterInfoDisplay.h">
+      <Filter>Header Files\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="Battle\Character.h">
+      <Filter>Header Files\Battle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

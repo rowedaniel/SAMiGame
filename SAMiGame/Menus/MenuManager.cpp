@@ -31,12 +31,23 @@ void MenuManager::load(std::istream & file)
 	}
 
 	// load all the menus
+	menus.reserve(loadInfo.totalNumberOfMenus);
+	std::vector<Menu>::iterator latestMenu;
+	bool firstMenu = false;
 	for (std::list<std::string>::iterator it = loadInfo.menuText.begin(); it != loadInfo.menuText.end(); ++it) {
 		// load submenus (recursion is sweet)!
 		std::cout << "Menu text: " << std::endl << it->substr() << std::endl;
 		std::istringstream textStream(it->substr());
 		menus.push_back(Menu::Menu(left, top));
-		menus.back().load(textStream);
+		//menus.back().load(textStream);
+		if (!firstMenu) {
+			latestMenu = menus.begin();
+			firstMenu = true;
+		}
+		else {
+			++latestMenu;
+		}
+		latestMenu->load(textStream);
 	}
 
 	activeMenu = menus.begin();
@@ -58,7 +69,7 @@ void MenuManager::checkMouseDown(sf::Vector2f pos)  // checks for buttons being 
 
 	// TODO: figure out how to do this without the ugly if's
 	if (inLevel) {
-		//activeLevel.checkMouseDown(pos);
+		activeLevel.checkMouseDown(pos);
 	}
 	else {
 		activeMenu->checkMouseDown(pos);
@@ -72,7 +83,8 @@ void MenuManager::checkMouseUp(sf::Vector2f pos)  // checks for buttons being cl
 	// TODO: figure out how to do this without the ugly if's
 	if (inLevel) {
 		//std::tie(actionType, actionArg) = activeLevel.checkMouseUp(pos);
-		// TODO: make this work. For now, just quit.
+		// TODO: make this work. For now, just run it.
+		activeLevel.checkMouseUp(pos);
 		return;
 	}
 	else {
@@ -80,6 +92,17 @@ void MenuManager::checkMouseUp(sf::Vector2f pos)  // checks for buttons being cl
 	}
 	std::cout << "recieved actionType: " << actionType << ", actionArg: " << actionArg << std::endl;
 	executeButton(actionType, actionArg);
+}
+
+void MenuManager::checkMouseMove(sf::Vector2f pos)
+{
+	// TODO: figure out how to do this without the ugly if's
+	if (inLevel) {
+		activeLevel.checkMouseMove(pos);
+	}
+	else {
+		activeMenu->checkMouseMove(pos);
+	}
 }
 
 void MenuManager::executeButton(int actionType, int actionArg)
@@ -103,7 +126,7 @@ void MenuManager::swapMenus(int id)
 	if (inLevel) {
 		std::cout << "Tried to swap menus while still in level. Not sure how to handle this." << std::endl;
 	}
-	for (std::list<Menu>::iterator it = menus.begin(); it != menus.end(); ++it) {
+	for (auto it = menus.begin(); it != menus.end(); ++it) {
 		if (it->id == id) {
 			activeMenu = it;
 			std::cout << "swapped menus!" << std::endl;
@@ -144,6 +167,7 @@ void MenuManager::getFileLineData(int i, std::string line, LoadInfo & loadInfo)
 	case 1: 
 	{
 		loadInfo.numberOfMenus = std::stoi(line);
+		loadInfo.totalNumberOfMenus = loadInfo.numberOfMenus;
 		break;
 	}
 	default:

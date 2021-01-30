@@ -232,6 +232,10 @@ std::tuple<int, int> Menu::checkMouseUp(sf::Vector2f pos)
 	return nullResult;
 }
 
+void Menu::checkMouseMove(sf::Vector2f pos)
+{
+}
+
 
 
 

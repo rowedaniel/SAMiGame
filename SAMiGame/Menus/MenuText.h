@@ -16,6 +16,8 @@ public:
 	void draw(sf::RenderWindow & window, sf::FloatRect boundBox);
 
 	void updatePos(sf::Vector2f pos);
+	void setText(std::string txt);
+	void setText(std::string txt, int usedchrs, int n);
 
 protected:
 
@@ -34,6 +36,8 @@ protected:
 	void getFileLineData(int i, std::string line, LoadInfo & loadInfo);
 	void loadFileData(LoadInfo & loadInfo);
 	void loadTextureData();
+
+	void updateTextPos();
 
 	void drawSubitem(sf::RenderWindow & window, sf::Text & item, sf::FloatRect & boundBox);
 };

@@ -24,17 +24,23 @@ void MenuText::load(std::istream& file)
 		getFileLineData(++i, line, loadInfo);
 	}
 
+
+	// unlike every other time, I need to load font data first, so that the sizing is right later on.
+	// now, load everything else
+	loadTextureData();
+
 	// do stuff with the file data
 	loadFileData(loadInfo);
 
-	// now, load everything else
-	loadTextureData();
 
 	updatePos(sf::Vector2f(boundingBox.left, boundingBox.top));
 }
 
 void MenuText::draw(sf::RenderWindow & window, sf::FloatRect boundBox)
 {
+	//// TODO: testing only, remove this later
+	//drawBackground(window, boundBox);
+
 	// text doesn't get borders
 	//MenuItem::draw(window, boundBox);
 	drawSubitem(window, text, boundBox);
@@ -43,9 +49,43 @@ void MenuText::draw(sf::RenderWindow & window, sf::FloatRect boundBox)
 void MenuText::updatePos(sf::Vector2f pos)
 {
 	MenuItem::updatePos(pos);
+	updateTextPos();
+}
 
-	sf::FloatRect textRect = text.getGlobalBounds();
-	text.setPosition(pos + sf::Vector2f((boundingBox.width - textRect.width) / 2.0f, (boundingBox.height - text.getCharacterSize() * 1.5f ) / 2.0f));
+void MenuText::setText(std::string txt)
+{
+	setText(txt, 0, 10);
+}
+
+void MenuText::setText(std::string txt, int usedchrs, int n)
+{
+	text.setString(txt);
+	updateTextPos();
+
+	if (n <= 0) {
+		return;
+	}
+
+	const sf::FloatRect textSize = text.getGlobalBounds();
+	if (textSize.width > boundingBox.width) {
+		//std::cout << "too big, " << txt << " size: " << textSize.width << " out of " << boundingBox.width << std::endl;
+		int pos = (int)(boundingBox.width) * 2 / text.getCharacterSize() + usedchrs * 1;
+		//std::cout << "starting at: " << pos << ", walking back to find nearest space" << std::endl;
+		pos = txt.find_last_of(" ", pos);
+		//std::cout << "replacing: " << pos << " of: " << sizeof txt << std::endl;
+
+		if (pos < txt.length()) {
+			txt.replace(pos, 1, "\n");
+			//std::cout << "recursing, n is: " << n << std::endl;
+			setText(txt, pos, n - 1);
+		}
+		else {
+			//std::cout << "unable to find nearest space" << std::endl;
+		}
+	}
+	else {
+		//std::cout << "right size, " << txt << " length: " << textSize.width << " out of " << boundingBox.width << std::endl;
+	}
 }
 
 
@@ -75,9 +115,16 @@ void MenuText::getFileLineData(int i, std::string line, LoadInfo & loadInfo)
 
 void MenuText::loadFileData(LoadInfo & loadInfo)
 {
-	text.setCharacterSize(loadInfo.fontSize);
-	text.setString(loadInfo.text);
+
 	MenuItem::loadFileData(loadInfo.oldInfo);
+
+	text.setCharacterSize(loadInfo.fontSize);
+	setText(loadInfo.text);
+
+
+	//// TODO: remove this later, testing only
+	//sf::Color color = sf::Color(100, 200, 50);
+	//background.setFillColor(color);
 }
 
 void MenuText::loadTextureData()
@@ -90,6 +137,14 @@ void MenuText::loadTextureData()
 	text.setFillColor(sf::Color::Black);
 }
 
+void MenuText::updateTextPos()
+{
+
+	sf::FloatRect textRect = text.getGlobalBounds();
+	text.setPosition(sf::Vector2f(boundingBox.left + (boundingBox.width - textRect.width) / 2.0f, 
+								  boundingBox.top + (boundingBox.height - textRect.height - text.getCharacterSize() / 2.0f) / 2.0f));
+}
+
 void MenuText::drawSubitem(sf::RenderWindow & window, sf::Text & item, sf::FloatRect & boundBox)
 {
 	sf::FloatRect intersection;
@@ -99,7 +154,7 @@ void MenuText::drawSubitem(sf::RenderWindow & window, sf::Text & item, sf::Float
 		if (intersection.width != itemBounds.width || intersection.height != itemBounds.height) {
 			// part of the subitem is off of the menu, so scale it down to keep it in.
 			if (intersection.width < itemBounds.width) {
-				item.setScale((intersection.width - borderSpriteSize / 2.0f) / itemBounds.width, 1.0f);
+				//item.setScale((intersection.width - borderSpriteSize / 2.0f) / itemBounds.width, 1.0f);
 			}
 			if (intersection.height < itemBounds.height) {
 				item.setScale(1.0f, (intersection.height - borderSpriteSize / 2.0f) / itemBounds.height);
