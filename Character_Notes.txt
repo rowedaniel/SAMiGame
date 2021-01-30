@@ -1,4 +1,19 @@
+Character Sprites:
+  - 10 animations:
+      - idle
+      - primary-tie
+      - primary-trade
+      - primary-loss
+      - primary-win
+      - secondary-trade
+      - secondary-loss
+      - secondary-win
+      - secondary-countered
+      - secondary-counter
+
 Character Template Files:
+  - character name and description
+  - rarity
   - sprite data
   - base stats
       - attack

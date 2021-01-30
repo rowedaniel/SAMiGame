@@ -1,0 +1,65 @@
+
+
+Planned Features:
+
+Legend:
+
+* = plan to do next
++ = low priority, necessary
+- = low priority, unnececelery
+
+
+Resource Manager System:                       [Not Started]-
+  - Store textures, character templates
+  - Figure out when/how to load resources
+      - check if already loaded
+  - Figure out when/how to unload resources
+      - how many people are using them?
+      - list of ids of people using them?
+  - more robust error checking
+
+Menu System:                                   [In Progress]
+  - Clickable Buttons                          [Done]
+  - Basic Layout                               [Done]
+      - background                             [Done]
+      - border                                 [Done]
+      - button/text/submenu content            [Done]
+  - Loading                                    [In Progress]
+  - Fancier Backgrounds                        [Not Started]-
+  - Locked Buttons                             [Not Started]+
+      - only unlock when beating level
+  - Add party change system                    [Not Started]+
+
+
+Battle System:                                 [In Progress]*
+  
+  - select order/matchups/etc.:                [In Progress]*
+  - physical attack system                     [In Progress]*
+      - defense? Decide on this                [Not Started]*
+      - attack                                 [In Progress]*
+      - health                                 [Not Started]*
+          - decide where to keep track of it
+  
+  - secondary effect system:                   [Not Started]+
+      - every character has a list of effects,
+        each one with:
+          - type
+          - duration
+          - amount (exact effect varies)
+  
+  - win/loss system:                           [Not Started]+
+      - when you win, unlock stuff
+      - decide where to keep track of it
+      - decide if health carries over
+
+
+Levels:                                        [In Progress]+
+  - Level system                               [In Progress]+
+  - platforming                                [Not Started]-
+  - add more (some) levels                     [Not Started]+
+  - event stages                               [Not Started]-
+
+Misc.:                                         [Not Started]-
+  - Better error checking overall
+      - don't crash when loading text (stoi)
+  - Unload things when not in use              [Not Started]+
