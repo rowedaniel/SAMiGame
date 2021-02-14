@@ -26,8 +26,10 @@ Menu System:                                   [In Progress]
       - button/text/submenu content            [Done]
   - Loading                                    [In Progress]
   - Fancier Backgrounds                        [Not Started]-
-  - Locked Buttons                             [Not Started]+
-      - only unlock when beating level
+  - Locked Buttons                             [In Progress]+
+      - only unlock under certain conditions   [Done]
+          - unlock when level is beaten        [Not Started]
+      - Animation/graphic for locked/unlocked  [Not Started]
   - Add party change system                    [Not Started]+
 
 
