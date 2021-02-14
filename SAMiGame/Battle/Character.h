@@ -9,12 +9,17 @@ public:
 	~Character();
 
 	void load(bool playerOwned);
+	void draw(sf::RenderWindow & window, sf::FloatRect boundBox);
 
 	float getPrimaryMatchup(std::vector<Character>::iterator opponent);
 	float getSecondaryMatchup(std::vector<Character>::iterator opponent);
 private:
 	const std::vector<float> primaryMatchups = {0.0f, 2.0f, 1.0f, 1.0f};
-	const std::vector<float> secondaryMatchups = { 1.0f, 2.0f, 1.5f, 0.5f, 0.0f };
+	const std::vector<float> secondaryMatchups = { 1.0f, 2.0f, 1.5f, 0.5f, 0.0f }; 
+
+	void loadTextureData();
+
+	sf::Sprite sprite;
 
 };
 

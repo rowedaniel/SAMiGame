@@ -78,6 +78,9 @@
     <ClCompile Include="Battle\Character.cpp">
       <Filter>Source Files\Battle</Filter>
     </ClCompile>
+    <ClCompile Include="Menus\LockableMenuButton.cpp">
+      <Filter>Source Files\Menus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -130,6 +133,9 @@
     </ClInclude>
     <ClInclude Include="Battle\Character.h">
       <Filter>Header Files\Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\LockableMenuButton.h">
+      <Filter>Header Files\Menus</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

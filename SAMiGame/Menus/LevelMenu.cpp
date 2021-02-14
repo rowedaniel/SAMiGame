@@ -102,10 +102,18 @@ void LevelMenu::draw(sf::RenderWindow & window)
 		// draw character matchup info
 		characterInfoDisplay.draw(window, boundingBox);
 
+		// draw go button
+		goButton.draw(window, boundingBox);
+
 		break;
 	}
 	case animating:
 	{
+		if (latestSelectedCharacter == selectedPlayerCharacterButtons.begin())
+		{
+			//std::cout << "attack: " << latestSelectedCharacter->characterRef->name << std::endl;
+		}
+		(latestSelectedCharacter->characterRef)->draw(window, boundingBox);
 		break;
 	}
 	}
@@ -130,6 +138,8 @@ void LevelMenu::checkMouseDown(sf::Vector2f pos)
 		for (auto it = selectedPlayerCharacterButtons.begin(); it != selectedPlayerCharacterButtons.end(); ++it) {
 			it->attemptSelect(pos);
 		}
+
+		goButton.checkMouseDown(pos);
 	}
 	}
 }
@@ -156,6 +166,14 @@ void LevelMenu::checkMouseUp(sf::Vector2f pos)
 				unselectCharacter(it);
 				return;
 			}
+		}
+
+		int actionType, actionArg;
+		std::tie(actionType, actionArg) = goButton.checkMouseUp(pos);
+		if (actionType != -1) {
+			std::cout << "GO GO GO!" << std::endl;
+			startAnimationState();
+			return;
 		}
 	}
 	}
@@ -213,6 +231,11 @@ void LevelMenu::updatePos(sf::Vector2f pos)
 
 void LevelMenu::updateItemPos()
 {
+
+
+	// place go button
+	goButton.updatePos(sf::Vector2f(boundingBox.left + boundingBox.width / 2.0f - goButton.getWidth() / 2.0f, boundingBox.top + 100.0f));
+
 
 
 	float y = boundingBox.top + boundingBox.height / 2 - 32.0f;
@@ -285,6 +308,13 @@ void LevelMenu::getFileLineData(int i, std::string & line, LoadInfo & loadInfo)
 	}
 	i -= 17;
 
+	if (i < 10)
+	{
+		loadInfo.goButtonText.append(line + "\n");
+		return;
+	}
+	i -= 9;
+
 	loadCharacters(i, line, loadInfo.enemyCharacterButtons);
 }
 
@@ -338,6 +368,12 @@ void LevelMenu::loadFileData(LoadInfo & loadInfo)
 	{
 		std::istringstream textStream(loadInfo.characterInfoMenuText);
 		characterInfoDisplay.load(textStream);
+	}
+
+	// go Button
+	{
+		std::istringstream textStream(loadInfo.goButtonText);
+		goButton.load(textStream);
 	}
 
 
@@ -451,7 +487,12 @@ void LevelMenu::selectCharacter(std::vector<CharacterButton>::iterator character
 	std::cout << "passed check 2" << std::endl;
 
 	latestSelectedCharacter->setCharacterData(character->characterRef);
-	++latestSelectedCharacter;
+	if (++latestSelectedCharacter == selectedPlayerCharacterButtons.end()) {
+		// all characters selected, unlock go button so people can play
+		goButton.unlock();
+	}
+
+	
 
 
 
@@ -483,5 +524,12 @@ void LevelMenu::unselectCharacter(std::vector<CharacterButton>::iterator charact
 	}
 	latestSelectedCharacter->clearCharacterData();
 
+	// a button has been removed, lock go button again
+	goButton.lock();
+}
 
+void LevelMenu::startAnimationState()
+{
+	state = animating;
+	latestSelectedCharacter = selectedPlayerCharacterButtons.begin();
 }

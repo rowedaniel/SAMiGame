@@ -215,7 +215,7 @@ std::tuple<int, int> Menu::checkMouseUp(sf::Vector2f pos)
 	std::tuple<int, int> result;
 
 	// check all submenus
-	for (std::list<Menu>::iterator it = menus.begin(); it != menus.end(); ++it) {
+	for (auto it = menus.begin(); it != menus.end(); ++it) {
 		result = it->checkMouseUp(pos);
 		if (result != nullResult) {
 			return result;
@@ -223,7 +223,7 @@ std::tuple<int, int> Menu::checkMouseUp(sf::Vector2f pos)
 	}
 
 	// check all buttons
-	for (std::list<MenuButton>::iterator it = buttons.begin(); it != buttons.end(); ++it) {
+	for (auto it = buttons.begin(); it != buttons.end(); ++it) {
 		result = it->checkMouseUp(pos);
 		if (result != nullResult) {
 			return result;

@@ -15,6 +15,7 @@ void CharacterInfoDisplay::setCharacterData(std::vector<Character>::iterator sou
 	secondaryTypeSprite.setTextureRect(sf::IntRect(sourceCharacter->secondary_type * 32, 32, 32, 32));
 	characterName.setText(sourceCharacter->name);
 	characterDescription.setText(sourceCharacter->description);
+	characterAttack.setText("Attack: " + std::to_string((int)sourceCharacter->attack));
 	//std::cout << "description length: " << sourceCharacter->description.length() << std::endl;
 }
 
@@ -44,6 +45,7 @@ void CharacterInfoDisplay::draw(sf::RenderWindow & window, sf::FloatRect boundBo
 	window.draw(secondaryTypeSprite);
 	characterName.draw(window, boundBox);
 	characterDescription.draw(window, boundBox);
+	characterAttack.draw(window, boundBox);
 
 	drawBorder(window, boundBox);
 
@@ -60,8 +62,9 @@ void CharacterInfoDisplay::updateItemPos()
 {
 	primaryTypeSprite.setPosition(sf::Vector2f(boundingBox.left + 16.0f, boundingBox.top + 16.0f));
 	secondaryTypeSprite.setPosition(sf::Vector2f(boundingBox.left + 16.0f, boundingBox.top + 48.0f));
-	characterName.updatePos(sf::Vector2f(boundingBox.left + 48.0f, boundingBox.top+16.0f));
-	characterDescription.updatePos(sf::Vector2f(boundingBox.left+170.0f, boundingBox.top+16.0f));
+	characterName.updatePos(sf::Vector2f(boundingBox.left + 48.0f, boundingBox.top + 16.0f));
+	characterDescription.updatePos(sf::Vector2f(boundingBox.left + 170.0f, boundingBox.top + 16.0f));
+	characterAttack.updatePos(sf::Vector2f(boundingBox.left + 0.0f, boundingBox.top + 40.0f));
 }
 
 
@@ -98,6 +101,11 @@ void CharacterInfoDisplay::loadFileData(LoadInfo & loadInfo)
 		//std::cout << "in characterinfodisplay" << characterRef->name << std::endl;
 		std::istringstream textStream(loadInfo.characterOtherText + "Test\n");
 		characterDescription.load(textStream);
+	}
+	{
+		//std::cout << "in characterinfodisplay" << characterRef->name << std::endl;
+		std::istringstream textStream(loadInfo.characterOtherText + "Test\n");
+		characterAttack.load(textStream);
 	}
 
 	MenuItem::loadFileData(loadInfo.oldInfo);

@@ -16,7 +16,7 @@ void CharacterTemplate::load()
 	if (!file.is_open()) {
 		// Error
 		// TODO: figure out error handling
-		std::cout << "Error in opening file: " << "../data/characters/" + std::to_string(type) + ".characterTemplate" << std::endl;
+		std::cout << "Error in opening file: " << "data/characters/" + std::to_string(type) + ".characterTemplate" << std::endl;
 		return;
 	}
 
@@ -34,6 +34,7 @@ void CharacterTemplate::load()
 
 	// do stuff with the file data
 	loadFileData(loadInfo);
+	loadTextureData();
 }
 
 void CharacterTemplate::getFileLineData(int i, std::string line, LoadInfo & loadInfo)
@@ -75,5 +76,14 @@ void CharacterTemplate::loadFileData(LoadInfo & loadInfo)
 	attack = loadInfo.attack;
 	primary_type = loadInfo.primary_type;
 	secondary_type = loadInfo.secondary_type;
+}
+
+void CharacterTemplate::loadTextureData()
+{
+	if (!texture.loadFromFile("data/images/sprites/characters/" + std::to_string(type) + ".png")) {
+		// error
+		std::cout << "error loading character texture: data/images/sprites/characters/" + std::to_string(type) + ".png" << std::endl;
+		return;
+	}
 }
 

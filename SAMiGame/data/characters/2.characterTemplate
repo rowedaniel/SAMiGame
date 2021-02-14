@@ -2,7 +2,7 @@ Bush (Test)
 Sample Text
 // sprite data placeholder
 // attack stat (at max level)
-100.0f
+50.0f
 // primary type (0-groundcover, 1-fern, 2-tree, 3-shrub)
 0
 // secondary type (0-empathy, 1-community, 2-balance, 3-thinking, 4-adventure)

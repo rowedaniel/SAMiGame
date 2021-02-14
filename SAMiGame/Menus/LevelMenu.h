@@ -3,7 +3,7 @@
 #include "MenuItem.h"
 #include "CharacterButton.h"
 #include "CharacterInfoDisplay.h"
-#include "MenuButton.h"
+#include "LockableMenuButton.h"
 #include "../Battle/Character.h"
 
 class LevelMenu : public MenuItem
@@ -42,6 +42,7 @@ private:
 		MenuItem::LoadInfo oldInfo;
 		std::string characterButtonMenuText;
 		std::string characterInfoMenuText;
+		std::string goButtonText;
 		CharacterInfo playerCharacterButtons;
 		CharacterInfo enemyCharacterButtons;
 	};
@@ -54,6 +55,9 @@ private:
 
 	void selectCharacter(std::vector<CharacterButton>::iterator character);
 	void unselectCharacter(std::vector<CharacterButton>::iterator character);
+
+
+	void startAnimationState();
 
 
 	// character select stuff
@@ -70,4 +74,5 @@ private:
 	std::vector<Character> playerCharacters;
 
 	CharacterInfoDisplay characterInfoDisplay;
+	LockableMenuButton goButton;
 };

@@ -136,6 +136,7 @@
     <ClCompile Include="Menus\CharacterButton.cpp" />
     <ClCompile Include="Menus\CharacterInfoDisplay.cpp" />
     <ClCompile Include="Menus\LevelMenu.cpp" />
+    <ClCompile Include="Menus\LockableMenuButton.cpp" />
     <ClCompile Include="Menus\Menu.cpp" />
     <ClCompile Include="Menus\MenuButton.cpp" />
     <ClCompile Include="Menus\MenuItem.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="Menus\CharacterButton.h" />
     <ClInclude Include="Menus\CharacterInfoDisplay.h" />
     <ClInclude Include="Menus\LevelMenu.h" />
+    <ClInclude Include="Menus\LockableMenuButton.h" />
     <ClInclude Include="Menus\Menu.h" />
     <ClInclude Include="Menus\MenuButton.h" />
     <ClInclude Include="Menus\MenuItem.h" />

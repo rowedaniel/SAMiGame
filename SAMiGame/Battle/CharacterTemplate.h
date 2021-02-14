@@ -28,4 +28,7 @@ protected:
 
 	void getFileLineData(int i, std::string line, LoadInfo & loadInfo);
 	void loadFileData(LoadInfo & loadInfo);
+	void loadTextureData();
+
+	sf::Texture texture;
 };

@@ -44,6 +44,7 @@ void MenuButton::checkMouseDown(sf::Vector2f pos)
 {
 	if (boundingBox.contains(pos)) {
 		selected = true;
+		std::cout << "button selected!" << std::endl;
 	}
 	else {
 		selected = false;
