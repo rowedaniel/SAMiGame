@@ -1,5 +1,5 @@
 Character Sprites:
-  - 10 animations:
+  - 5 animations:
       - primary-tie
       - primary-trade
       - primary-loss

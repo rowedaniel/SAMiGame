@@ -142,11 +142,7 @@
     <ClCompile Include="Menus\MenuItem.cpp" />
     <ClCompile Include="Menus\MenuManager.cpp" />
     <ClCompile Include="Menus\MenuText.cpp" />
-    <ClCompile Include="SplashScreen.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="Tile.cpp" />
-    <ClCompile Include="TileManager.cpp" />
-    <ClCompile Include="VisualGameObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Battle\Character.h" />
@@ -162,11 +158,7 @@
     <ClInclude Include="Menus\MenuManager.h" />
     <ClInclude Include="Menus\MenuText.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="SplashScreen.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Tile.h" />
-    <ClInclude Include="TileManager.h" />
-    <ClInclude Include="VisualGameObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SAMiGame.rc" />

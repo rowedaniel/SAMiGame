@@ -34,7 +34,7 @@ void CharacterTemplate::load()
 
 	// do stuff with the file data
 	loadFileData(loadInfo);
-	loadTextureData();
+	CharacterTemplate::loadTextureData();
 }
 
 void CharacterTemplate::getFileLineData(int i, std::string line, LoadInfo & loadInfo)

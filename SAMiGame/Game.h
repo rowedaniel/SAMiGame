@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include "Menus/MenuManager.h"
 
 
 class Game
@@ -21,6 +22,7 @@ private:
 	static GameState _gameState;
 	static sf::RenderWindow _mainWindow;
 	static sf::View mainView;
+	static sf::Clock clock;
 
 	static const int orig_window_width = 512;
 	static const int orig_window_height = 384;

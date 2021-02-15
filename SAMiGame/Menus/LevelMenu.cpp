@@ -17,6 +17,20 @@ LevelMenu::~LevelMenu()
 {
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+// Loading
+
 void LevelMenu::load(std::istream& file)
 {
 	// TODO: figure out how to integrate this with superclass
@@ -32,7 +46,7 @@ void LevelMenu::load(std::istream& file)
 		getFileLineData(++i, line, loadInfo);
 	}
 
-	
+
 	// load player party data
 	std::cout << "attempting to load party data" << std::endl;
 	std::fstream partyFile("gamestate/current.party", std::ios::in);
@@ -68,6 +82,260 @@ void LevelMenu::load(std::istream& file)
 
 	state = selecting;
 }
+
+void LevelMenu::getFileLineData(int i, std::string & line, LoadInfo & loadInfo)
+{
+	if (i < 6) { // info for the background
+		MenuItem::getFileLineData(i, line, loadInfo.oldInfo);
+		return;
+	}
+	i -= 5;
+
+	if (i < 6) {
+		loadInfo.characterButtonMenuText.append(line + "\n");
+		return;
+	}
+	i -= 5;
+
+	if (i < 18) {
+		loadInfo.characterInfoMenuText.append(line + "\n");
+		return;
+	}
+	i -= 17;
+
+	if (i < 10)
+	{
+		loadInfo.goButtonText.append(line + "\n");
+		return;
+	}
+	i -= 9;
+
+	loadCharacters(i, line, loadInfo.enemyCharacterButtons);
+}
+
+void LevelMenu::loadCharacters(int i, std::string & line, CharacterInfo & characterInfo)
+{
+	switch (i) {
+	case 1:
+	{
+		characterInfo.numberOfCharacters = std::stoi(line);
+		characterInfo.totalNumberOfCharacters = characterInfo.numberOfCharacters;
+		std::cout << characterInfo.numberOfCharacters << " characters to be made!" << std::endl;
+		break;
+	}
+	default:
+	{
+		if (characterInfo.numberOfCharacters > 0) {
+			characterInfo.characterIds.push_back(std::stoi(line));
+			--characterInfo.numberOfCharacters;
+			std::cout << "Recieved data for a character. " << characterInfo.numberOfCharacters << " left" << std::endl;
+		}
+		break;
+	}
+	}
+}
+
+
+void LevelMenu::loadFileData(LoadInfo & loadInfo)
+{
+
+	// TODO: testing only
+	testCharacter.load(true);
+
+
+	if (loadInfo.playerCharacterButtons.totalNumberOfCharacters != loadInfo.enemyCharacterButtons.totalNumberOfCharacters) {
+		// real bad news. Error.
+		// TODO: figure out how to handle this. For now, just returns.
+		return;
+	}
+
+
+	// character button backgrounds
+	{
+		std::istringstream textStream(loadInfo.characterButtonMenuText);
+		playerCharacterButtonBackground.load(textStream);
+	}
+	{
+		std::istringstream textStream(loadInfo.characterButtonMenuText);
+		enemyCharacterButtonBackground.load(textStream);
+	}
+	{
+		std::istringstream textStream(loadInfo.characterButtonMenuText);
+		selectedPlayerCharacterButtonBackground.load(textStream);
+	}
+
+	// character info background
+	{
+		std::istringstream textStream(loadInfo.characterInfoMenuText);
+		characterInfoDisplay.load(textStream);
+	}
+
+	// go Button
+	{
+		std::istringstream textStream(loadInfo.goButtonText);
+		goButton.load(textStream);
+	}
+
+
+	// player character buttons
+	// allocate vector space
+	playerCharacterButtons.reserve(loadInfo.playerCharacterButtons.totalNumberOfCharacters);
+	playerCharacters.reserve(loadInfo.playerCharacterButtons.totalNumberOfCharacters);
+	for (int i : loadInfo.playerCharacterButtons.characterIds)
+	{
+		playerCharacters.push_back(Character(i));
+	}
+
+	for (auto it = playerCharacters.begin(); it != playerCharacters.end(); ++it)
+	{
+		it->load(true);
+	}
+
+
+	for (auto it = playerCharacters.begin(); it != playerCharacters.end(); ++it)
+	{
+		playerCharacterButtons.push_back(CharacterButton(it));
+	}
+
+	for (auto it = playerCharacterButtons.begin(); it != playerCharacterButtons.end(); ++it)
+	{
+		it->load();
+	}
+
+
+	// enemy character buttons
+	// allocate vector space
+	enemyCharacterButtons.reserve(loadInfo.enemyCharacterButtons.totalNumberOfCharacters);
+	enemyCharacters.reserve(loadInfo.enemyCharacterButtons.totalNumberOfCharacters);
+	for (int i : loadInfo.enemyCharacterButtons.characterIds)
+	{
+		enemyCharacters.push_back(Character(i));
+	}
+
+	for (auto it = enemyCharacters.begin(); it != enemyCharacters.end(); ++it)
+	{
+		it->load(false);
+	}
+
+	for (auto it = enemyCharacters.begin(); it != enemyCharacters.end(); ++it)
+	{
+		enemyCharacterButtons.push_back(CharacterButton(it));
+	}
+
+	for (auto it = enemyCharacterButtons.begin(); it != enemyCharacterButtons.end(); ++it)
+	{
+		it->load();
+	}
+
+
+	// selected player character buttons
+	// allocate vector space
+	std::cout << "number of characters: " << loadInfo.playerCharacterButtons.totalNumberOfCharacters << std::endl;
+	selectedPlayerCharacterButtons.reserve(loadInfo.playerCharacterButtons.totalNumberOfCharacters);
+	for (int i = 0; i < loadInfo.playerCharacterButtons.totalNumberOfCharacters; ++i) {
+		selectedPlayerCharacterButtons.push_back(CharacterButton());
+	}
+	for (auto it = selectedPlayerCharacterButtons.begin(); it != selectedPlayerCharacterButtons.end(); ++it)
+	{
+		it->load();
+	}
+	latestSelectedCharacter = selectedPlayerCharacterButtons.begin();
+
+
+
+	MenuItem::loadFileData(loadInfo.oldInfo);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// Position updates
+
+void LevelMenu::updatePos(sf::Vector2f pos)
+{
+	MenuItem::updatePos(pos);
+}
+
+void LevelMenu::updateItemPos()
+{
+
+
+	// place go button
+	goButton.updatePos(sf::Vector2f(boundingBox.left + boundingBox.width / 2.0f - goButton.getWidth() / 2.0f, boundingBox.top + 100.0f));
+
+
+
+	float y = boundingBox.top + boundingBox.height / 2 - 32.0f;
+
+	// Player characters go at the left-middle section
+	float x = boundingBox.left + 32.0f;
+
+	// place player character button background
+	playerCharacterButtonBackground.updatePos(sf::Vector2f(x - 4.0f, y - 4.0f));
+
+	for (auto it = playerCharacterButtons.begin(); it != playerCharacterButtons.end(); ++it) {
+		it->updatePos(sf::Vector2f(x, y));
+		std::cout << "character of type: " << it->characterType << " positioned at: " << x << std::endl;
+		// move to the right, leaving space between characters
+		x += 32.0f + 4.0f;
+	}
+
+
+	// Enemy characters go at the right-middle section
+	x = boundingBox.left + boundingBox.width - 32.0f - 32.0f;
+
+	for (auto it = enemyCharacterButtons.begin(); it != enemyCharacterButtons.end(); ++it) {
+		it->updatePos(sf::Vector2f(x, y));
+		std::cout << "character positioned at: " << x << std::endl;
+		// move to the left, leaving space between characters
+		x -= 32.0f + 4.0f;
+	}
+
+	// place enemy character button background
+	enemyCharacterButtonBackground.updatePos(sf::Vector2f(x + 28.0f, y - 4.0f));
+
+
+
+
+	// selected player character buttons go at the top-middle section
+	x = boundingBox.left + boundingBox.width / 2.0f - selectedPlayerCharacterButtonBackground.getWidth() / 2.0f + 4.0f;
+	y = 64.0f;
+
+	// place player character button background
+	selectedPlayerCharacterButtonBackground.updatePos(sf::Vector2f(x - 4.0f, y - 4.0f));
+
+	for (auto it = selectedPlayerCharacterButtons.begin(); it != selectedPlayerCharacterButtons.end(); ++it) {
+		it->updatePos(sf::Vector2f(x, y));
+		std::cout << "character of type: " << it->characterType << " positioned at: " << x << std::endl;
+		// move to the right, leaving space between characters
+		x += 32.0f + 4.0f;
+	}
+
+	// place character matchup info section
+	characterInfoDisplay.updatePos(sf::Vector2f(boundingBox.left + 32.0f, boundingBox.top + boundingBox.height / 2 + 32));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Drawing
 
 void LevelMenu::draw(sf::RenderWindow & window)
 {
@@ -109,17 +377,40 @@ void LevelMenu::draw(sf::RenderWindow & window)
 	}
 	case animating:
 	{
+		// /*
 		if (latestSelectedCharacter == selectedPlayerCharacterButtons.begin())
 		{
 			//std::cout << "attack: " << latestSelectedCharacter->characterRef->name << std::endl;
 		}
 		(latestSelectedCharacter->characterRef)->draw(window, boundingBox);
+		// */
+
+		/*// TODO: testing purposes only
+		testCharacterPointer = playerCharacters.begin();
+		testCharacterPointer->draw(window, boundingBox);*/
+
+
+		//testCharacter.draw(window, boundingBox);
 		break;
 	}
 	}
 
 	drawBorder(window, boundingBox);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Mouse/Button checks
 
 void LevelMenu::checkMouseDown(sf::Vector2f pos)
 {
@@ -224,222 +515,16 @@ void LevelMenu::checkMouseMove(sf::Vector2f pos)
 
 
 
-void LevelMenu::updatePos(sf::Vector2f pos)
-{
-	MenuItem::updatePos(pos);
-}
-
-void LevelMenu::updateItemPos()
-{
-
-
-	// place go button
-	goButton.updatePos(sf::Vector2f(boundingBox.left + boundingBox.width / 2.0f - goButton.getWidth() / 2.0f, boundingBox.top + 100.0f));
-
-
-
-	float y = boundingBox.top + boundingBox.height / 2 - 32.0f;
-
-	// Player characters go at the left-middle section
-	float x = boundingBox.left + 32.0f;
-
-	// place player character button background
-	playerCharacterButtonBackground.updatePos(sf::Vector2f(x - 4.0f, y - 4.0f));
-
-	for (auto it = playerCharacterButtons.begin(); it != playerCharacterButtons.end(); ++it) {
-		it->updatePos(sf::Vector2f(x, y));
-		std::cout << "character of type: " << it->characterType << " positioned at: " << x << std::endl;
-		// move to the right, leaving space between characters
-		x += 32.0f + 4.0f;
-	}
-
-
-	// Enemy characters go at the right-middle section
-	x = boundingBox.left + boundingBox.width - 32.0f - 32.0f;
-
-	for (auto it = enemyCharacterButtons.begin(); it != enemyCharacterButtons.end(); ++it) {
-		it->updatePos(sf::Vector2f(x, y));
-		std::cout << "character positioned at: " << x << std::endl;
-		// move to the left, leaving space between characters
-		x -= 32.0f + 4.0f;
-	}
-
-	// place enemy character button background
-	enemyCharacterButtonBackground.updatePos(sf::Vector2f(x + 28.0f, y - 4.0f));
 
 
 
 
-	// selected player character buttons go at the top-middle section
-	x = boundingBox.left + boundingBox.width / 2.0f - selectedPlayerCharacterButtonBackground.getWidth() / 2.0f + 4.0f;
-	y = 64.0f;
-
-	// place player character button background
-	selectedPlayerCharacterButtonBackground.updatePos(sf::Vector2f(x - 4.0f, y - 4.0f));
-
-	for (auto it = selectedPlayerCharacterButtons.begin(); it != selectedPlayerCharacterButtons.end(); ++it) {
-		it->updatePos(sf::Vector2f(x, y));
-		std::cout << "character of type: " << it->characterType << " positioned at: " << x << std::endl;
-		// move to the right, leaving space between characters
-		x += 32.0f + 4.0f;
-	}
-
-	// place character matchup info section
-	characterInfoDisplay.updatePos(sf::Vector2f(boundingBox.left + 32.0f, boundingBox.top + boundingBox.height / 2 + 32));
-}
-
-void LevelMenu::getFileLineData(int i, std::string & line, LoadInfo & loadInfo)
-{
-	if (i < 6) { // info for the background
-		MenuItem::getFileLineData(i, line, loadInfo.oldInfo);
-		return;
-	}
-	i -= 5;
-
-	if (i < 6) {
-		loadInfo.characterButtonMenuText.append(line + "\n");
-		return;
-	}
-	i -= 5;
-	
-	if (i < 18) {
-		loadInfo.characterInfoMenuText.append(line + "\n");
-		return;
-	}
-	i -= 17;
-
-	if (i < 10)
-	{
-		loadInfo.goButtonText.append(line + "\n");
-		return;
-	}
-	i -= 9;
-
-	loadCharacters(i, line, loadInfo.enemyCharacterButtons);
-}
-
-void LevelMenu::loadCharacters(int i, std::string & line, CharacterInfo & characterInfo)
-{
-	switch (i) {
-	case 1:
-	{
-		characterInfo.numberOfCharacters = std::stoi(line);
-		characterInfo.totalNumberOfCharacters = characterInfo.numberOfCharacters;
-		std::cout << characterInfo.numberOfCharacters << " characters to be made!" << std::endl;
-		break;
-	}
-	default:
-	{
-		if (characterInfo.numberOfCharacters > 0) {
-			characterInfo.characterIds.push_back(std::stoi(line));
-			--characterInfo.numberOfCharacters;
-			std::cout << "Recieved data for a character. " << characterInfo.numberOfCharacters << " left" << std::endl;
-		}
-		break;
-	}
-	}
-}
-
-void LevelMenu::loadFileData(LoadInfo & loadInfo)
-{
-
-	if (loadInfo.playerCharacterButtons.totalNumberOfCharacters != loadInfo.enemyCharacterButtons.totalNumberOfCharacters) {
-		// real bad news. Error.
-		// TODO: figure out how to handle this. For now, just returns.
-		return;
-	}
-
-
-	// character button backgrounds
-	{
-		std::istringstream textStream(loadInfo.characterButtonMenuText);
-		playerCharacterButtonBackground.load(textStream);
-	}
-	{
-		std::istringstream textStream(loadInfo.characterButtonMenuText);
-		enemyCharacterButtonBackground.load(textStream);
-	}
-	{
-		std::istringstream textStream(loadInfo.characterButtonMenuText);
-		selectedPlayerCharacterButtonBackground.load(textStream);
-	}
-
-	// character info background
-	{
-		std::istringstream textStream(loadInfo.characterInfoMenuText);
-		characterInfoDisplay.load(textStream);
-	}
-
-	// go Button
-	{
-		std::istringstream textStream(loadInfo.goButtonText);
-		goButton.load(textStream);
-	}
-
-
-	// player character buttons
-	// allocate vector space
-	playerCharacterButtons.reserve(loadInfo.playerCharacterButtons.totalNumberOfCharacters);
-	playerCharacters.reserve(loadInfo.playerCharacterButtons.totalNumberOfCharacters);
-	for (int i : loadInfo.playerCharacterButtons.characterIds) {
-		// load character buttons!
-
-		Character newchr = Character(i);
-		newchr.load(true);
-		playerCharacters.push_back(newchr);
-	}
-
-	for (auto it = playerCharacters.begin(); it != playerCharacters.end(); ++it)
-	{
-		playerCharacterButtons.push_back(CharacterButton(it));
-	}
-
-	for (auto it = playerCharacterButtons.begin(); it != playerCharacterButtons.end(); ++it)
-	{
-		it->load();
-	}
-
-
-	// enemy character buttons
-	// allocate vector space
-	enemyCharacterButtons.reserve(loadInfo.enemyCharacterButtons.totalNumberOfCharacters);
-	enemyCharacters.reserve(loadInfo.enemyCharacterButtons.totalNumberOfCharacters);
-	for (int i : loadInfo.enemyCharacterButtons.characterIds) {
-		// load character buttons!
-
-		Character newchr = Character(i);
-		newchr.load(true);
-		enemyCharacters.push_back(newchr);
-	}
-
-	for (auto it = enemyCharacters.begin(); it != enemyCharacters.end(); ++it)
-	{
-		enemyCharacterButtons.push_back(CharacterButton(it));
-	}
-
-	for (auto it = enemyCharacterButtons.begin(); it != enemyCharacterButtons.end(); ++it)
-	{
-		it->load();
-	}
-
-
-	// selected player character buttons
-	// allocate vector space
-	std::cout << "number of characters: " << loadInfo.playerCharacterButtons.totalNumberOfCharacters << std::endl;
-	selectedPlayerCharacterButtons.reserve(loadInfo.playerCharacterButtons.totalNumberOfCharacters);
-	for (int i = 0; i < loadInfo.playerCharacterButtons.totalNumberOfCharacters; ++i) {
-		selectedPlayerCharacterButtons.push_back(CharacterButton());
-	}
-	for (auto it = selectedPlayerCharacterButtons.begin(); it != selectedPlayerCharacterButtons.end(); ++it)
-	{
-		it->load();
-	}
-	latestSelectedCharacter = selectedPlayerCharacterButtons.begin();
 
 
 
-	MenuItem::loadFileData(loadInfo.oldInfo);
-}
+
+
+// Character selection management
 
 void LevelMenu::displayCharacterInfo(std::vector<CharacterButton>::iterator character, std::vector<CharacterButton> & otherlist)
 {
@@ -459,8 +544,6 @@ void LevelMenu::displayCharacterInfo(std::vector<CharacterButton>::iterator char
 	// set the matchups
 	for (auto it = otherlist.begin(); it != otherlist.end(); ++it)
 	{
-		//std::cout << "pitting " << character->characterRef->name << " against " << it->characterRef->name << std::endl;
-		//std::cout << it->characterRef->name << " recieves " << (int)(it->characterRef->getPrimaryMatchup(character->characterRef)) << "x damage" << std::endl;
 		it->setMatchup((int)(it->characterRef->getPrimaryMatchup(character->characterRef)), 
 					   (int)(2*it->characterRef->getSecondaryMatchup(character->characterRef)));
 	}
@@ -527,6 +610,20 @@ void LevelMenu::unselectCharacter(std::vector<CharacterButton>::iterator charact
 	// a button has been removed, lock go button again
 	goButton.lock();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Animation manager
 
 void LevelMenu::startAnimationState()
 {

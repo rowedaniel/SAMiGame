@@ -75,4 +75,7 @@ private:
 
 	CharacterInfoDisplay characterInfoDisplay;
 	LockableMenuButton goButton;
+
+	Character testCharacter = Character::Character(1);
+	std::vector<Character>::iterator testCharacterPointer;
 };

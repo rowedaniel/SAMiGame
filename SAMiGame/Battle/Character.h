@@ -19,7 +19,10 @@ private:
 
 	void loadTextureData();
 
+	sf::Texture newtexture;
 	sf::Sprite sprite;
+
+	bool loaded = false;
 
 };
 

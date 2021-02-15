@@ -13,7 +13,10 @@ void Character::load(bool playerOwned)
 {
 	CharacterTemplate::load();
 
-
+	std::string characterFilename;
+	if (playerOwned) {
+		characterFilename = "";
+	}
 	loadTextureData();
 }
 
@@ -34,6 +37,16 @@ float Character::getSecondaryMatchup(std::vector<Character>::iterator opponent)
 
 void Character::loadTextureData()
 {
+	/*std::cout << "loading texture: data/images/sprites/characters/" + std::to_string(type) + ".png" << std::endl;
+	if (!newtexture.loadFromFile("data/images/sprites/characters/" + std::to_string(type) + ".png")) {
+		// error
+		std::cout << "error loading image file for character" << std::endl;
+		return;
+	}
+	sprite.setTexture(newtexture);
+	sprite.setTextureRect(sf::IntRect(0, 0, 64, 64));*/
 	sprite = sf::Sprite(texture, sf::IntRect(0, 0, 64, 64));
 	sprite.setPosition(sf::Vector2f(100.0f, 100.0f));
+
+	loaded = true;
 }
