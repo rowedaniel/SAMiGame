@@ -9,7 +9,7 @@ public:
 	~Character();
 
 	void load(bool playerOwned);
-	void draw(sf::RenderWindow & window, sf::FloatRect boundBox);
+	void draw(sf::RenderWindow & window, sf::FloatRect boundBox, sf::Time elapsedTime);
 
 	float getPrimaryMatchup(std::vector<Character>::iterator opponent);
 	float getSecondaryMatchup(std::vector<Character>::iterator opponent);
@@ -19,8 +19,11 @@ private:
 
 	void loadTextureData();
 
-	sf::Texture newtexture;
+	sf::IntRect animationRect = sf::IntRect(0, 0, 64, 64);
 	sf::Sprite sprite;
+
+	sf::Time animationTime;
+	const sf::Time timestep = sf::milliseconds(100);
 
 	bool loaded = false;
 

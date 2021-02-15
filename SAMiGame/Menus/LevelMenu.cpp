@@ -337,7 +337,7 @@ void LevelMenu::updateItemPos()
 
 // Drawing
 
-void LevelMenu::draw(sf::RenderWindow & window)
+void LevelMenu::draw(sf::RenderWindow & window, sf::Time elapsedTime)
 {
 	drawBackground(window, boundingBox);
 
@@ -382,7 +382,7 @@ void LevelMenu::draw(sf::RenderWindow & window)
 		{
 			//std::cout << "attack: " << latestSelectedCharacter->characterRef->name << std::endl;
 		}
-		(latestSelectedCharacter->characterRef)->draw(window, boundingBox);
+		(latestSelectedCharacter->characterRef)->draw(window, boundingBox, elapsedTime);
 		// */
 
 		/*// TODO: testing purposes only

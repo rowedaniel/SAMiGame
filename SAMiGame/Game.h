@@ -17,12 +17,14 @@ private:
 	static sf::Vector2f screenToViewCoords(sf::Vector2f pos);
 
 
-	enum GameState { Uninitialized, Paused, ShowingMenu, Playing, Exiting };
+	enum GameState { Uninitialized, Paused, Playing, Exiting };
 	
-	static GameState _gameState;
-	static sf::RenderWindow _mainWindow;
+	static GameState gameState;
+	static sf::RenderWindow mainWindow;
 	static sf::View mainView;
 	static sf::Clock clock;
+
+	static MenuManager mainMenu;
 
 	static const int orig_window_width = 512;
 	static const int orig_window_height = 384;

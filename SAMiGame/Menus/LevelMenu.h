@@ -14,7 +14,7 @@ public:
 	~LevelMenu();
 	
 	void load(std::istream& file);
-	void draw(sf::RenderWindow & window);
+	void draw(sf::RenderWindow & window, sf::Time elapsedTime);
 	
 	void checkMouseDown(sf::Vector2f pos);
 	void checkMouseUp(sf::Vector2f pos);

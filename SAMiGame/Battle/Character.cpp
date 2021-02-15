@@ -20,8 +20,23 @@ void Character::load(bool playerOwned)
 	loadTextureData();
 }
 
-void Character::draw(sf::RenderWindow & window, sf::FloatRect boundBox)
+void Character::draw(sf::RenderWindow & window, sf::FloatRect boundBox, sf::Time elapsedTime)
 {
+	animationTime += elapsedTime;
+	while (animationTime > timestep) {
+		animationTime -= timestep;
+		animationRect.left += animationRect.width;
+		if (animationRect.left >= texture.getSize().x) {
+			animationRect.left = 0;
+			animationRect.top += animationRect.height;
+			if (animationRect.top >= texture.getSize().y) {
+				animationRect.top = 0;
+			}
+		}
+		sprite.setTextureRect(animationRect);
+	}
+
+
 	window.draw(sprite);
 }
 
@@ -45,7 +60,7 @@ void Character::loadTextureData()
 	}
 	sprite.setTexture(newtexture);
 	sprite.setTextureRect(sf::IntRect(0, 0, 64, 64));*/
-	sprite = sf::Sprite(texture, sf::IntRect(0, 0, 64, 64));
+	sprite = sf::Sprite(texture, animationRect);
 	sprite.setPosition(sf::Vector2f(100.0f, 100.0f));
 
 	loaded = true;

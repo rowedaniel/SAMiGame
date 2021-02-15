@@ -53,11 +53,11 @@ void MenuManager::load(std::istream & file)
 	activeMenu = menus.begin();
 }
 
-void MenuManager::draw(sf::RenderWindow & window)
+void MenuManager::draw(sf::RenderWindow & window, sf::Time elapsedTime)
 {
 	// TODO: figure out how to do this without the ugly if's
 	if (inLevel) {
-		activeLevel.draw(window);
+		activeLevel.draw(window, elapsedTime);
 	}
 	else {
 		activeMenu->draw(window);
