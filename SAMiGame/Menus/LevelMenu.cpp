@@ -31,8 +31,19 @@ LevelMenu::~LevelMenu()
 
 // Loading
 
-void LevelMenu::load(std::istream& file)
+bool LevelMenu::load(int id)
 {
+
+	std::fstream file;
+	file.open("data/levels/" + std::to_string(id) + "/.level", std::ios::in);
+	if (!file.is_open()) 
+	{
+		std::cout << "error opening file: data / levels" + std::to_string(id) + ".level" << std::endl;
+		return false;
+	}
+
+	levelid = id;
+
 	// TODO: figure out how to integrate this with superclass
 	LevelMenu::LoadInfo loadInfo;
 
@@ -81,6 +92,8 @@ void LevelMenu::load(std::istream& file)
 	updateItemPos();
 
 	state = selecting;
+
+	return true;
 }
 
 void LevelMenu::getFileLineData(int i, std::string & line, LoadInfo & loadInfo)
@@ -139,9 +152,6 @@ void LevelMenu::loadCharacters(int i, std::string & line, CharacterInfo & charac
 void LevelMenu::loadFileData(LoadInfo & loadInfo)
 {
 
-	// TODO: testing only
-	testCharacter.load(true);
-
 
 	if (loadInfo.playerCharacterButtons.totalNumberOfCharacters != loadInfo.enemyCharacterButtons.totalNumberOfCharacters) {
 		// real bad news. Error.
@@ -188,7 +198,7 @@ void LevelMenu::loadFileData(LoadInfo & loadInfo)
 
 	for (auto it = playerCharacters.begin(); it != playerCharacters.end(); ++it)
 	{
-		it->load(true);
+		it->load();
 	}
 
 
@@ -214,7 +224,7 @@ void LevelMenu::loadFileData(LoadInfo & loadInfo)
 
 	for (auto it = enemyCharacters.begin(); it != enemyCharacters.end(); ++it)
 	{
-		it->load(false);
+		it->load(levelid);
 	}
 
 	for (auto it = enemyCharacters.begin(); it != enemyCharacters.end(); ++it)
@@ -230,7 +240,6 @@ void LevelMenu::loadFileData(LoadInfo & loadInfo)
 
 	// selected player character buttons
 	// allocate vector space
-	std::cout << "number of characters: " << loadInfo.playerCharacterButtons.totalNumberOfCharacters << std::endl;
 	selectedPlayerCharacterButtons.reserve(loadInfo.playerCharacterButtons.totalNumberOfCharacters);
 	for (int i = 0; i < loadInfo.playerCharacterButtons.totalNumberOfCharacters; ++i) {
 		selectedPlayerCharacterButtons.push_back(CharacterButton());
@@ -239,8 +248,32 @@ void LevelMenu::loadFileData(LoadInfo & loadInfo)
 	{
 		it->load();
 	}
-	latestSelectedCharacter = selectedPlayerCharacterButtons.begin();
+	latestSelectedPlayerCharacter = selectedPlayerCharacterButtons.begin();
 
+	// selected enemy character buttons
+	// allocate vector space
+	selectedEnemyCharacterButtons.reserve(loadInfo.enemyCharacterButtons.totalNumberOfCharacters);
+	for (int i = 0; i < loadInfo.enemyCharacterButtons.totalNumberOfCharacters; ++i) {
+		selectedEnemyCharacterButtons.push_back(CharacterButton());
+	}
+	for (auto it = selectedEnemyCharacterButtons.begin(); it != selectedEnemyCharacterButtons.end(); ++it)
+	{
+		it->load();
+	}
+	latestSelectedEnemyCharacter = selectedEnemyCharacterButtons.begin();
+
+
+
+
+	// load players
+	// TODO: load in player health from file
+	player = Player(1000.0f);
+	enemy = Player(1000.0f);
+
+	playerHealthBar.load();
+	enemyHealthBar.load();
+	playerHealthBar.setHealth(player);
+	enemyHealthBar.setHealth(enemy);
 
 
 	MenuItem::loadFileData(loadInfo.oldInfo);
@@ -266,17 +299,44 @@ void LevelMenu::updatePos(sf::Vector2f pos)
 
 void LevelMenu::updateItemPos()
 {
-
+	float x, y;
 
 	// place go button
 	goButton.updatePos(sf::Vector2f(boundingBox.left + boundingBox.width / 2.0f - goButton.getWidth() / 2.0f, boundingBox.top + 100.0f));
 
 
+	// place characters
+	y = boundingBox.top + boundingBox.height / 2 - 32.0f;
+	x = boundingBox.left + 32.0f;
+	for (auto it = playerCharacters.begin(); it != playerCharacters.end(); ++it)
+	{
+		it->updatePos(sf::Vector2f(x, y));
+	}
 
-	float y = boundingBox.top + boundingBox.height / 2 - 32.0f;
+	// TODO: make this dependant on character size, not fixed:
+	x = boundingBox.left + boundingBox.width - 32.0f;
+	for (auto it = enemyCharacters.begin(); it != enemyCharacters.end(); ++it)
+	{
+		it->updatePos(sf::Vector2f(x, y));
+	}
+
+
+
+	// place healthBars
+	y = boundingBox.top + 32.0f;
+	x = boundingBox.left + 8.0f;
+	playerHealthBar.updatePos(sf::Vector2f(x, y));
+	x = boundingBox.left + boundingBox.width - 8.0f - enemyHealthBar.getWidth();
+	enemyHealthBar.updatePos(sf::Vector2f(x, y));
+
+
+
+	// place character buttons
+
+	y = boundingBox.top + boundingBox.height / 2 - 32.0f;
 
 	// Player characters go at the left-middle section
-	float x = boundingBox.left + 32.0f;
+	x = boundingBox.left + 32.0f;
 
 	// place player character button background
 	playerCharacterButtonBackground.updatePos(sf::Vector2f(x - 4.0f, y - 4.0f));
@@ -377,23 +437,124 @@ void LevelMenu::draw(sf::RenderWindow & window, sf::Time elapsedTime)
 	}
 	case animating:
 	{
-		// /*
-		if (latestSelectedCharacter == selectedPlayerCharacterButtons.begin())
+
+		auto pCharacter = latestSelectedPlayerCharacter->characterRef;
+		auto eCharacter = latestSelectedEnemyCharacter->characterRef;
+
+		switch (animationState)
 		{
-			//std::cout << "attack: " << latestSelectedCharacter->characterRef->name << std::endl;
+		case intro:
+		{
+
+
+			animationTime += elapsedTime;
+			if (animationTime > animationStartDelay) {
+				animationTime = sf::milliseconds(0);
+
+				pCharacter->startSecondaryAnimation(latestSelectedEnemyCharacter->characterRef);
+				eCharacter->startSecondaryAnimation(latestSelectedPlayerCharacter->characterRef);
+
+
+				animationState = secondaryAttack;
+			}
+			break;
 		}
-		(latestSelectedCharacter->characterRef)->draw(window, boundingBox, elapsedTime);
-		// */
+		case secondaryAttack:
+		{
 
-		/*// TODO: testing purposes only
-		testCharacterPointer = playerCharacters.begin();
-		testCharacterPointer->draw(window, boundingBox);*/
+			if (pCharacter->isAnimationFinished() && eCharacter->isAnimationFinished()) {
+				animationState = addEffects;
+			}
+			break;
+		}
+		case addEffects:
+		{
+
+			// TODO: add effects to player
+			// pCharacter->addEffectsToPlayer(player);
+			// pCharacter->addEffectsToOpponent(enemy);
+			// eCharacter->addEffectsToPlayer(enemy);
+			// eCharacter->addEffectsToOpponent(player);
+
+			animationTime += elapsedTime;
+			if (animationTime > animationPauseDelay) {
+				animationTime = sf::milliseconds(0);
+
+				pCharacter->startPrimaryAnimation(eCharacter);
+				eCharacter->startPrimaryAnimation(pCharacter);
+				animationState = primaryAttack;
+			}
+			break;
+		}
+		case primaryAttack:
+		{
+			if (pCharacter->isAnimationFinished() && eCharacter->isAnimationFinished()) {
+				// TODO: update health graphics/logic
+				player.damage(eCharacter->calculateDamage(pCharacter));
+				enemy.damage(pCharacter->calculateDamage(eCharacter));
+
+				playerHealthBar.setHealth(player);
+				enemyHealthBar.setHealth(enemy);
+
+				animationState = healthUpdate;
+			}
+			break;
+		}
+		case healthUpdate:
+		{
+
+			if (playerHealthBar.isAnimationFinished() && enemyHealthBar.isAnimationFinished())
+			{
+				animationState = endingPause;
+			}
+
+			break;
+		}
+		case endingPause:
+		{
+			animationTime += elapsedTime;
+			if (animationTime > animationPauseDelay) {
+				animationTime = sf::milliseconds(0);
+				animationState = finishedCharacter;
+			}
+			break;
+		}
+		case finishedCharacter:
+		{
+
+			pCharacter->resetAnimation();
+			eCharacter->resetAnimation();
+
+			++latestSelectedPlayerCharacter;
+			++latestSelectedEnemyCharacter;
+
+			animationState = intro;
+
+			if (latestSelectedPlayerCharacter == selectedPlayerCharacterButtons.end() || latestSelectedEnemyCharacter == selectedEnemyCharacterButtons.end())
+			{
+				// reset all player-selected characters
+				while (latestSelectedPlayerCharacter != selectedPlayerCharacterButtons.begin())
+				{
+					unselectCharacter(selectedPlayerCharacterButtons.begin());
+				}
+				latestSelectedEnemyCharacter = selectedEnemyCharacterButtons.begin();
+				state = selecting;
+			}
+			break;
+		}
+		}
 
 
-		//testCharacter.draw(window, boundingBox);
+		pCharacter->draw(window, boundingBox, elapsedTime);
+		eCharacter->draw(window, boundingBox, elapsedTime);
+
 		break;
 	}
 	}
+
+	// draw healthbars
+	playerHealthBar.draw(window, boundingBox, elapsedTime);
+	enemyHealthBar.draw(window, boundingBox, elapsedTime);
 
 	drawBorder(window, boundingBox);
 }
@@ -544,8 +705,8 @@ void LevelMenu::displayCharacterInfo(std::vector<CharacterButton>::iterator char
 	// set the matchups
 	for (auto it = otherlist.begin(); it != otherlist.end(); ++it)
 	{
-		it->setMatchup((int)(it->characterRef->getPrimaryMatchup(character->characterRef)), 
-					   (int)(2*it->characterRef->getSecondaryMatchup(character->characterRef)));
+		it->setMatchup((int)(character->characterRef->getPrimaryMatchup(it->characterRef)),
+					   (int)(2* character->characterRef->getSecondaryMatchup(it->characterRef)));
 	}
 }
 
@@ -553,24 +714,24 @@ void LevelMenu::selectCharacter(std::vector<CharacterButton>::iterator character
 {
 
 	std::cout << "in selectCharacter" << std::endl;
-	std::cout << "check one is: " << (latestSelectedCharacter == selectedPlayerCharacterButtons.end()) << std::endl;
+	std::cout << "check one is: " << (latestSelectedPlayerCharacter == selectedPlayerCharacterButtons.end()) << std::endl;
 
 	// if the last one's there, then full capacity has been reached
-	if (latestSelectedCharacter == selectedPlayerCharacterButtons.end()) {
+	if (latestSelectedPlayerCharacter == selectedPlayerCharacterButtons.end()) {
 		return;
 	}
 	std::cout << "passed check 1" << std::endl;
 
 	// if the one we're trying to add is already in the list, then it's invalid
-	for (auto it = selectedPlayerCharacterButtons.begin(); it != latestSelectedCharacter; ++it) {
+	for (auto it = selectedPlayerCharacterButtons.begin(); it != latestSelectedPlayerCharacter; ++it) {
 		if (it->isCharacterDataSet() && it->characterRef == character->characterRef) {
 			return;
 		}
 	}
 	std::cout << "passed check 2" << std::endl;
 
-	latestSelectedCharacter->setCharacterData(character->characterRef);
-	if (++latestSelectedCharacter == selectedPlayerCharacterButtons.end()) {
+	latestSelectedPlayerCharacter->setCharacterData(character->characterRef);
+	if (++latestSelectedPlayerCharacter == selectedPlayerCharacterButtons.end()) {
 		// all characters selected, unlock go button so people can play
 		goButton.unlock();
 	}
@@ -585,30 +746,34 @@ void LevelMenu::selectCharacter(std::vector<CharacterButton>::iterator character
 void LevelMenu::unselectCharacter(std::vector<CharacterButton>::iterator character)
 {
 
-	std::cout << "in unselectCharacter, first check is: " << (latestSelectedCharacter == selectedPlayerCharacterButtons.begin()) << std::endl;
 	// if the first one hasn't been set yet, there's nothing to remove
-	if (character == latestSelectedCharacter) {
+	if (character == latestSelectedPlayerCharacter) {
 		return;
 	}
 
 
 	// if the latest one is before the selected, there's nothing to remove
 	for (auto it = selectedPlayerCharacterButtons.begin(); it != character; ++it) {
-		if (it == latestSelectedCharacter) {
+		if (it == latestSelectedPlayerCharacter) {
 			return;
 		}
 	}
 
-	--latestSelectedCharacter;
+	--latestSelectedPlayerCharacter;
+
 
 	std::vector<CharacterButton>::iterator nextCharacter = character;
-	for (auto it = character; it != latestSelectedCharacter; ++it) {
+	for (auto it = character; it != latestSelectedPlayerCharacter; ++it) {
 		it->setCharacterData((++nextCharacter)->characterRef);
 	}
-	latestSelectedCharacter->clearCharacterData();
+	latestSelectedPlayerCharacter->clearCharacterData();
 
 	// a button has been removed, lock go button again
 	goButton.lock();
+
+
+	std::cout << "successfully unselected character!!" << std::endl;
+
 }
 
 
@@ -627,6 +792,25 @@ void LevelMenu::unselectCharacter(std::vector<CharacterButton>::iterator charact
 
 void LevelMenu::startAnimationState()
 {
+
+	chooseEnemyCharacters();
+
+	
+	latestSelectedPlayerCharacter = selectedPlayerCharacterButtons.begin();
+	latestSelectedEnemyCharacter  = selectedEnemyCharacterButtons.begin();
+
+	animationTime = sf::milliseconds(0);
+
 	state = animating;
-	latestSelectedCharacter = selectedPlayerCharacterButtons.begin();
+	animationState = intro;
+}
+
+void LevelMenu::chooseEnemyCharacters()
+{
+	latestSelectedEnemyCharacter = selectedEnemyCharacterButtons.begin();
+	for (auto it = enemyCharacterButtons.begin(); it != enemyCharacterButtons.end(); ++it)
+	{
+		latestSelectedEnemyCharacter->setCharacterData(it->characterRef);
+		++latestSelectedEnemyCharacter;
+	}
 }

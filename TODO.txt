@@ -65,3 +65,4 @@ Misc.:                                         [Not Started]-
   - Better error checking overall
       - don't crash when loading text (stoi)
   - Unload things when not in use              [Not Started]+
+  - Add Gacha menu color customizations        [Not Started]-

@@ -1,7 +1,7 @@
 #pragma once
-#include "../stdafx.h";
-#include "MenuItem.h";
-#include "../Battle/Character.h";
+#include "../stdafx.h"
+#include "MenuItem.h"
+#include "../Battle/Character.h"
 
 // TODO: make parent 'clickable' class. Also, consider adding more parent classes.
 class CharacterButton : public MenuItem

@@ -1,8 +1,8 @@
 #pragma once
-#include "../stdafx.h";
-#include "MenuItem.h";
-#include "MenuText.h";
-#include "../Battle/Character.h";
+#include "../stdafx.h"
+#include "MenuItem.h"
+#include "MenuText.h"
+#include "../Battle/Character.h"
 
 // TODO: make parent 'clickable' class. Also, consider adding more parent classes.
 class CharacterInfoDisplay : MenuItem

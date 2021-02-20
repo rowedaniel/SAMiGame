@@ -1,4 +1,4 @@
-#include "CharacterInfoDisplay.h";
+#include "CharacterInfoDisplay.h"
 
 CharacterInfoDisplay::CharacterInfoDisplay()
 {
@@ -15,7 +15,7 @@ void CharacterInfoDisplay::setCharacterData(std::vector<Character>::iterator sou
 	secondaryTypeSprite.setTextureRect(sf::IntRect(sourceCharacter->secondary_type * 32, 32, 32, 32));
 	characterName.setText(sourceCharacter->name);
 	characterDescription.setText(sourceCharacter->description);
-	characterAttack.setText("Attack: " + std::to_string((int)sourceCharacter->attack));
+	characterAttack.setText("Attack: " + std::to_string((int)std::round(sourceCharacter->getAttack())));
 	//std::cout << "description length: " << sourceCharacter->description.length() << std::endl;
 }
 

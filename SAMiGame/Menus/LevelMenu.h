@@ -3,8 +3,10 @@
 #include "MenuItem.h"
 #include "CharacterButton.h"
 #include "CharacterInfoDisplay.h"
+#include "HealthBar.h"
 #include "LockableMenuButton.h"
 #include "../Battle/Character.h"
+#include "../Battle/Player.h"
 
 class LevelMenu : public MenuItem
 {
@@ -13,7 +15,7 @@ public:
 	LevelMenu(float x, float y);
 	~LevelMenu();
 	
-	void load(std::istream& file);
+	bool load(int id);
 	void draw(sf::RenderWindow & window, sf::Time elapsedTime);
 	
 	void checkMouseDown(sf::Vector2f pos);
@@ -25,7 +27,9 @@ public:
 private:
 
 	enum BattleState { loading, selecting, animating };
+	enum AnimationState { intro, secondaryAttack, addEffects, primaryAttack, healthUpdate, endingPause, finishedCharacter };
 	BattleState state;
+	AnimationState animationState;
 
 
 	struct CharacterInfo
@@ -58,7 +62,12 @@ private:
 
 
 	void startAnimationState();
+	void chooseEnemyCharacters();
 
+
+
+
+	int levelid;
 
 	// character select stuff
 
@@ -68,7 +77,9 @@ private:
 	std::vector<CharacterButton> enemyCharacterButtons;
 	std::vector<CharacterButton> playerCharacterButtons;
 	std::vector<CharacterButton> selectedPlayerCharacterButtons;
-	std::vector<CharacterButton>::iterator latestSelectedCharacter;
+	std::vector<CharacterButton>::iterator latestSelectedPlayerCharacter;
+	std::vector<CharacterButton> selectedEnemyCharacterButtons;
+	std::vector<CharacterButton>::iterator latestSelectedEnemyCharacter;
 
 	std::vector<Character> enemyCharacters;
 	std::vector<Character> playerCharacters;
@@ -76,6 +87,19 @@ private:
 	CharacterInfoDisplay characterInfoDisplay;
 	LockableMenuButton goButton;
 
-	Character testCharacter = Character::Character(1);
-	std::vector<Character>::iterator testCharacterPointer;
+	Player player;
+	Player enemy;
+
+	HealthBar playerHealthBar;
+	HealthBar enemyHealthBar;
+
+
+
+
+
+
+	// animation stuff
+	sf::Time animationTime = sf::milliseconds(0);
+	const sf::Time animationStartDelay = sf::milliseconds(500);
+	const sf::Time animationPauseDelay = sf::milliseconds(500);
 };

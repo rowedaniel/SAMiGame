@@ -1,6 +1,6 @@
 #pragma once
-#include "../stdafx.h";
-#include "CharacterTemplate.h";
+#include "../stdafx.h"
+#include "CharacterTemplate.h"
 
 class Character : public CharacterTemplate
 {
@@ -8,24 +8,63 @@ public:
 	Character(int characterType);
 	~Character();
 
-	void load(bool playerOwned);
+	void load(); // assume owned by player
+	void load(int levelnumber); // owned by level
+	void load(std::string path);
 	void draw(sf::RenderWindow & window, sf::FloatRect boundBox, sf::Time elapsedTime);
+	void updatePos(sf::Vector2f pos);
 
+
+	// animation controllers
+	void resetAnimation();
+	void startPrimaryAnimation(std::vector<Character>::iterator opponent);
+	void startSecondaryAnimation(std::vector<Character>::iterator opponent);
+	bool isAnimationFinished();
+
+	// battle logic
 	float getPrimaryMatchup(std::vector<Character>::iterator opponent);
 	float getSecondaryMatchup(std::vector<Character>::iterator opponent);
+	float getAttack();
+	float calculateDamage(std::vector<Character>::iterator opponent);
 private:
+
+	// loading stuff
+	bool loaded = false;
+	struct LoadInfo
+	{
+		unsigned int level = 0;
+	};
+
+
 	const std::vector<float> primaryMatchups = {0.0f, 2.0f, 1.0f, 1.0f};
 	const std::vector<float> secondaryMatchups = { 1.0f, 2.0f, 1.5f, 0.5f, 0.0f }; 
 
+
+
+	void getFileLineData(int i, std::string & line, LoadInfo & loadInfo);
+	void loadFileData(LoadInfo & loadInfo);
 	void loadTextureData();
 
-	sf::IntRect animationRect = sf::IntRect(0, 0, 64, 64);
+
+
+
+	// animation stuff
+	sf::IntRect animationRect = sf::IntRect(0, 64*4, 64, 64);
 	sf::Sprite sprite;
 
-	sf::Time animationTime;
+	sf::Time animationTime = sf::milliseconds(0);
 	const sf::Time timestep = sf::milliseconds(100);
+	bool animating = false;
 
-	bool loaded = false;
+
+	
+
+
+	// character stat stuff
+	float levelFactor;
+
+
+
 
 };
 

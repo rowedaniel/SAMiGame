@@ -33,7 +33,6 @@ void CharacterButton::draw(sf::RenderWindow & window, sf::FloatRect boundBox)
 
 void CharacterButton::setCharacterData(std::vector<Character>::iterator sourceCharacter)
 {
-	std::cout << "in characterbutton, type is: " << sourceCharacter->type << std::endl;
 	characterRef = sourceCharacter;
 	characterType = sourceCharacter->type;
 	//sprite.setTextureRect(sf::IntRect(1 * 32, 0, 32, 32));

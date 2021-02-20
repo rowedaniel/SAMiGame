@@ -10,7 +10,7 @@ void Game::start(void)
 	mainWindow.create(sf::VideoMode(orig_window_width, orig_window_height, 32), "Gaem");
 	mainView = sf::View(sf::FloatRect(0, 0, orig_window_width, orig_window_height));
 	
-	std::fstream file("data/menu.txt", std::ios::in);
+	std::fstream file("data/mainMenu.menuItem", std::ios::in);
 	if (file.is_open()) {
 		mainMenu.load(file);
 	}

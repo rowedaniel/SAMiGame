@@ -9,45 +9,66 @@ Character::~Character()
 {
 }
 
-void Character::load(bool playerOwned)
+
+
+// loading stuff
+
+void Character::load()
+{
+	Character::load("gamestate/characters/");
+}
+
+void Character::load(int levelnumber)
+{
+	Character::load("data/levels/" + std::to_string(levelnumber) + "/");
+	// enemy, so flip sprite
+
+	sprite.setScale(-1.0f, 1.0f);
+}
+
+void Character::load(std::string path)
 {
 	CharacterTemplate::load();
 
 	std::string characterFilename;
-	if (playerOwned) {
-		characterFilename = "";
+	characterFilename = path + std::to_string(type) + ".character";
+
+	std::fstream file(characterFilename, std::ios::in);
+	if (!file.is_open()) {
+		std::cout << "error loading file: " + path + std::to_string(type) + ".character" << std::endl;
 	}
+
+	Character::LoadInfo loadInfo;
+
+	std::string line;
+	int i = 0;
+	while (getline(file, line)) {
+		if (line.substr(0, 2) == "//") {
+			continue;
+		}
+		getFileLineData(++i, line, loadInfo);
+	}
+
+	loadFileData(loadInfo);
 	loadTextureData();
 }
 
-void Character::draw(sf::RenderWindow & window, sf::FloatRect boundBox, sf::Time elapsedTime)
+void Character::getFileLineData(int i, std::string & line, LoadInfo & loadInfo)
 {
-	animationTime += elapsedTime;
-	while (animationTime > timestep) {
-		animationTime -= timestep;
-		animationRect.left += animationRect.width;
-		if (animationRect.left >= texture.getSize().x) {
-			animationRect.left = 0;
-			animationRect.top += animationRect.height;
-			if (animationRect.top >= texture.getSize().y) {
-				animationRect.top = 0;
-			}
-		}
-		sprite.setTextureRect(animationRect);
+	switch (i)
+	{
+	case 1:
+	{
+		// TODO: make this safer, to avoid crashes
+		loadInfo.level = std::stoi(line);
+		break;
 	}
-
-
-	window.draw(sprite);
+	}
 }
 
-float Character::getPrimaryMatchup(std::vector<Character>::iterator opponent)
+void Character::loadFileData(LoadInfo & loadInfo)
 {
-	return primaryMatchups[(primary_type - opponent->primary_type+4)%4];
-}
-
-float Character::getSecondaryMatchup(std::vector<Character>::iterator opponent)
-{
-	return secondaryMatchups[(secondary_type - opponent->secondary_type + 5) % 5];
+	levelFactor = (loadInfo.level * 1.0f) / 100.0f;
 }
 
 void Character::loadTextureData()
@@ -61,7 +82,108 @@ void Character::loadTextureData()
 	sprite.setTexture(newtexture);
 	sprite.setTextureRect(sf::IntRect(0, 0, 64, 64));*/
 	sprite = sf::Sprite(texture, animationRect);
-	sprite.setPosition(sf::Vector2f(100.0f, 100.0f));
 
 	loaded = true;
+}
+
+
+
+
+
+
+
+
+void Character::updatePos(sf::Vector2f pos)
+{
+	sprite.setPosition(pos);
+}
+
+
+
+
+
+// animation and drawing
+
+void Character::draw(sf::RenderWindow & window, sf::FloatRect boundBox, sf::Time elapsedTime)
+{
+	if (animating)
+	{
+		animationTime += elapsedTime;
+		while (animationTime > timestep) {
+			animationTime -= timestep;
+			animationRect.left += animationRect.width;
+			if (animationRect.left >= texture.getSize().x) {
+				animating = false;
+				break;
+			}
+			sprite.setTextureRect(animationRect);
+		}
+	}
+
+	window.draw(sprite);
+}
+
+
+void Character::resetAnimation()
+{
+	animationRect.top = animationRect.height * 4;
+	animationRect.left = 0;
+	sprite.setTextureRect(animationRect);
+	std::cout << "resetting animation for: " << name << std::endl;
+}
+
+void Character::startPrimaryAnimation(std::vector<Character>::iterator opponent)
+{
+	// TODO: make this do different animations, instead of just the one
+	animationRect.top = getPrimaryMatchup(opponent) * animationRect.height;
+	animationRect.left = 0;
+	sprite.setTextureRect(animationRect);
+	animating = true;
+
+	std::cout << "in character, am: " << name << " fighting: " << opponent->name << std::endl;
+}
+
+void Character::startSecondaryAnimation(std::vector<Character>::iterator opponent)
+{
+	animationRect.top = animationRect.height*4;
+	animationRect.left = 0;
+	sprite.setTextureRect(animationRect);
+	animating = true;
+}
+
+
+
+
+
+bool Character::isAnimationFinished()
+{
+	return !animating;
+}
+
+
+
+
+
+
+// battle mechanics
+
+float Character::getPrimaryMatchup(std::vector<Character>::iterator opponent)
+{
+	return primaryMatchups[(opponent->primary_type - primary_type + 4)%4];
+}
+
+float Character::getSecondaryMatchup(std::vector<Character>::iterator opponent)
+{
+	return secondaryMatchups[(opponent->secondary_type - secondary_type + 5) % 5];
+}
+
+float Character::getAttack()
+{
+	return attack * levelFactor;
+}
+
+float Character::calculateDamage(std::vector<Character>::iterator opponent)
+{
+	std::cout << name << " attacking: " << opponent->name << ", matchup factor is: " << getPrimaryMatchup(opponent) << std::endl;
+	return getAttack() * getPrimaryMatchup(opponent);
 }

@@ -10,7 +10,6 @@ public:
 	int type; // which character, kevin, etc.
 	std::string name;
 	std::string description;
-	float attack;
 	int primary_type; // the actual type. TODO: make this terminology less confusing
 	int secondary_type;
 
@@ -31,4 +30,7 @@ protected:
 	void loadTextureData();
 
 	sf::Texture texture;
+
+
+	float attack;
 };
