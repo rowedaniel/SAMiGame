@@ -1,0 +1,22 @@
+Effects should have:
+  - effect type (enum, determining what it does)
+  - duration
+  - amount (scales with level, probably)
+  - some way to identify who it's affecting
+ 
+Therefore, should also have the following methods:
+
+Influences Players:
+  - beforeRound (happens at the begining of the round, before anything else)
+  - afterRound (happens at the end of the round, after everything else)
+      - (flat damage should usually be this, except in rare cases.)
+  - applyToDefense (applies to player damage)
+      - (i.e. 
+
+Influences Characters:
+  - beforeAttack (happens right before attack)
+  - afterAttack (happens right after attack)
+  - applyToAttack (applies to character damage directly)
+      - (i.e. opponent does 20% less damage)
+  - applyToNewSpecial (triggers when character applies a new special, changes amount)
+

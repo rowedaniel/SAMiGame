@@ -25,6 +25,12 @@
     <Filter Include="Source Files\Battle">
       <UniqueIdentifier>{55cd0a42-931d-49fc-b342-44f033528dae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Battle\Effects">
+      <UniqueIdentifier>{d3dfce13-a869-4865-9901-500435ef94d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Battle\Effects">
+      <UniqueIdentifier>{1a095c24-5efb-42ef-9be4-0dc2b00fd392}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -75,6 +81,15 @@
     <ClCompile Include="Menus\HealthBar.cpp">
       <Filter>Source Files\Menus</Filter>
     </ClCompile>
+    <ClCompile Include="Battle\EffectGetter.cpp">
+      <Filter>Source Files\Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="Battle\Effects\Effect.cpp">
+      <Filter>Source Files\Battle\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="Battle\Effects\ModifyDamage.cpp">
+      <Filter>Source Files\Battle\Effects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -124,6 +139,15 @@
     </ClInclude>
     <ClInclude Include="Menus\HealthBar.h">
       <Filter>Header Files\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="Battle\EffectGetter.h">
+      <Filter>Header Files\Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="Battle\Effects\Effect.h">
+      <Filter>Header Files\Battle\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Battle\Effects\ModifyDamage.h">
+      <Filter>Header Files\Battle\Effects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
