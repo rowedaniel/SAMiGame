@@ -35,17 +35,18 @@ Menu System:                                   [In Progress]
 
 Battle System:                                 [In Progress]*
   
-  - select order/matchups/etc.:                [In Progress]*
+  - select order/matchups/etc.:                [Done]
   - physical attack system                     [In Progress]*
       - defense? Decide on this                [Not Started]*
-      - attack                                 [In Progress]*
-      - health                                 [Not Started]*
-          - decide where to keep track of it
+      - attack                                 [Done]
+      - health                                 [Done]
+          - decide where to keep track of it   [Done]
+      - make attack take effects into account  [Not Started]*
   
-  - secondary effect system:                   [Not Started]+
+  - secondary effect system:                   [In Progress]*
       - every character has a list of effects,
-        each one with:
-          - type
+        each one with:                         [Done]
+          - type                               
           - duration
           - amount (exact effect varies)
   
