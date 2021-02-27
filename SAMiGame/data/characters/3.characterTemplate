@@ -2,9 +2,29 @@ Volcano (Test)
 Sample Text
 // sprite data placeholder
 // attack stat (at max level)
-65.0f
+100.0f
 // primary type (0-groundcover, 1-fern, 2-tree, 3-shrub)
 2
 // secondary type (0-empathy, 1-community, 2-balance, 3-thinking, 4-adventure)
 2
-// ability placeholder
+// secondary effect cooldown:
+2
+// number of each type of effect:
+// influences this character:
+0
+// influences the opposing character:
+0
+// influences this character's player:
+0
+// influences the opposing character's player:
+1
+//
+// for each effect:
+// number of lines:
+3
+// effect type
+7
+// effect duration (in turns)
+1
+// effect amount
+150.0f;

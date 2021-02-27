@@ -96,6 +96,12 @@ bool LevelMenu::load(int id)
 	return true;
 }
 
+void LevelMenu::unload()
+{
+	// do something with vectors here
+
+}
+
 void LevelMenu::getFileLineData(int i, std::string & line, LoadInfo & loadInfo)
 {
 	if (i < 6) { // info for the background
@@ -122,6 +128,12 @@ void LevelMenu::getFileLineData(int i, std::string & line, LoadInfo & loadInfo)
 		return;
 	}
 	i -= 9;
+
+	if (i < 2) {
+		loadInfo.enemyHealth = std::stof(line);
+		return;
+	}
+	i -= 1;
 
 	loadCharacters(i, line, loadInfo.enemyCharacterButtons);
 }
@@ -266,14 +278,28 @@ void LevelMenu::loadFileData(LoadInfo & loadInfo)
 
 
 	// load players
-	// TODO: load in player health from file
-	player = Player(1000.0f);
-	enemy = Player(1000.0f);
+	// TODO: put this in a more reasonable place
+	{
+		std::fstream file("gamestate/current.player", std::ios::in);
+		if (file.is_open()) {
+			std::string line;
+			float playerHealth = 100.0f;
+			while (getline(file, line)) {
+				if (line.substr(0, 2) == "//") {
+					continue;
+				}
+				playerHealth = std::stof(line);
+				break;
+			}
+			player = Player(playerHealth);
+		}
+	}
+	enemy = Player(loadInfo.enemyHealth);
 
 	playerHealthBar.load();
 	enemyHealthBar.load();
-	playerHealthBar.setHealth(player);
-	enemyHealthBar.setHealth(enemy);
+	playerHealthBar.update(player, true);
+	enemyHealthBar.update(enemy, false);
 
 
 	MenuItem::loadFileData(loadInfo.oldInfo);
@@ -306,7 +332,7 @@ void LevelMenu::updateItemPos()
 
 
 	// place characters
-	y = boundingBox.top + boundingBox.height / 2 - 32.0f;
+	y = boundingBox.top + boundingBox.height / 2 - 64.0f;
 	x = boundingBox.left + 32.0f;
 	for (auto it = playerCharacters.begin(); it != playerCharacters.end(); ++it)
 	{
@@ -380,7 +406,12 @@ void LevelMenu::updateItemPos()
 	}
 
 	// place character matchup info section
-	characterInfoDisplay.updatePos(sf::Vector2f(boundingBox.left + 32.0f, boundingBox.top + boundingBox.height / 2 + 32));
+	characterInfoDisplay.updatePos(sf::Vector2f(boundingBox.left + 40.0f, boundingBox.top + boundingBox.height / 2 + 32));
+}
+
+bool LevelMenu::isDone()
+{
+	return done;
 }
 
 
@@ -438,6 +469,8 @@ void LevelMenu::draw(sf::RenderWindow & window, sf::Time elapsedTime)
 	case animating:
 	{
 
+		// TODO: move this to an actual reasonable place
+
 		auto pCharacter = latestSelectedPlayerCharacter->characterRef;
 		auto eCharacter = latestSelectedEnemyCharacter->characterRef;
 
@@ -451,9 +484,12 @@ void LevelMenu::draw(sf::RenderWindow & window, sf::Time elapsedTime)
 			if (animationTime > animationStartDelay) {
 				animationTime = sf::milliseconds(0);
 
+				// TODO: probably place this in a better place
+				pCharacter->beforeAttackEffects();
+				eCharacter->beforeAttackEffects();
+
 				pCharacter->startSecondaryAnimation(latestSelectedEnemyCharacter->characterRef);
 				eCharacter->startSecondaryAnimation(latestSelectedPlayerCharacter->characterRef);
-
 
 				animationState = secondaryAttack;
 			}
@@ -463,22 +499,30 @@ void LevelMenu::draw(sf::RenderWindow & window, sf::Time elapsedTime)
 		{
 
 			if (pCharacter->isAnimationFinished() && eCharacter->isAnimationFinished()) {
+				pCharacter->applySecondary(eCharacter, player, enemy);
+				eCharacter->applySecondary(pCharacter, enemy, player);
 				animationState = addEffects;
+
+				playerHealthBar.update(player, true);
+				enemyHealthBar.update(enemy, false);
 			}
 			break;
 		}
 		case addEffects:
 		{
 
-			// TODO: add effects to player
-			// pCharacter->addEffectsToPlayer(player);
-			// pCharacter->addEffectsToOpponent(enemy);
-			// eCharacter->addEffectsToPlayer(enemy);
-			// eCharacter->addEffectsToOpponent(player);
-
 			animationTime += elapsedTime;
 			if (animationTime > animationPauseDelay) {
 				animationTime = sf::milliseconds(0);
+
+				if (player.isDead()) {
+					animationState = loss;
+					break;
+				}
+				if (enemy.isDead()) {
+					animationState = win;
+					break;
+				}
 
 				pCharacter->startPrimaryAnimation(eCharacter);
 				eCharacter->startPrimaryAnimation(pCharacter);
@@ -493,8 +537,8 @@ void LevelMenu::draw(sf::RenderWindow & window, sf::Time elapsedTime)
 				player.damage(eCharacter->calculateDamage(pCharacter));
 				enemy.damage(pCharacter->calculateDamage(eCharacter));
 
-				playerHealthBar.setHealth(player);
-				enemyHealthBar.setHealth(enemy);
+				playerHealthBar.update(player, true);
+				enemyHealthBar.update(enemy, false);
 
 				animationState = healthUpdate;
 			}
@@ -505,6 +549,14 @@ void LevelMenu::draw(sf::RenderWindow & window, sf::Time elapsedTime)
 
 			if (playerHealthBar.isAnimationFinished() && enemyHealthBar.isAnimationFinished())
 			{
+				if (player.isDead()) {
+					animationState = loss;
+					break;
+				}
+				if (enemy.isDead()) {
+					animationState = win;
+					break;
+				}
 				animationState = endingPause;
 			}
 
@@ -525,6 +577,7 @@ void LevelMenu::draw(sf::RenderWindow & window, sf::Time elapsedTime)
 			pCharacter->resetAnimation();
 			eCharacter->resetAnimation();
 
+
 			++latestSelectedPlayerCharacter;
 			++latestSelectedEnemyCharacter;
 
@@ -532,14 +585,74 @@ void LevelMenu::draw(sf::RenderWindow & window, sf::Time elapsedTime)
 
 			if (latestSelectedPlayerCharacter == selectedPlayerCharacterButtons.end() || latestSelectedEnemyCharacter == selectedEnemyCharacterButtons.end())
 			{
-				// reset all player-selected characters
+				animationState = updatePlayerEffects;
+
+				pCharacter->afterAttackEffects();
+				eCharacter->afterAttackEffects();
+
+				playerHealthBar.update(player, true);
+				enemyHealthBar.update(enemy, false);
+
+
 				while (latestSelectedPlayerCharacter != selectedPlayerCharacterButtons.begin())
 				{
 					unselectCharacter(selectedPlayerCharacterButtons.begin());
 				}
 				latestSelectedEnemyCharacter = selectedEnemyCharacterButtons.begin();
+			}
+			break;
+		}
+		case updatePlayerEffects:
+		{
+
+			if (playerHealthBar.isAnimationFinished() && enemyHealthBar.isAnimationFinished())
+			{
+				// round is over
+				std::cout << "finished with 1 full round!" << std::endl;
+
+
+				if (player.isDead()) {
+					animationState = loss;
+					break;
+				}
+				if (enemy.isDead()) {
+					animationState = win;
+					break;
+				}
+
+				// update all the effect timers
+				for (auto it = playerCharacterButtons.begin(); it != playerCharacterButtons.end(); ++it)
+				{
+					it->characterRef->incrementEffectTimer();
+				}
+				for (auto it = enemyCharacterButtons.begin(); it != enemyCharacterButtons.end(); ++it)
+				{
+					it->characterRef->incrementEffectTimer();
+				}
+
+				player.afterRoundEffects();
+				enemy.afterRoundEffects();
+
+				playerHealthBar.update(player, true);
+				enemyHealthBar.update(enemy, false);
+
+				player.incrementEffectTimer();
+				enemy.incrementEffectTimer();
+
+				// reset all player-selected characters
+				animationState = intro;
 				state = selecting;
 			}
+			break;
+		}
+		case win:
+		{
+			done = true;
+			break;
+		}
+		case loss:
+		{
+			done = true;
 			break;
 		}
 		}
@@ -633,6 +746,9 @@ void LevelMenu::checkMouseUp(sf::Vector2f pos)
 
 void LevelMenu::checkMouseMove(sf::Vector2f pos)
 {
+	// always update player health bar, so effects show up nicely
+	playerHealthBar.checkMouseMove(pos);
+	enemyHealthBar.checkMouseMove(pos);
 
 	switch (state)
 	{
@@ -650,16 +766,6 @@ void LevelMenu::checkMouseMove(sf::Vector2f pos)
 			}
 		}
 
-		/*// check player character buttons
-		for (auto it = selectedPlayerCharacterButtons.begin(); it != selectedPlayerCharacterButtons.end(); ++it) {
-			if (it->contains(pos)) {
-				std::cout << "player character button clicked of type: " << it->characterType << std::endl;
-				//std::cout << "name: " << getCharacterTemplate((it->characterType))->name << std::endl;
-				displayCharacterInfo(it, enemyCharacterButtons);
-				return;
-			}
-		}*/
-
 		// check enemy character buttons
 		for (auto it = enemyCharacterButtons.begin(); it != enemyCharacterButtons.end(); ++it) {
 			if (it->contains(pos)) {
@@ -669,6 +775,16 @@ void LevelMenu::checkMouseMove(sf::Vector2f pos)
 				return;
 			}
 		}
+
+		// update character info displayer
+		characterInfoDisplay.checkMouseMove(pos);
+		break;
+	}
+	case animating:
+	{
+		latestSelectedPlayerCharacter->characterRef->checkMouseMove(pos);
+		latestSelectedEnemyCharacter->characterRef->checkMouseMove(pos);
+		break;
 	}
 	}
 }
@@ -800,6 +916,10 @@ void LevelMenu::startAnimationState()
 	latestSelectedEnemyCharacter  = selectedEnemyCharacterButtons.begin();
 
 	animationTime = sf::milliseconds(0);
+
+	// before anything, trigger the player before round effects
+	player.beforeRoundEffects();
+	enemy.beforeRoundEffects();
 
 	state = animating;
 	animationState = intro;

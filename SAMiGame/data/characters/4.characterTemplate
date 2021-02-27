@@ -2,9 +2,19 @@ Vine (Test)
 Sample Text
 // sprite data placeholder
 // attack stat (at max level)
-200.0f
+100.0f
 // primary type (0-groundcover, 1-fern, 2-tree, 3-shrub)
 1
 // secondary type (0-empathy, 1-community, 2-balance, 3-thinking, 4-adventure)
 3
-// ability placeholder
+// secondary effect cooldown:
+2
+// number of each type of effect:
+// influences this character:
+0
+// influences the opposing character:
+0
+// influences this character's player:
+0
+// influences the opposing character's player:
+0

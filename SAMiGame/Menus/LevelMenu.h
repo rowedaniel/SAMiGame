@@ -16,6 +16,7 @@ public:
 	~LevelMenu();
 	
 	bool load(int id);
+	void unload();
 	void draw(sf::RenderWindow & window, sf::Time elapsedTime);
 	
 	void checkMouseDown(sf::Vector2f pos);
@@ -24,10 +25,12 @@ public:
 	void updatePos(sf::Vector2f pos);
 	void updateItemPos();
 
+	bool isDone();
+
 private:
 
 	enum BattleState { loading, selecting, animating };
-	enum AnimationState { intro, secondaryAttack, addEffects, primaryAttack, healthUpdate, endingPause, finishedCharacter };
+	enum AnimationState { intro, secondaryAttack, addEffects, primaryAttack, healthUpdate, endingPause, finishedCharacter, updatePlayerEffects, loss, win };
 	BattleState state;
 	AnimationState animationState;
 
@@ -47,6 +50,7 @@ private:
 		std::string characterButtonMenuText;
 		std::string characterInfoMenuText;
 		std::string goButtonText;
+		float enemyHealth = 0.0f;
 		CharacterInfo playerCharacterButtons;
 		CharacterInfo enemyCharacterButtons;
 	};
@@ -102,4 +106,6 @@ private:
 	sf::Time animationTime = sf::milliseconds(0);
 	const sf::Time animationStartDelay = sf::milliseconds(500);
 	const sf::Time animationPauseDelay = sf::milliseconds(500);
+
+	bool done = false;
 };

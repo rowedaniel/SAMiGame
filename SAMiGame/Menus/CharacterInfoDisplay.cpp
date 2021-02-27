@@ -10,12 +10,32 @@ CharacterInfoDisplay::~CharacterInfoDisplay()
 
 void CharacterInfoDisplay::setCharacterData(std::vector<Character>::iterator sourceCharacter)
 {
-	//sprite.setTextureRect(sf::IntRect(type * 32, secondaryType * 32, 32, 32));
+	// display character primary and secondary types
 	primaryTypeSprite.setTextureRect(sf::IntRect(sourceCharacter->primary_type * 32, 0, 32, 32));
 	secondaryTypeSprite.setTextureRect(sf::IntRect(sourceCharacter->secondary_type * 32, 32, 32, 32));
+
+	// display various character stats
 	characterName.setText(sourceCharacter->name);
-	characterDescription.setText(sourceCharacter->description);
-	characterAttack.setText("Attack: " + std::to_string((int)std::round(sourceCharacter->getAttack())));
+	// TODO: figure out how to display actual effect info
+	characterAttack.setText("Attack: " + std::to_string((int)std::round(sourceCharacter->getAttack())) + 
+							"   Effect cooldown: " + std::to_string(sourceCharacter->getEffectCooldown())
+							);
+
+	// display active effects on character
+	auto activeEffectInfo = sourceCharacter->getEffects();
+	activeEffects.clear();
+	for (auto it = activeEffectInfo.begin(); it != activeEffectInfo.end(); ++it) {
+		activeEffects.push_back(EffectButton());
+	}
+	// TODO: do this more efficiently
+	auto info = activeEffectInfo.begin();
+	for (auto it = activeEffects.begin(); it != activeEffects.end(); ++it) {
+		it->load();
+		it->setEffectData(info);
+		++info;
+	}
+	updateItemPos();
+
 	//std::cout << "description length: " << sourceCharacter->description.length() << std::endl;
 }
 
@@ -41,12 +61,21 @@ void CharacterInfoDisplay::draw(sf::RenderWindow & window, sf::FloatRect boundBo
 {
 	drawBackground(window, boundBox);
 
+	// draw sprites first
 	window.draw(primaryTypeSprite);
 	window.draw(secondaryTypeSprite);
+	for (auto it = activeEffects.begin(); it != activeEffects.end(); ++it) {
+		it->draw(window, boundingBox);
+	}
+
+	// draw text second so it goes on top
 	characterName.draw(window, boundBox);
-	characterDescription.draw(window, boundBox);
+	//characterDescription.draw(window, boundBox);
 	characterAttack.draw(window, boundBox);
 
+	
+	
+	
 	drawBorder(window, boundBox);
 
 }
@@ -60,11 +89,23 @@ void CharacterInfoDisplay::updatePos(sf::Vector2f pos)
 
 void CharacterInfoDisplay::updateItemPos()
 {
-	primaryTypeSprite.setPosition(sf::Vector2f(boundingBox.left + 16.0f, boundingBox.top + 16.0f));
-	secondaryTypeSprite.setPosition(sf::Vector2f(boundingBox.left + 16.0f, boundingBox.top + 48.0f));
 	characterName.updatePos(sf::Vector2f(boundingBox.left + 48.0f, boundingBox.top + 16.0f));
-	characterDescription.updatePos(sf::Vector2f(boundingBox.left + 170.0f, boundingBox.top + 16.0f));
-	characterAttack.updatePos(sf::Vector2f(boundingBox.left + 0.0f, boundingBox.top + 40.0f));
+	//characterDescription.updatePos(sf::Vector2f(boundingBox.left + 170.0f, boundingBox.top + 16.0f));
+	characterAttack.updatePos(sf::Vector2f(boundingBox.left + 170.0f, boundingBox.top + 16.0f));
+	float x = boundingBox.left + 16.0f;
+	primaryTypeSprite.setPosition(sf::Vector2f(x, boundingBox.top + 16.0f));
+	secondaryTypeSprite.setPosition(sf::Vector2f(x, boundingBox.top + 48.0f));
+
+	for (auto it = activeEffects.begin(); it != activeEffects.end(); ++it) {
+		it->updatePos(sf::Vector2f(x, boundingBox.top + 96.0f));
+	}
+}
+
+void CharacterInfoDisplay::checkMouseMove(sf::Vector2f pos)
+{
+	for (auto it = activeEffects.begin(); it != activeEffects.end(); ++it) {
+		it->checkMouseMove(pos);
+	}
 }
 
 
@@ -97,11 +138,13 @@ void CharacterInfoDisplay::loadFileData(LoadInfo & loadInfo)
 		std::istringstream textStream(loadInfo.characterNameText + "Test\n");
 		characterName.load(textStream);
 	}
+	/*
 	{
 		//std::cout << "in characterinfodisplay" << characterRef->name << std::endl;
 		std::istringstream textStream(loadInfo.characterOtherText + "Test\n");
 		characterDescription.load(textStream);
 	}
+	*/
 	{
 		//std::cout << "in characterinfodisplay" << characterRef->name << std::endl;
 		std::istringstream textStream(loadInfo.characterOtherText + "Test\n");

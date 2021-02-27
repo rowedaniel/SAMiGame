@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../stdafx.h"
+#include "Effects/Effect.h"
 
 class Player
 {
@@ -14,9 +15,18 @@ public:
 	float getMaxHealth();
 	void setHealth(float h);
 
+	void flatDamage(float damage);
 	void damage(float damage);
-	void addEffects();
-	void calculateEffectDamage();
+	void addEffect(Effect effect);
+
+	bool isDead();
+
+	std::list<Effect> activeEffects;
+	
+	void beforeRoundEffects();
+	void afterRoundEffects();
+	
+	void incrementEffectTimer();
 
 private:
 

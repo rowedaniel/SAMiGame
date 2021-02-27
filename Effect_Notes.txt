@@ -18,5 +18,9 @@ Influences Characters:
   - afterAttack (happens right after attack)
   - applyToAttack (applies to character damage directly)
       - (i.e. opponent does 20% less damage)
-  - applyToNewSpecial (triggers when character applies a new special, changes amount)
+  - applyToNewEffect (happens right before new effect is created)
 
+
+
+Display:
+  - make a EffectInfoDisplay class, which swaps with PlayerInfoDisplay

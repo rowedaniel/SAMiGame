@@ -11,7 +11,7 @@
 160
 200
 // character info bg and shape
-436
+420
 140
 40
 60
@@ -40,9 +40,11 @@
 GO
 0
 0
+// enemy health
+1000.0f
 // 4 Characters
 4
-1
 2
 4
+3
 1

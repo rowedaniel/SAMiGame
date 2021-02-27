@@ -101,6 +101,10 @@ void CharacterButton::loadTextureData()
 {
 	//MenuItem::loadTextureData();
 	
+
+	boundingBox.width = 32;
+	boundingBox.height = 32;
+
 	// main texture/sprite
 
 	if (!texture.loadFromFile("data/images/sprites/characterButtons.png")) {
@@ -109,8 +113,6 @@ void CharacterButton::loadTextureData()
 		return;
 	}
 	sprite.setTexture(texture);
-	boundingBox.width = 32;
-	boundingBox.height = 32;
 
 
 	// matchup texture/sprite

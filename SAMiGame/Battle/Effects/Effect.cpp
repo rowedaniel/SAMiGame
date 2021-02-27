@@ -1,9 +1,32 @@
 #include "Effect.h"
+#include "../Character.h"
+#include "../Player.h"
 
-Effect::Effect(int d, float a)
+
+// applies to player
+void doNothingPlayer(Effect & effect, Player * player) {};
+float doNothingPlayerDefense(Effect & effect, float old, Player * player) { return old; };
+
+void doNothingCharacter(Effect & effect, Character * character) {};
+float doNothingCharacterAttack(Effect & effect, float old, Character * character) { return old; };
+
+
+Effect::Effect(int d, float a, int characterType, bool pOwned)
 {
 	duration = d;
 	amount = a;
+	playerOwned = pOwned;
+	sourceCharacterType = characterType;
+
+	beforeRound = &doNothingPlayer;
+	afterRound = &doNothingPlayer;
+	applyToDefense = &doNothingPlayerDefense;
+
+	// affects characters:
+	beforeAttack = &doNothingCharacter;
+	afterAttack = &doNothingCharacter;
+	applyToAttack = &doNothingCharacterAttack;
+	applyToNewEffect = &doNothingCharacterAttack;
 }
 
 Effect::~Effect()
@@ -20,42 +43,28 @@ void Effect::advanceTurn()
 	--duration;
 }
 
-
-// applies to player
-
-void Effect::beforeRound(Player & player)
+void Effect::setDescription(std::string s)
 {
+	description = s;
 }
 
-void Effect::afterRound(Player & player)
+std::string Effect::getDescription()
 {
+	return description;
 }
 
-float Effect::applyToDefense(float old, Player & player)
+float Effect::getAmount()
 {
-	return old;
+	return amount;
 }
 
-
-
-
-
-// applies to character
-
-void Effect::beforeAttack(std::vector<Character>::iterator character)
+bool Effect::isPlayerOwned()
 {
+	return playerOwned;
 }
 
-void Effect::afterAttack(std::vector<Character>::iterator character)
+int Effect::getSourceCharacterType()
 {
+	return sourceCharacterType;
 }
 
-float Effect::applyToAttack(float old, std::vector<Character>::iterator character)
-{
-	return old;
-}
-
-float Effect::applyToNewSpecial(float old, std::vector<Character>::iterator character)
-{
-	return old;
-}

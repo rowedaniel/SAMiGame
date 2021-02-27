@@ -87,8 +87,26 @@
     <ClCompile Include="Battle\Effects\Effect.cpp">
       <Filter>Source Files\Battle\Effects</Filter>
     </ClCompile>
-    <ClCompile Include="Battle\Effects\ModifyDamage.cpp">
+    <ClCompile Include="Battle\Effects\IncreaseDamage.cpp">
       <Filter>Source Files\Battle\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="Battle\Effects\ReduceDamage.cpp">
+      <Filter>Source Files\Battle\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="Battle\Effects\FlatDamage.cpp">
+      <Filter>Source Files\Battle\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="Battle\Effects\IncreaseAttack.cpp">
+      <Filter>Source Files\Battle\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="Battle\Effects\IncreaseEffectCooldown.cpp">
+      <Filter>Source Files\Battle\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="Battle\Effects\ReduceAttack.cpp">
+      <Filter>Source Files\Battle\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="Menus\EffectButton.cpp">
+      <Filter>Source Files\Menus</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -146,8 +164,26 @@
     <ClInclude Include="Battle\Effects\Effect.h">
       <Filter>Header Files\Battle\Effects</Filter>
     </ClInclude>
-    <ClInclude Include="Battle\Effects\ModifyDamage.h">
+    <ClInclude Include="Battle\Effects\FlatDamage.h">
       <Filter>Header Files\Battle\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Battle\Effects\IncreaseAttack.h">
+      <Filter>Header Files\Battle\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Battle\Effects\IncreaseDamage.h">
+      <Filter>Header Files\Battle\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Battle\Effects\IncreaseEffectCooldown.h">
+      <Filter>Header Files\Battle\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Battle\Effects\ReduceAttack.h">
+      <Filter>Header Files\Battle\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Battle\Effects\ReduceDamage.h">
+      <Filter>Header Files\Battle\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\EffectButton.h">
+      <Filter>Header Files\Menus</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

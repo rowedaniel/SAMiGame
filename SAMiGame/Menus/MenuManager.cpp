@@ -88,6 +88,9 @@ void MenuManager::checkMouseUp(sf::Vector2f pos)  // checks for buttons being cl
 		//std::tie(actionType, actionArg) = activeLevel.checkMouseUp(pos);
 		// TODO: make this work. For now, just run it.
 		activeLevel.checkMouseUp(pos);
+		if (activeLevel.isDone()) {
+			stopLevel();
+		}
 		return;
 	}
 	else {
@@ -144,7 +147,6 @@ void MenuManager::swapMenus(int id)
 void MenuManager::startLevel(int id)
 {
 
-
 	if (activeLevel.load(id)) {
 		inLevel = true;
 	}
@@ -152,6 +154,7 @@ void MenuManager::startLevel(int id)
 
 void MenuManager::stopLevel()
 {
+	activeLevel.unload();
 	inLevel = false;
 }
 

@@ -1,4 +1,4 @@
-#include "CharacterTemplate.h";
+#include "CharacterTemplate.h"
 
 CharacterTemplate::CharacterTemplate(int characterType)
 {
@@ -66,6 +66,99 @@ void CharacterTemplate::getFileLineData(int i, std::string line, LoadInfo & load
 		loadInfo.secondary_type = std::stoi(line);
 		break;
 	}
+	case 6:
+	{
+		loadInfo.secodary_effect_cooldown = std::stoi(line);
+		break;
+	}
+	case 7:
+	{
+		loadInfo.numberOfCharacterEffects = std::stoi(line);
+		loadInfo.totalNumberOfCharacterEffects = loadInfo.numberOfCharacterEffects;
+		break;
+	}
+	case 8:
+	{
+		loadInfo.numberOfOpponentEffects = std::stoi(line);
+		loadInfo.totalNumberOfOpponentEffects = loadInfo.numberOfOpponentEffects;
+		break;
+	}
+	case 9:
+	{
+		loadInfo.numberOfPlayerEffects = std::stoi(line);
+		loadInfo.totalNumberOfPlayerEffects = loadInfo.numberOfPlayerEffects;
+		break;
+	}
+	case 10:
+	{
+		loadInfo.numberOfEnemyEffects = std::stoi(line);
+		loadInfo.totalNumberOfEnemyEffects = loadInfo.numberOfEnemyEffects;
+		break;
+	}
+	default:
+	{
+		i -= 9;
+
+		// TODO: please, for the love of god, make these into a reasonable function
+
+		// effects that influence this character
+		if (loadInfo.numberOfCharacterEffects > 0) {
+			if (loadInfo.extraLines == 0) {
+				loadInfo.extraLines = std::stoi(line);
+				loadInfo.characterEffectsText.push_back(std::string());
+			}
+			else {
+				loadInfo.characterEffectsText.back().append(line + "\n");
+				if (--loadInfo.extraLines == 0) {
+					--loadInfo.numberOfCharacterEffects;
+				}
+			}
+		}
+
+		// effects that influence the opposing character
+		else if (loadInfo.numberOfOpponentEffects > 0) {
+			if (loadInfo.extraLines == 0) {
+				loadInfo.extraLines = std::stoi(line);
+				loadInfo.opponentEffectsText.push_back(std::string());
+			}
+			else {
+				loadInfo.opponentEffectsText.back().append(line + "\n");
+				if (--loadInfo.extraLines == 0) {
+					--loadInfo.numberOfOpponentEffects;
+				}
+			}
+		}
+
+		// effects that influence this character's player
+		else if (loadInfo.numberOfPlayerEffects > 0) {
+			if (loadInfo.extraLines == 0) {
+				loadInfo.extraLines = std::stoi(line);
+				loadInfo.playerEffectsText.push_back(std::string());
+			}
+			else {
+				loadInfo.playerEffectsText.back().append(line + "\n");
+				if (--loadInfo.extraLines == 0) {
+					--loadInfo.numberOfPlayerEffects;
+				}
+			}
+		}
+
+
+		// effects that influence the opposing character's player
+		else if (loadInfo.numberOfEnemyEffects > 0) {
+			if (loadInfo.extraLines == 0) {
+				loadInfo.extraLines = std::stoi(line);
+				loadInfo.enemyEffectsText.push_back(std::string());
+			}
+			else {
+				loadInfo.enemyEffectsText.back().append(line + "\n");
+				if (--loadInfo.extraLines == 0) {
+					--loadInfo.numberOfEnemyEffects;
+				}
+			}
+		}
+		break;
+	}
 	}
 }
 
@@ -76,6 +169,27 @@ void CharacterTemplate::loadFileData(LoadInfo & loadInfo)
 	attack = loadInfo.attack;
 	primary_type = loadInfo.primary_type;
 	secondary_type = loadInfo.secondary_type;
+	secondary_effect_cooldown = loadInfo.secodary_effect_cooldown;
+
+	selfAppliedEffects.reserve(loadInfo.totalNumberOfCharacterEffects);
+	opponentAppliedEffects.reserve(loadInfo.totalNumberOfOpponentEffects);
+	selfPlayerAppliedEffects.reserve(loadInfo.totalNumberOfPlayerEffects);
+	opponentPlayerAppliedEffects.reserve(loadInfo.totalNumberOfEnemyEffects);
+
+	for (auto s : loadInfo.characterEffectsText) {
+		selfAppliedEffects.push_back(EffectGetter::getEffectTemplate(s));
+	}
+	for (auto s : loadInfo.opponentEffectsText) {
+		opponentAppliedEffects.push_back(EffectGetter::getEffectTemplate(s));
+	}
+	for (auto s : loadInfo.playerEffectsText) {
+		selfPlayerAppliedEffects.push_back(EffectGetter::getEffectTemplate(s));
+	}
+	for (std::string s : loadInfo.enemyEffectsText) {
+		opponentPlayerAppliedEffects.push_back(EffectGetter::getEffectTemplate(s));
+	}
+
+
 }
 
 void CharacterTemplate::loadTextureData()

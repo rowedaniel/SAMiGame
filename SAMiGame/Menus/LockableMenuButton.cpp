@@ -26,7 +26,6 @@ std::tuple<int, int> LockableMenuButton::checkMouseUp(sf::Vector2f pos) {
 void LockableMenuButton::lock()
 {
 	// TODO: put lock/unlock image distinctions
-	std::cout << "button successfully locked!" << std::endl;
 
 	locked = true;
 }

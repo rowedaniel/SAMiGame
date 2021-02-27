@@ -1,0 +1,34 @@
++-----------------------------------------------------------+
+| Task Name                   | Expected Time | Actual Time |
++===========================================================+
+| Effect Mechanics            | 3 hours       | 2 hours     |
+| Effect Display              | 5 hours       | 3 hours     |
+| Menu Locking                | 2 hours       | 
+| Character Selection         | 4 hours       | 
+| Character Levelling         | 1 hours       | 
+| Clean up Code               | 7 hours       | 
+| Fancy Level Things          | 3 hours       | 
+| Finish Kevin Character      | 4 hours       | 
+
++=====================+=================+===================+
+|                     | Recurring Tasks |                   |
++=====================+=================+===================+
+| Build a Character (10+)     | 7 hours       | 
+| Build a Level (40+)         | 20 min        |
+| Build a World (5+Events)    | 1.5 hours     |
+
++=====================+================+====================+
+|                     | Optional Tasks |                    |
++=====================+================+====================+
+| Tutoiral                    | 2 hours       | 
+| Items                       | 8 hours       | 
+| Event Stage System          | 5 hours       |
+
+
+Estimated time for system completion: 29 hours
+Estimated time for total completion: 113 hours
+
+
+Current time total: 32 hours
+Estimated time until system completion: 22 hours
+Estimated time until total completion: 105 hours

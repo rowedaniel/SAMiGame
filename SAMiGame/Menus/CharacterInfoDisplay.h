@@ -3,6 +3,7 @@
 #include "MenuItem.h"
 #include "MenuText.h"
 #include "../Battle/Character.h"
+#include "EffectButton.h"
 
 // TODO: make parent 'clickable' class. Also, consider adding more parent classes.
 class CharacterInfoDisplay : MenuItem
@@ -18,6 +19,9 @@ public:
 	void updatePos(sf::Vector2f pos);
 	void updateItemPos();
 
+
+	void checkMouseMove(sf::Vector2f pos);
+
 private:
 	struct LoadInfo
 	{
@@ -32,12 +36,14 @@ private:
 	void loadTextureData();
 
 	MenuText characterName;
-	MenuText characterDescription;
+	//MenuText characterDescription;
 	MenuText characterAttack;
 	
 	sf::Texture typeTexture; // TODO: move all textures to a resource manager of some sort
 	sf::Sprite primaryTypeSprite;
 	sf::Sprite secondaryTypeSprite;
+
+	std::list<EffectButton> activeEffects;
 
 
 };

@@ -101,7 +101,6 @@ void MenuText::getFileLineData(int i, std::string line, LoadInfo & loadInfo)
 	switch (i) {
 	case 6:
 	{
-		std::cout << "font size: " << line << std::endl;
 		loadInfo.fontSize = std::stoi(line);
 		break;
 	}

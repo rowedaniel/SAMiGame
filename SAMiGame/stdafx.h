@@ -9,7 +9,7 @@
 #include <stdio.h>
 
 
-// TODO: reference additional headers your program requires here
+// reference additional required headers here
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -22,3 +22,6 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+
+
+// To avoid include loops, include player and effects here

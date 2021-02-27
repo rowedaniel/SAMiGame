@@ -1,6 +1,11 @@
 #pragma once
 #include "../stdafx.h"
 #include "CharacterTemplate.h"
+#include "EffectGetter.h"
+#include "Effects/Effect.h"
+#include "../Menus/EffectButton.h"
+#include "Player.h"
+
 
 class Character : public CharacterTemplate
 {
@@ -24,9 +29,37 @@ public:
 	// battle logic
 	float getPrimaryMatchup(std::vector<Character>::iterator opponent);
 	float getSecondaryMatchup(std::vector<Character>::iterator opponent);
+	// gets raw attack damage
 	float getAttack();
+	// calculates damage against opponent, taking effects and type matchup into account
 	float calculateDamage(std::vector<Character>::iterator opponent);
+	
+	// gets secondary effect cooldown
+	int getEffectCooldown();
+	void increaseEffectCooldown(int duration);
+
+	// calculate secondary effect amounts
+	EffectGetter::EffectInfo calculateSecondaryAmount(std::vector<Character>::iterator opponent, EffectGetter::EffectInfo & inputInfo);
+
+	// applies secondary effects to self, opponent, player, and opponent character
+	void applySecondary(std::vector<Character>::iterator opponent, Player & player, Player & opponentPlayer);
+	
+	// adds a new effect to this character.
+	void addEffect(Effect effect);
+	void incrementEffectTimer();
+
+	void beforeAttackEffects();
+	void afterAttackEffects();
+
+	std::list<Effect> getEffects();
+	bool isPlayerOwned();
+
+	// for displaying active effects
+	void checkMouseMove(sf::Vector2f pos);
+
 private:
+
+	bool playerOwned = false; // determines if this character is owned by the player, or a CPU
 
 	// loading stuff
 	bool loaded = false;
@@ -46,6 +79,9 @@ private:
 	void loadTextureData();
 
 
+	void updateItemPos();
+
+
 
 
 	// animation stuff
@@ -62,6 +98,10 @@ private:
 
 	// character stat stuff
 	float levelFactor;
+	std::list<Effect> activeEffects;
+	std::list<EffectButton> activeEffectButtons;
+
+	int cooldownTimer = 0;
 
 
 

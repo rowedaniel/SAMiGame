@@ -18,46 +18,69 @@ Resource Manager System:                       [Not Started]-
       - list of ids of people using them?
   - more robust error checking
 
-Menu System:                                   [In Progress]
+Menu System:                                   [In Progress]+
   - Clickable Buttons                          [Done]
   - Basic Layout                               [Done]
       - background                             [Done]
       - border                                 [Done]
       - button/text/submenu content            [Done]
-  - Loading                                    [In Progress]
+  - Loading                                    [In Progress]-
   - Fancier Backgrounds                        [Not Started]-
   - Locked Buttons                             [In Progress]+
       - only unlock under certain conditions   [Done]
           - unlock when level is beaten        [Not Started]
       - Animation/graphic for locked/unlocked  [Not Started]
   - Add party change system                    [Not Started]+
+  - Figire out how to leave/restart level      [In Progress]*
 
 
-Battle System:                                 [In Progress]*
+Battle System:                                 [In Progress]+
   
   - select order/matchups/etc.:                [Done]
-  - physical attack system                     [In Progress]*
-      - defense? Decide on this                [Not Started]*
+  - physical attack system                     [Done]
+      - defense? Decide on this                [Done]
       - attack                                 [Done]
       - health                                 [Done]
           - decide where to keep track of it   [Done]
-      - make attack take effects into account  [Not Started]*
+      - make attack take effects into account  [Done]
   
-  - secondary effect system:                   [In Progress]*
-      - every character has a list of effects,
-        each one with:                         [Done]
+  - secondary effect system:                   [In Progress]+
+      - every character has a list of effects, [Done]
+        each one with:                         
           - type                               
           - duration
+          - cooldown
           - amount (exact effect varies)
+      - rig up effect trigger scenarios:       [Done]
+          - before round                       [Done]
+          - after round                        [Done]
+          - apply during defense               [Done]
+          - before attack                      [Done]
+          - after attack                       [Done]
+          - apply during attack                [Done]
+          - apply during new effects           [Done]
+      - give effects access to other chrs      [Not Started]+
+      - display effect description             [Done]
+      - display active character effects       [Done]
+      - display active player effects          [Done]
   
   - win/loss system:                           [Not Started]+
       - when you win, unlock stuff
       - decide where to keep track of it
       - decide if health carries over
 
+Character System:                              [In Progress]+
+  - Character Templates                        [In Progress]+
+  - Characters                                 [In Progress]+
+  - Switching characters:                      [Not Started]+
+      - Menu interactions
+      - Change gamestate stuff
+  - Items                                      [Not Started]-
+
 
 Levels:                                        [In Progress]+
   - Level system                               [In Progress]+
+      - different levels have different quirks [Not Started]
   - platforming                                [Not Started]-
   - add more (some) levels                     [Not Started]+
   - event stages                               [Not Started]-

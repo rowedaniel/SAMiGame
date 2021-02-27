@@ -15,11 +15,13 @@ Character::~Character()
 
 void Character::load()
 {
+	playerOwned = true;
 	Character::load("gamestate/characters/");
 }
 
 void Character::load(int levelnumber)
 {
+	playerOwned = false;
 	Character::load("data/levels/" + std::to_string(levelnumber) + "/");
 	// enemy, so flip sprite
 
@@ -93,9 +95,23 @@ void Character::loadTextureData()
 
 
 
+
 void Character::updatePos(sf::Vector2f pos)
 {
 	sprite.setPosition(pos);
+	updateItemPos();
+}
+
+
+void Character::updateItemPos()
+{
+	float x = (playerOwned - 1.0f) * 64.0f + 16.0f;
+	const float y = 96.0f;
+	const float xIncrement = 32.0f * (playerOwned * 2.0f - 1.0f);
+	for (auto it = activeEffectButtons.begin(); it != activeEffectButtons.end(); ++it) {
+		it->updatePos(sprite.getPosition() + sf::Vector2f(x, y));
+		x += xIncrement;
+	}
 }
 
 
@@ -112,7 +128,8 @@ void Character::draw(sf::RenderWindow & window, sf::FloatRect boundBox, sf::Time
 		while (animationTime > timestep) {
 			animationTime -= timestep;
 			animationRect.left += animationRect.width;
-			if (animationRect.left >= texture.getSize().x) {
+			// TODO: check if this is good practice
+			if ((unsigned int)animationRect.left >= texture.getSize().x) {
 				animating = false;
 				break;
 			}
@@ -121,6 +138,11 @@ void Character::draw(sf::RenderWindow & window, sf::FloatRect boundBox, sf::Time
 	}
 
 	window.draw(sprite);
+
+	// draw active effects at bottom
+	for (auto it = activeEffectButtons.begin(); it != activeEffectButtons.end(); ++it) {
+		it->draw(window, boundBox);
+	}
 }
 
 
@@ -135,7 +157,7 @@ void Character::resetAnimation()
 void Character::startPrimaryAnimation(std::vector<Character>::iterator opponent)
 {
 	// TODO: make this do different animations, instead of just the one
-	animationRect.top = getPrimaryMatchup(opponent) * animationRect.height;
+	animationRect.top = (int)(getPrimaryMatchup(opponent) * animationRect.height);
 	animationRect.left = 0;
 	sprite.setTextureRect(animationRect);
 	animating = true;
@@ -185,5 +207,128 @@ float Character::getAttack()
 float Character::calculateDamage(std::vector<Character>::iterator opponent)
 {
 	std::cout << name << " attacking: " << opponent->name << ", matchup factor is: " << getPrimaryMatchup(opponent) << std::endl;
-	return getAttack() * getPrimaryMatchup(opponent);
+	float attack = getAttack() * getPrimaryMatchup(opponent);
+	for (auto it = activeEffects.begin(); it != activeEffects.end(); ++it) {
+		std::cout << "In Character, damage before: " << attack << std::endl;
+		attack = (*it->applyToAttack)(*it, attack, this);
+		std::cout << "In Character, damage after: " << attack << std::endl;
+	}
+
+	return attack;
+}
+
+int Character::getEffectCooldown()
+{
+	return cooldownTimer;
+}
+
+void Character::increaseEffectCooldown(int duration)
+{
+	cooldownTimer = std::max(0, cooldownTimer + duration);
+}
+
+EffectGetter::EffectInfo Character::calculateSecondaryAmount(std::vector<Character>::iterator opponent, EffectGetter::EffectInfo & inputInfo)
+{
+	EffectGetter::EffectInfo outputInfo;
+
+	outputInfo.type = inputInfo.type;
+	outputInfo.duration = inputInfo.duration;
+	outputInfo.amount = inputInfo.amount * getSecondaryMatchup(opponent);
+	for (auto it = activeEffects.begin(); it != activeEffects.end(); ++it) {
+		std::cout << "In Character, effect amount before: " << outputInfo.amount << std::endl;
+		outputInfo.amount = (*it->applyToAttack)(*it, outputInfo.amount, this);
+		std::cout << "In Character, effect amount after: " << outputInfo.amount << std::endl;
+	}
+
+	return outputInfo;
+	
+}
+
+void Character::applySecondary(std::vector<Character>::iterator opponent, Player & player, Player & opponentPlayer)
+{
+	if (cooldownTimer > 0 || getSecondaryMatchup(opponent) == 0) {
+		return;
+	}
+	cooldownTimer = secondary_effect_cooldown;
+
+	std::cout << "applying secondary effects!" << std::endl;
+	for (auto it : selfAppliedEffects)
+	{
+		addEffect(EffectGetter::getEffect(calculateSecondaryAmount(opponent, it), type, playerOwned));
+	}
+	for (auto it : opponentAppliedEffects)
+	{
+		opponent->addEffect(EffectGetter::getEffect(calculateSecondaryAmount(opponent, it), type, playerOwned));
+	}
+	for (auto it : selfPlayerAppliedEffects)
+	{
+		player.addEffect(EffectGetter::getEffect(calculateSecondaryAmount(opponent, it), type, playerOwned));
+	}
+	for (auto it : opponentPlayerAppliedEffects)
+	{
+		opponentPlayer.addEffect(EffectGetter::getEffect(calculateSecondaryAmount(opponent, it), type, playerOwned));
+	}
+}
+
+void Character::addEffect(Effect effect)
+{
+	activeEffects.push_back(effect);
+	activeEffectButtons.push_back(EffectButton());
+	auto it = --activeEffectButtons.end();
+	it->load();
+	it->setEffectData(--activeEffects.end());
+
+	updateItemPos();
+}
+
+void Character::incrementEffectTimer()
+{
+	auto it = activeEffects.begin();
+	auto itButton = activeEffectButtons.begin();
+	while(it != activeEffects.end()) {
+		it->advanceTurn();
+		if (it->isExpired())
+		{
+			it = activeEffects.erase(it);
+			itButton = activeEffectButtons.erase(itButton);
+			continue;
+		}
+		++it;
+		++itButton;
+	}
+
+	if (cooldownTimer > 0) {
+		--cooldownTimer;
+	}
+}
+
+void Character::beforeAttackEffects()
+{
+	for (auto it = activeEffects.begin(); it != activeEffects.end(); ++it) {
+		(*it->beforeAttack)(*it, this);
+	}
+}
+
+void Character::afterAttackEffects()
+{
+	for (auto it = activeEffects.begin(); it != activeEffects.end(); ++it) {
+		(*it->beforeAttack)(*it, this);
+	}
+}
+
+std::list<Effect> Character::getEffects()
+{
+	return activeEffects;
+}
+
+bool Character::isPlayerOwned()
+{
+	return playerOwned;
+}
+
+void Character::checkMouseMove(sf::Vector2f pos)
+{
+	for (auto it = activeEffectButtons.begin(); it != activeEffectButtons.end(); ++it) {
+		it->checkMouseMove(pos);
+	}
 }
