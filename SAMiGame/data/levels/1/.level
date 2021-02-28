@@ -40,8 +40,10 @@
 GO
 0
 0
+// what to unlock on win
+11
 // enemy health
-1000.0f
+100.0f
 // 4 Characters
 4
 2

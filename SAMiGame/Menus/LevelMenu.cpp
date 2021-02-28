@@ -96,6 +96,7 @@ bool LevelMenu::load(int id)
 
 	state = selecting;
 	done = false;
+	won = false;
 
 
 
@@ -105,7 +106,7 @@ bool LevelMenu::load(int id)
 
 void LevelMenu::unload()
 {
-	// do something with vectors here
+	// do something here?
 
 }
 
@@ -135,6 +136,12 @@ void LevelMenu::getFileLineData(int i, std::string & line, LoadInfo & loadInfo)
 		return;
 	}
 	i -= 9;
+
+	if (i < 2) {
+		loadInfo.winButtonId = std::stoi(line);
+		return;
+	}
+	i -= 1;
 
 	if (i < 2) {
 		loadInfo.enemyHealth = std::stof(line);
@@ -316,10 +323,39 @@ void LevelMenu::loadFileData(LoadInfo & loadInfo)
 	playerHealthBar.update(player, true);
 	enemyHealthBar.update(enemy, false);
 
+	winButtonId = loadInfo.winButtonId;
+
 
 	MenuItem::loadFileData(loadInfo.oldInfo);
-	std::cout << "finished loading info" << std::endl;
+	std::cout << "finished loading level info" << std::endl;
 }
+
+void LevelMenu::onWin()
+{
+	won = true;
+	{
+		// first, check if the button is already unlocked:
+		std::fstream unlockedButtonFile("gamestate/unlocked.buttons", std::ios::in);
+		if (unlockedButtonFile.is_open()) {
+			std::string line;
+			int i = 0;
+			while (getline(unlockedButtonFile, line)) {
+				if (line == std::to_string(winButtonId)) {
+					std::cout << "level button already unlocked, so skipping" << std::endl;
+					return;
+				}
+			}
+		}
+	}
+	{
+		std::fstream unlockedButtonFile("gamestate/unlocked.buttons", std::ios::app);
+		if (unlockedButtonFile.is_open()) {
+			unlockedButtonFile << std::to_string(winButtonId) << std::endl;
+		}
+	}
+
+}
+
 
 
 
@@ -425,11 +461,28 @@ void LevelMenu::updateItemPos()
 	characterInfoDisplay.updatePos(sf::Vector2f(boundingBox.left + 40.0f, boundingBox.top + boundingBox.height / 2 + 32));
 }
 
+
+
+
+
+
+
+
+
+
+
 bool LevelMenu::isDone()
 {
 	return done;
 }
 
+int LevelMenu::getButtonToUnlock()
+{
+	if (won) {
+		return winButtonId;
+	}
+	return 0;
+}
 
 
 
@@ -665,12 +718,22 @@ void LevelMenu::draw(sf::RenderWindow & window, sf::Time elapsedTime)
 		}
 		case win:
 		{
+			if (done) {
+				break;
+			}
 			done = true;
+			std::cout << "win!!!" << std::endl;
+			onWin();
 			break;
 		}
 		case loss:
 		{
+			if (done) {
+				break;
+			}
 			done = true;
+			won = false;
+			std::cout << "loss :(" << std::endl;
 			break;
 		}
 		}

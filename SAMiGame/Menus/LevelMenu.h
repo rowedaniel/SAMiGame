@@ -26,6 +26,7 @@ public:
 	void updateItemPos();
 
 	bool isDone();
+	int getButtonToUnlock();
 
 private:
 
@@ -50,6 +51,7 @@ private:
 		std::string characterButtonMenuText;
 		std::string characterInfoMenuText;
 		std::string goButtonText;
+		int winButtonId = 0;
 		float enemyHealth = 0.0f;
 		CharacterInfo playerCharacterButtons;
 		CharacterInfo enemyCharacterButtons;
@@ -58,6 +60,8 @@ private:
 	void getFileLineData(int i, std::string & line, LoadInfo & loadInfo);
 	void loadCharacters(int i, std::string & line, CharacterInfo & characterInfo);
 	void loadFileData(LoadInfo & loadInfo);
+	void onWin();
+
 	// display matchups between character and list of other characters
 	void displayCharacterInfo(std::vector<CharacterButton>::iterator character, std::vector<CharacterButton> & otherlist);
 
@@ -108,4 +112,7 @@ private:
 	const sf::Time animationPauseDelay = sf::milliseconds(500);
 
 	bool done = false;
+	bool won = false;
+
+	int winButtonId;
 };

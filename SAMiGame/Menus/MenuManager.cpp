@@ -168,6 +168,14 @@ void MenuManager::startLevel(int id)
 
 void MenuManager::stopLevel()
 {
+	// unlock new levels and stuff
+	const int buttonId = activeLevel.getButtonToUnlock();
+	if(buttonId != 0){
+		for (auto it = menus.begin(); it != menus.end(); ++it) {
+			it->unlockButton(buttonId);
+		}
+	}
+
 	activeLevel.unload();
 	inLevel = false;
 }

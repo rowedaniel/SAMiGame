@@ -117,7 +117,7 @@ menus = (
             MenuBuilder.Text(*menuTextSize, *menuTextColor, menuTextFontSize, 'Level 2'),
         ),
         (
-            MenuBuilder.Button(*mainMenuButtonSize, *world1ButtonColor, buttonFontSize, 'Play', 1, 1),
+            MenuBuilder.Button(*mainMenuButtonSize, *world1ButtonColor, buttonFontSize, 'Play', 1, 2),
         ),
         (
             MenuBuilder.Menu(*subMenuSize, *world1SubmenuColor, 0, subMenuDirection,
