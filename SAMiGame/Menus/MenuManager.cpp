@@ -21,12 +21,10 @@ void MenuManager::load(std::istream & file)
 	std::string line;
 	int i = 0;
 	while (getline(file, line)) {
-		// DEBUG:
-
 		if (line.substr(0, 2) == "//") {
 			continue;
 		}
-		std::cout << "line " << i+1 << ": " << line << std::endl;
+		//std::cout << "line " << i+1 << ": " << line << std::endl;
 		getFileLineData(++i, line, loadInfo);
 	}
 
@@ -34,9 +32,9 @@ void MenuManager::load(std::istream & file)
 	menus.reserve(loadInfo.totalNumberOfMenus);
 	std::vector<Menu>::iterator latestMenu;
 	bool firstMenu = false;
-	for (std::list<std::string>::iterator it = loadInfo.menuText.begin(); it != loadInfo.menuText.end(); ++it) {
+	for (auto it = loadInfo.menuText.begin(); it != loadInfo.menuText.end(); ++it) {
 		// load submenus (recursion is sweet)!
-		std::cout << "Menu text: " << std::endl << it->substr() << std::endl;
+		//std::cout << "Menu text: " << std::endl << it->substr() << std::endl;
 		std::istringstream textStream(it->substr());
 		menus.push_back(Menu::Menu(left, top));
 		//menus.back().load(textStream);
@@ -48,6 +46,22 @@ void MenuManager::load(std::istream & file)
 			++latestMenu;
 		}
 		latestMenu->load(textStream);
+	}
+
+
+	std::fstream unlockedButtonFile("gamestate/unlocked.buttons", std::ios::in);
+	if (unlockedButtonFile.is_open()) {
+		std::string line;
+		int i = 0;
+		while (getline(unlockedButtonFile, line)) {
+			if (line.substr(0, 2) == "//") {
+				continue;
+			}
+			for (auto it = menus.begin(); it != menus.end(); ++it) {
+				// TODO: make this more crash-secure
+				it->unlockButton(std::stoi(line));
+			}
+		}
 	}
 
 

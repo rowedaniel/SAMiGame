@@ -62,18 +62,18 @@ void Menu::draw(sf::RenderWindow & window, sf::FloatRect boundBox)
 	drawBackground(window, boundBox);
 
 	// draw all submenus
-	for (std::list<Menu>::iterator it = menus.begin(); it != menus.end(); ++it) {
+	for (auto it = menus.begin(); it != menus.end(); ++it) {
 		it->draw(window, boundBox);
 	}
 
 
 	// draw all text
-	for (std::list<MenuText>::iterator it = texts.begin(); it != texts.end(); ++it) {
+	for (auto it = texts.begin(); it != texts.end(); ++it) {
 		it->draw(window, boundBox);
 	}
 
 	// draw all buttons
-	for (std::list<MenuButton>::iterator it = buttons.begin(); it != buttons.end(); ++it) {
+	for (auto it = buttons.begin(); it != buttons.end(); ++it) {
 		it->draw(window, boundBox);
 	}
 
@@ -147,7 +147,7 @@ void Menu::updateItemPos()
 	}
 
 	// Next, position all the buttons
-	for (std::list<MenuButton>::iterator it = buttons.begin(); it != buttons.end(); ++it) {
+	for (auto it = buttons.begin(); it != buttons.end(); ++it) {
 		// Increment scroll, so items are offset
 		const float scrollAmount = (it->getWidth() * itemScrollXAmount + it->getHeight() * itemScrollYAmount);
 		itemScroll += scrollAmount < 0 ? (int)scrollAmount - 4 : 0; // the -4 adds space in between items.
@@ -194,7 +194,7 @@ void Menu::checkMouseDown(sf::Vector2f pos) // checks for buttons being clicked
 	}
 
 	// check all buttons
-	for (std::list<MenuButton>::iterator it = buttons.begin(); it != buttons.end(); ++it) {
+	for (auto it = buttons.begin(); it != buttons.end(); ++it) {
 		it->checkMouseDown(pos);
 	}
 }
@@ -234,6 +234,34 @@ std::tuple<int, int> Menu::checkMouseUp(sf::Vector2f pos)
 
 void Menu::checkMouseMove(sf::Vector2f pos)
 {
+}
+
+void Menu::unlockButton(int buttonId)
+{
+	for (auto it = buttons.begin(); it != buttons.end(); ++it) {
+		if (it->getId() == buttonId) {
+			it->unlock();
+		}
+	}
+
+	// also check submenus
+	for (auto it = menus.begin(); it != menus.end(); ++it) {
+		it->unlockButton(buttonId);
+	}
+}
+
+void Menu::lockButton(int buttonId)
+{
+	for (auto it = buttons.begin(); it != buttons.end(); ++it) {
+		if (it->getId() == buttonId) {
+			it->lock();
+		}
+	}
+
+	// also check submenus
+	for (auto it = menus.begin(); it != menus.end(); ++it) {
+		it->lockButton(buttonId);
+	}
 }
 
 
@@ -323,22 +351,22 @@ void Menu::loadFileData(LoadInfo & loadInfo)
 	direction = static_cast<Menu::Direction>(loadInfo.dir);
 	id = loadInfo.id;
 
-	for (std::list<std::string>::iterator it = loadInfo.textText.begin(); it != loadInfo.textText.end(); ++it) {
+	for (auto it = loadInfo.textText.begin(); it != loadInfo.textText.end(); ++it) {
 		// load buttons!
 		std::istringstream textStream(it->substr());
-		texts.push_back(MenuText::MenuText());
+		texts.push_back(MenuText());
 		texts.back().load(textStream);
 	}
-	for (std::list<std::string>::iterator it = loadInfo.buttonText.begin(); it != loadInfo.buttonText.end(); ++it) {
+	for (auto it = loadInfo.buttonText.begin(); it != loadInfo.buttonText.end(); ++it) {
 		// load buttons!
 		std::istringstream textStream(it->substr());
-		buttons.push_back(MenuButton::MenuButton());
+		buttons.push_back(LockableMenuButton(false));
 		buttons.back().load(textStream);
 	}
-	for (std::list<std::string>::iterator it = loadInfo.submenuText.begin(); it != loadInfo.submenuText.end(); ++it) {
+	for (auto it = loadInfo.submenuText.begin(); it != loadInfo.submenuText.end(); ++it) {
 		// load submenus (recursion is sweet)!
 		std::istringstream textStream(it->substr());
-		menus.push_back(Menu::Menu(0.0f, 0.0f));
+		menus.push_back(Menu(0.0f, 0.0f));
 		menus.back().load(textStream);
 	}
 	// End debug section

@@ -4,9 +4,71 @@ LockableMenuButton::LockableMenuButton()
 {
 }
 
+LockableMenuButton::LockableMenuButton(bool startingState)
+{
+	locked = startingState;
+	LockableMenuButton();
+}
+
 LockableMenuButton::~LockableMenuButton()
 {
 }
+
+
+
+
+
+
+
+
+void LockableMenuButton::load(std::istream & file)
+{
+	LoadInfo loadInfo;
+
+	// load text file
+	std::string line;
+	int i = 0;
+	while (getline(file, line)) {
+		if (line.substr(0, 2) == "//") {
+			continue;
+		}
+		getFileLineData(++i, line, loadInfo);
+	}
+
+	// do stuff with the file data
+	loadFileData(loadInfo);
+
+	// now, load everything else
+	loadTextureData();
+
+	updatePos(sf::Vector2f(boundingBox.left, boundingBox.top));
+}
+
+void LockableMenuButton::getFileLineData(int i, std::string line, LoadInfo & loadInfo)
+{
+	if (i < 10) {
+		MenuButton::getFileLineData(i, line, loadInfo.oldInfo);
+		return;
+	}
+	i -= 9;
+
+	loadInfo.id = std::stoi(line);
+}
+
+void LockableMenuButton::loadFileData(LoadInfo & loadInfo)
+{
+	MenuButton::loadFileData(loadInfo.oldInfo);
+	id = loadInfo.id;
+	if (id != -1) {
+		locked = true;
+	}
+}
+
+
+
+
+
+
 
 void LockableMenuButton::checkMouseDown(sf::Vector2f pos)
 {
@@ -23,6 +85,10 @@ std::tuple<int, int> LockableMenuButton::checkMouseUp(sf::Vector2f pos) {
 	return MenuButton::checkMouseUp(pos);
 }
 
+
+
+
+
 void LockableMenuButton::lock()
 {
 	// TODO: put lock/unlock image distinctions
@@ -33,4 +99,9 @@ void LockableMenuButton::lock()
 void LockableMenuButton::unlock()
 {
 	locked = false;
+}
+
+int LockableMenuButton::getId()
+{
+	return id;
 }

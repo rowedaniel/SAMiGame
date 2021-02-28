@@ -41,12 +41,16 @@ class Text(MenuItem):
         return super().getText()+f'\n{self.fontSize}\n{self.text}'
 
 class Button(Text):
-    def __init__(self, width, height, red, green, blue, fontSize, text, actionType, actionArg):
+    def __init__(self, width, height, red, green, blue, fontSize, text, actionType, actionArg, ID=-1):
         super().__init__(width, height, red, green, blue, fontSize, text)
         self.actionType = actionType
         self.actionArg = actionArg
+        self.id = ID
     def getText(self):
-        return super().getText()+f'\n{self.actionType}\n{self.actionArg}'
+        text = super().getText()+f'\n{self.actionType}\n{self.actionArg}'
+        if self.id == -1:
+            return text
+        return text + f'\n{self.id}'
 
 
 

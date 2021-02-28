@@ -83,16 +83,23 @@ bool LevelMenu::load(int id)
 	// now, load everything else
 	loadTextureData();
 
+
+	std::cout << "displaying character info for first character!" << std::endl;
 	// at first, just display the first of the characters
 	if (!playerCharacterButtons.empty()) {
 		displayCharacterInfo(playerCharacterButtons.begin(), enemyCharacterButtons);
 	}
+	std::cout << "finished displaying character info" << std::endl;
 
 	updatePos(sf::Vector2f(boundingBox.left, boundingBox.top));
 	updateItemPos();
 
 	state = selecting;
+	done = false;
 
+
+
+	std::cout << "finished load()" << std::endl;
 	return true;
 }
 
@@ -170,6 +177,14 @@ void LevelMenu::loadFileData(LoadInfo & loadInfo)
 		// TODO: figure out how to handle this. For now, just returns.
 		return;
 	}
+
+	// reset anything (in case of previous load)
+	enemyCharacterButtons.clear();
+	playerCharacterButtons.clear();
+	selectedPlayerCharacterButtons.clear();
+	selectedEnemyCharacterButtons.clear();
+	enemyCharacters.clear();
+	playerCharacters.clear();
 
 
 	// character button backgrounds
@@ -303,6 +318,7 @@ void LevelMenu::loadFileData(LoadInfo & loadInfo)
 
 
 	MenuItem::loadFileData(loadInfo.oldInfo);
+	std::cout << "finished loading info" << std::endl;
 }
 
 
@@ -611,15 +627,6 @@ void LevelMenu::draw(sf::RenderWindow & window, sf::Time elapsedTime)
 				std::cout << "finished with 1 full round!" << std::endl;
 
 
-				if (player.isDead()) {
-					animationState = loss;
-					break;
-				}
-				if (enemy.isDead()) {
-					animationState = win;
-					break;
-				}
-
 				// update all the effect timers
 				for (auto it = playerCharacterButtons.begin(); it != playerCharacterButtons.end(); ++it)
 				{
@@ -638,6 +645,17 @@ void LevelMenu::draw(sf::RenderWindow & window, sf::Time elapsedTime)
 
 				player.incrementEffectTimer();
 				enemy.incrementEffectTimer();
+
+
+
+				if (player.isDead()) {
+					animationState = loss;
+					break;
+				}
+				if (enemy.isDead()) {
+					animationState = win;
+					break;
+				}
 
 				// reset all player-selected characters
 				animationState = intro;

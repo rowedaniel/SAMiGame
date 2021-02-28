@@ -2,7 +2,7 @@
 #include "../stdafx.h"
 #include "MenuItem.h"
 #include "MenuText.h"
-#include "MenuButton.h"
+#include "LockableMenuButton.h"
 
 
 class Menu : public MenuItem
@@ -26,6 +26,9 @@ public:
 	std::tuple<int, int> checkMouseUp(sf::Vector2f pos);
 	void checkMouseMove(sf::Vector2f pos);
 
+	void unlockButton(int buttonId);
+	void lockButton(int buttonId);
+
 	int id = 0;
 
 
@@ -35,7 +38,7 @@ private:
 
 	std::list<Menu> menus;
 	std::list<MenuText> texts;
-	std::list<MenuButton> buttons;
+	std::list<LockableMenuButton> buttons;
 
 
 

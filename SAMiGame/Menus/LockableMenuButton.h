@@ -6,14 +6,33 @@ class LockableMenuButton : public MenuButton
 {
 public:
 	LockableMenuButton();
+	LockableMenuButton(bool startingState);
 	~LockableMenuButton();
 
-	std::tuple<int, int> checkMouseUp(sf::Vector2f pos);
+
+	void load(std::istream& file);
+
+
 	void checkMouseDown(sf::Vector2f pos);
+	std::tuple<int, int> checkMouseUp(sf::Vector2f pos);
 
 	void lock();
 	void unlock();
 
+	int getId();
+
 private:
+	struct LoadInfo
+	{
+	public:
+		MenuButton::LoadInfo oldInfo;
+		int id = -1;
+	};
+
+	void getFileLineData(int i, std::string line, LoadInfo & loadInfo);
+	void loadFileData(LoadInfo & loadInfo);
+
+
 	bool locked = true;
+	int id;
 };

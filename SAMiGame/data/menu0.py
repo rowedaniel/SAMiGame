@@ -62,7 +62,7 @@ menus = (
             MenuBuilder.Menu(*subMenuSize, *world1SubmenuColor, 0, 0,
                 (),
                 (
-                    MenuBuilder.Button(*subMenuButtonSize, *world1ButtonColor, buttonFontSize, 'Next', 0, 2),
+                    MenuBuilder.Button(*subMenuButtonSize, *world1ButtonColor, buttonFontSize, 'Next', 0, 2, 1),
                     MenuBuilder.Button(*subMenuButtonSize, *world1ButtonColor, buttonFontSize, 'Back', 0, 0),
                 ),
                 ()
@@ -75,7 +75,7 @@ menus = (
             MenuBuilder.Text(*menuTextSize, *menuTextColor, menuTextFontSize, 'World 2'),
         ),
         (
-            MenuBuilder.Button(*mainMenuButtonSize, *world2ButtonColor, buttonFontSize, 'Play', 0, 11),
+            MenuBuilder.Button(*mainMenuButtonSize, *world2ButtonColor, buttonFontSize, 'Play', 0, 20),
         ),
         (
             MenuBuilder.Menu(*subMenuSize, *world2SubmenuColor, 0, subMenuDirection,
@@ -83,7 +83,7 @@ menus = (
                 (
                     MenuBuilder.Button(*subMenuButtonSize, *world2ButtonColor, buttonFontSize, 'Prev', 0, 1),
                     MenuBuilder.Button(*subMenuButtonSize, *world2ButtonColor, buttonFontSize, 'Back', 0, 0),
-                    MenuBuilder.Button(*subMenuButtonSize, *world2ButtonColor, buttonFontSize, 'Next', 0, 3),
+                    MenuBuilder.Button(*subMenuButtonSize, *world2ButtonColor, buttonFontSize, 'Next', 0, 3, 2),
                 ),
                 ()
             ),
@@ -103,8 +103,29 @@ menus = (
             MenuBuilder.Menu(*subMenuSize, *world1SubmenuColor, 0, 0,
                 (),
                 (
-                    MenuBuilder.Button(*subMenuButtonSize, *world1ButtonColor, buttonFontSize, 'Next', 0, 11),
+                    MenuBuilder.Button(*subMenuButtonSize, *world1ButtonColor, buttonFontSize, 'Next', 0, 11, 11),
                     MenuBuilder.Button(*subMenuButtonSize, *world1ButtonColor, buttonFontSize, 'Back', 0, 1),
+                ),
+                ()
+            ),
+        ),
+    ),
+
+    # Level 1-2 menu
+    MenuBuilder.Menu(*mainMenuSize, *world1Color, 11, mainMenuDirection,
+        (
+            MenuBuilder.Text(*menuTextSize, *menuTextColor, menuTextFontSize, 'Level 2'),
+        ),
+        (
+            MenuBuilder.Button(*mainMenuButtonSize, *world1ButtonColor, buttonFontSize, 'Play', 1, 1),
+        ),
+        (
+            MenuBuilder.Menu(*subMenuSize, *world1SubmenuColor, 0, subMenuDirection,
+                (),
+                (
+                    MenuBuilder.Button(*subMenuButtonSize, *world1ButtonColor, buttonFontSize, 'Prev', 0, 10),
+                    MenuBuilder.Button(*subMenuButtonSize, *world1ButtonColor, buttonFontSize, 'Back', 0, 1),
+                    MenuBuilder.Button(*subMenuButtonSize, *world1ButtonColor, buttonFontSize, 'Next', 0, 12, 12),
                 ),
                 ()
             ),
@@ -114,5 +135,5 @@ menus = (
 
 
 text = MenuBuilder.getLineNumber(menus)
-with open('menu.txt', 'w') as file:
+with open('mainMenu.menuItem', 'w') as file:
     file.write(str(len(menus)) + text)

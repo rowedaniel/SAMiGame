@@ -19,7 +19,7 @@ public:
 	void checkMouseDown(sf::Vector2f pos);
 	std::tuple<int, int> checkMouseUp(sf::Vector2f pos);
 
-private:
+protected:
 	MenuButton::Action actionType;
 	int actionArg;
 

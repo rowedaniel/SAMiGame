@@ -31,7 +31,9 @@ Menu System:                                   [In Progress]+
           - unlock when level is beaten        [Not Started]
       - Animation/graphic for locked/unlocked  [Not Started]
   - Add party change system                    [Not Started]+
-  - Figire out how to leave/restart level      [In Progress]*
+  - Figure out how to leave/restart level      [Done]
+  - Button locked/unlocked state can be saved  [Done]
+  - Beating level unlocks button               [Not Started]*
 
 
 Battle System:                                 [In Progress]+

@@ -71,6 +71,7 @@ void Character::getFileLineData(int i, std::string & line, LoadInfo & loadInfo)
 void Character::loadFileData(LoadInfo & loadInfo)
 {
 	levelFactor = (loadInfo.level * 1.0f) / 100.0f;
+	cooldownTimer = secondary_effect_cooldown;
 }
 
 void Character::loadTextureData()
