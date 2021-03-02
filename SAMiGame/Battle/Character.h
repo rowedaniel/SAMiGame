@@ -85,7 +85,7 @@ private:
 
 
 	// animation stuff
-	sf::IntRect animationRect = sf::IntRect(0, 64*4, 64, 64);
+	sf::IntRect animationRect = sf::IntRect(0, 64*3, 64, 64);
 	sf::Sprite sprite;
 
 	sf::Time animationTime = sf::milliseconds(0);

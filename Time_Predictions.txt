@@ -3,7 +3,7 @@
 +===========================================================+
 | Effect Mechanics            | 3 hours       | 2 hours     |
 | Effect Display              | 5 hours       | 3 hours     |
-| Menu Locking                | 4 hours       | 2 hours     
+| Menu Locking                | 4 hours       | 2 hours     |
 | Character Selection         | 4 hours       | 
 | Character Levelling         | 1 hours       | 
 | Clean up Code               | 7 hours       | 
@@ -29,6 +29,6 @@ Estimated time for system completion: 29 hours
 Estimated time for total completion: 113 hours
 
 
-Current time total: 35 hours
-Estimated time until system completion: 21 hours
-Estimated time until total completion: 105 hours
+Current time total: 38 hours
+Estimated time until system completion: 19 hours
+Estimated time until total completion: 101 hours

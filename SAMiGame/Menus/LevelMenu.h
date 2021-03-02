@@ -52,18 +52,18 @@ private:
 		std::string characterInfoMenuText;
 		std::string goButtonText;
 		int winButtonId = 0;
-		float enemyHealth = 0.0f;
+		float enemyHealth = 100.0f;
 		CharacterInfo playerCharacterButtons;
 		CharacterInfo enemyCharacterButtons;
 	};
 
 	void getFileLineData(int i, std::string & line, LoadInfo & loadInfo);
 	void loadCharacters(int i, std::string & line, CharacterInfo & characterInfo);
-	void loadFileData(LoadInfo & loadInfo);
+	bool loadFileData(LoadInfo & loadInfo);
 	void onWin();
 
 	// display matchups between character and list of other characters
-	void displayCharacterInfo(std::vector<CharacterButton>::iterator character, std::vector<CharacterButton> & otherlist);
+	void displayCharacterInfo(std::vector<CharacterButton>::iterator character, std::vector<CharacterButton> & otherlist, bool playerOwned);
 
 	void selectCharacter(std::vector<CharacterButton>::iterator character);
 	void unselectCharacter(std::vector<CharacterButton>::iterator character);
@@ -93,6 +93,10 @@ private:
 	std::vector<Character> playerCharacters;
 
 	CharacterInfoDisplay characterInfoDisplay;
+	bool lastSelectedGroup = true;
+	std::vector<CharacterButton>::iterator lastDisplayedCharacter;
+
+
 	LockableMenuButton goButton;
 
 	Player player;

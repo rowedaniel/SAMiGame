@@ -78,7 +78,9 @@ bool LevelMenu::load(int id)
 	}
 
 	// do stuff with the file data
-	loadFileData(loadInfo);
+	if (!loadFileData(loadInfo)) {
+		return false;
+	}
 
 	// now, load everything else
 	loadTextureData();
@@ -87,7 +89,8 @@ bool LevelMenu::load(int id)
 	std::cout << "displaying character info for first character!" << std::endl;
 	// at first, just display the first of the characters
 	if (!playerCharacterButtons.empty()) {
-		displayCharacterInfo(playerCharacterButtons.begin(), enemyCharacterButtons);
+		lastDisplayedCharacter = playerCharacterButtons.end();
+		displayCharacterInfo(playerCharacterButtons.begin(), enemyCharacterButtons, true);
 	}
 	std::cout << "finished displaying character info" << std::endl;
 
@@ -124,11 +127,11 @@ void LevelMenu::getFileLineData(int i, std::string & line, LoadInfo & loadInfo)
 	}
 	i -= 5;
 
-	if (i < 18) {
+	if (i < 24) {
 		loadInfo.characterInfoMenuText.append(line + "\n");
 		return;
 	}
-	i -= 17;
+	i -= 23;
 
 	if (i < 10)
 	{
@@ -175,14 +178,14 @@ void LevelMenu::loadCharacters(int i, std::string & line, CharacterInfo & charac
 }
 
 
-void LevelMenu::loadFileData(LoadInfo & loadInfo)
+bool LevelMenu::loadFileData(LoadInfo & loadInfo)
 {
 
 
 	if (loadInfo.playerCharacterButtons.totalNumberOfCharacters != loadInfo.enemyCharacterButtons.totalNumberOfCharacters) {
-		// real bad news. Error.
-		// TODO: figure out how to handle this. For now, just returns.
-		return;
+		// mismatch between number of player characters and number of level characters.
+		std::cout << "player/level character number mismatch" << std::endl;
+		return false;
 	}
 
 	// reset anything (in case of previous load)
@@ -304,8 +307,21 @@ void LevelMenu::loadFileData(LoadInfo & loadInfo)
 	{
 		std::fstream file("gamestate/current.player", std::ios::in);
 		if (file.is_open()) {
+
+
 			std::string line;
+			float playerMaxHealth = 100.0f;
 			float playerHealth = 100.0f;
+
+			// line 1
+			while (getline(file, line)) {
+				if (line.substr(0, 2) == "//") {
+					continue;
+				}
+				playerMaxHealth = std::stof(line);
+				break;
+			}
+			// line 2
 			while (getline(file, line)) {
 				if (line.substr(0, 2) == "//") {
 					continue;
@@ -313,7 +329,8 @@ void LevelMenu::loadFileData(LoadInfo & loadInfo)
 				playerHealth = std::stof(line);
 				break;
 			}
-			player = Player(playerHealth);
+			player = Player(playerMaxHealth);
+			player.setHealth(playerHealth);
 		}
 	}
 	enemy = Player(loadInfo.enemyHealth);
@@ -328,6 +345,9 @@ void LevelMenu::loadFileData(LoadInfo & loadInfo)
 
 	MenuItem::loadFileData(loadInfo.oldInfo);
 	std::cout << "finished loading level info" << std::endl;
+
+	// everything worked successfully
+	return true;
 }
 
 void LevelMenu::onWin()
@@ -842,7 +862,7 @@ void LevelMenu::checkMouseMove(sf::Vector2f pos)
 			if (it->contains(pos)) {
 				//std::cout << "player character button clicked of type: " << it->characterType << std::endl;
 				//std::cout << "name: " << getCharacterTemplate((it->characterType))->name << std::endl;
-				displayCharacterInfo(it, enemyCharacterButtons);
+				displayCharacterInfo(it, enemyCharacterButtons, true);
 				return;
 			}
 		}
@@ -852,7 +872,7 @@ void LevelMenu::checkMouseMove(sf::Vector2f pos)
 			if (it->contains(pos)) {
 				//std::cout << "enemy character button clicked of type: " << it->characterType << std::endl;
 				//std::cout << "name: " << getCharacterTemplate((it->characterType))->name << std::endl;
-				displayCharacterInfo(it, playerCharacterButtons);
+				displayCharacterInfo(it, playerCharacterButtons, false);
 				return;
 			}
 		}
@@ -884,8 +904,15 @@ void LevelMenu::checkMouseMove(sf::Vector2f pos)
 
 // Character selection management
 
-void LevelMenu::displayCharacterInfo(std::vector<CharacterButton>::iterator character, std::vector<CharacterButton> & otherlist)
+void LevelMenu::displayCharacterInfo(std::vector<CharacterButton>::iterator character, std::vector<CharacterButton> & otherlist, bool playerOwned)
 {
+	if (playerOwned == lastSelectedGroup && character == lastDisplayedCharacter) {
+		return;
+	}
+	lastDisplayedCharacter = character;
+	lastSelectedGroup = playerOwned;
+
+
 	characterInfoDisplay.setCharacterData(character->characterRef);
 
 	// clear both player and enemy matchups

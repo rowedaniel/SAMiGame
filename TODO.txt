@@ -18,7 +18,7 @@ Resource Manager System:                       [Not Started]-
       - list of ids of people using them?
   - more robust error checking
 
-Menu System:                                   [In Progress]+
+Menu System:                                   [In Progress]*
   - Clickable Buttons                          [Done]
   - Basic Layout                               [Done]
       - background                             [Done]
@@ -30,7 +30,7 @@ Menu System:                                   [In Progress]+
       - only unlock under certain conditions   [Done]
           - unlock when level is beaten        [Done]
       - Animation/graphic for locked/unlocked  [Not Started]-
-  - Add party change system                    [Not Started]+
+  - Add party change system                    [In Progress]*
   - Figure out how to leave/restart level      [Done]
   - Button locked/unlocked state can be saved  [Done]
   - Beating level unlocks button               [Done]
@@ -62,14 +62,14 @@ Battle System:                                 [In Progress]+
           - apply during attack                [Done]
           - apply during new effects           [Done]
       - give effects access to other chrs      [Not Started]+
-      - display inactive effect description    [Not Started]+
+      - display inactive effect description    [Done]
       - display active character effects       [Done]
       - display active player effects          [Done]
   
-  - win/loss system:                           [In Progress]+
+  - win/loss system:                           [Done]
       - when you win, unlock stuff             [Done]
       - decide where to keep track of it       [Done]
-      - decide if health carries over          [Not Started]+
+      - decide if health carries over          [Done]
 
 Character System:                              [In Progress]+
   - Character Templates                        [In Progress]+

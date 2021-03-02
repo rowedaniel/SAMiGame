@@ -45,7 +45,7 @@ void Effect::advanceTurn()
 
 void Effect::setDescription(std::string s)
 {
-	description = s;
+	description = s + " for " + std::to_string(duration) + " turn(s).";
 }
 
 std::string Effect::getDescription()

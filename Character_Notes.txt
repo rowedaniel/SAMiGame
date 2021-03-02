@@ -2,7 +2,6 @@ Character Sprites:
   - 5 animations:
       - primary-tie
       - primary-trade
-      - primary-loss
       - primary-win
       - secondary
 

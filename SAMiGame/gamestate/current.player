@@ -1,2 +1,4 @@
-// health
+// max health
 1000.0f
+// current health
+700.0f

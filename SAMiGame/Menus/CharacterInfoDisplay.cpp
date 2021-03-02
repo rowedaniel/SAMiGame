@@ -10,6 +10,8 @@ CharacterInfoDisplay::~CharacterInfoDisplay()
 
 void CharacterInfoDisplay::setCharacterData(std::vector<Character>::iterator sourceCharacter)
 {
+	std::cout << "displaying character data!" << std::endl;
+
 	// display character primary and secondary types
 	primaryTypeSprite.setTextureRect(sf::IntRect(sourceCharacter->primary_type * 32, 0, 32, 32));
 	secondaryTypeSprite.setTextureRect(sf::IntRect(sourceCharacter->secondary_type * 32, 32, 32, 32));
@@ -21,19 +23,36 @@ void CharacterInfoDisplay::setCharacterData(std::vector<Character>::iterator sou
 							"   Effect cooldown: " + std::to_string(sourceCharacter->getEffectCooldown())
 							);
 
+
+
+
+
+	// display effects that it causes
+	// get effects
+	std::list<Effect> effects;
+	for (auto it = sourceCharacter->selfAppliedEffects.begin(); it != sourceCharacter->selfAppliedEffects.end(); ++it) {
+		effects.push_back(getEffectInfo(it, sourceCharacter->type, sourceCharacter->isPlayerOwned()));
+	}
+	for (auto it = sourceCharacter->opponentAppliedEffects.begin(); it != sourceCharacter->opponentAppliedEffects.end(); ++it) {
+		effects.push_back(getEffectInfo(it, sourceCharacter->type, !sourceCharacter->isPlayerOwned()));
+	}
+	for (auto it = sourceCharacter->selfPlayerAppliedEffects.begin(); it != sourceCharacter->selfPlayerAppliedEffects.end(); ++it) {
+		effects.push_back(getEffectInfo(it, sourceCharacter->type, sourceCharacter->isPlayerOwned()));
+	}
+	for (auto it = sourceCharacter->opponentPlayerAppliedEffects.begin(); it != sourceCharacter->opponentPlayerAppliedEffects.end(); ++it) {
+		effects.push_back(getEffectInfo(it, sourceCharacter->type, !sourceCharacter->isPlayerOwned()));
+	}
+	loadEffectButton(effects, causedEffects);
+
+
+
+
 	// display active effects on character
 	auto activeEffectInfo = sourceCharacter->getEffects();
-	activeEffects.clear();
-	for (auto it = activeEffectInfo.begin(); it != activeEffectInfo.end(); ++it) {
-		activeEffects.push_back(EffectButton());
-	}
-	// TODO: do this more efficiently
-	auto info = activeEffectInfo.begin();
-	for (auto it = activeEffects.begin(); it != activeEffects.end(); ++it) {
-		it->load();
-		it->setEffectData(info);
-		++info;
-	}
+	loadEffectButton(activeEffectInfo, activeEffects);
+
+
+
 	updateItemPos();
 
 	//std::cout << "description length: " << sourceCharacter->description.length() << std::endl;
@@ -64,16 +83,20 @@ void CharacterInfoDisplay::draw(sf::RenderWindow & window, sf::FloatRect boundBo
 	// draw sprites first
 	window.draw(primaryTypeSprite);
 	window.draw(secondaryTypeSprite);
-	for (auto it = activeEffects.begin(); it != activeEffects.end(); ++it) {
-		it->draw(window, boundingBox);
-	}
 
 	// draw text second so it goes on top
 	characterName.draw(window, boundBox);
 	//characterDescription.draw(window, boundBox);
 	characterAttack.draw(window, boundBox);
 
-	
+	// draw effects last, so the text shows up on top
+	// TODO: make it so the text doesn't get blocked by other effects
+	for (auto it = activeEffects.begin(); it != activeEffects.end(); ++it) {
+		it->draw(window, boundingBox);
+	}
+	for (auto it = causedEffects.begin(); it != causedEffects.end(); ++it) {
+		it->draw(window, boundingBox);
+	}
 	
 	
 	drawBorder(window, boundBox);
@@ -99,10 +122,18 @@ void CharacterInfoDisplay::updateItemPos()
 	for (auto it = activeEffects.begin(); it != activeEffects.end(); ++it) {
 		it->updatePos(sf::Vector2f(x, boundingBox.top + 96.0f));
 	}
+
+	x += 64;
+	for (auto it = causedEffects.begin(); it != causedEffects.end(); ++it) {
+		it->updatePos(sf::Vector2f(x, boundingBox.top + 64.0f));
+	}
 }
 
 void CharacterInfoDisplay::checkMouseMove(sf::Vector2f pos)
 {
+	for (auto it = causedEffects.begin(); it != causedEffects.end(); ++it) {
+		it->checkMouseMove(pos);
+	}
 	for (auto it = activeEffects.begin(); it != activeEffects.end(); ++it) {
 		it->checkMouseMove(pos);
 	}
@@ -165,4 +196,23 @@ void CharacterInfoDisplay::loadTextureData()
 	}
 	primaryTypeSprite.setTexture(typeTexture);
 	secondaryTypeSprite.setTexture(typeTexture);
+}
+
+Effect CharacterInfoDisplay::getEffectInfo(std::vector<EffectGetter::EffectInfo>::iterator effect, int characterType, bool playerOwned)
+{
+	return EffectGetter::getEffect(*effect, characterType, playerOwned);
+}
+
+void CharacterInfoDisplay::loadEffectButton(std::list<Effect> effectList, std::list<EffectButton>& effectButtonList)
+{
+	effectButtonList.clear();
+	for (auto it = effectList.begin(); it != effectList.end(); ++it) {
+		effectButtonList.push_back(EffectButton());
+	}
+	auto info = effectList.begin();
+	for (auto it = effectButtonList.begin(); it != effectButtonList.end(); ++it) {
+		it->load();
+		it->setEffectData(info);
+		++info;
+	}
 }

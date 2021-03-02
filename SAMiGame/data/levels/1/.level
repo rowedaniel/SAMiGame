@@ -23,6 +23,13 @@
 0
 0
 20
+// character info text data - character attack and effect cooldown.
+234
+60
+0
+0
+0
+11
 // character info text data - character description and attack.
 234
 60
@@ -43,7 +50,7 @@ GO
 // what to unlock on win
 11
 // enemy health
-100.0f
+1000.0f
 // 4 Characters
 4
 2

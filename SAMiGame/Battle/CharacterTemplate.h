@@ -16,6 +16,11 @@ public:
 
 	void load();
 
+	std::vector<EffectGetter::EffectInfo> selfAppliedEffects;
+	std::vector<EffectGetter::EffectInfo> opponentAppliedEffects;
+	std::vector<EffectGetter::EffectInfo> selfPlayerAppliedEffects;
+	std::vector<EffectGetter::EffectInfo> opponentPlayerAppliedEffects;
+
 protected:
 	struct LoadInfo
 	{
@@ -56,10 +61,4 @@ protected:
 
 	float attack;
 	int secondary_effect_cooldown;
-
-
-	std::vector<EffectGetter::EffectInfo> selfAppliedEffects;
-	std::vector<EffectGetter::EffectInfo> opponentAppliedEffects;
-	std::vector<EffectGetter::EffectInfo> selfPlayerAppliedEffects;
-	std::vector<EffectGetter::EffectInfo> opponentPlayerAppliedEffects;
 };

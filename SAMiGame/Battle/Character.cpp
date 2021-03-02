@@ -71,7 +71,8 @@ void Character::getFileLineData(int i, std::string & line, LoadInfo & loadInfo)
 void Character::loadFileData(LoadInfo & loadInfo)
 {
 	levelFactor = (loadInfo.level * 1.0f) / 100.0f;
-	cooldownTimer = secondary_effect_cooldown;
+	// TODO: testing only, change this later
+	cooldownTimer = 0;// secondary_effect_cooldown;
 }
 
 void Character::loadTextureData()
@@ -85,6 +86,7 @@ void Character::loadTextureData()
 	sprite.setTexture(newtexture);
 	sprite.setTextureRect(sf::IntRect(0, 0, 64, 64));*/
 	sprite = sf::Sprite(texture, animationRect);
+	resetAnimation();
 
 	loaded = true;
 }
@@ -149,7 +151,7 @@ void Character::draw(sf::RenderWindow & window, sf::FloatRect boundBox, sf::Time
 
 void Character::resetAnimation()
 {
-	animationRect.top = animationRect.height * 4;
+	animationRect.top = animationRect.height * 3;
 	animationRect.left = 0;
 	sprite.setTextureRect(animationRect);
 	std::cout << "resetting animation for: " << name << std::endl;
@@ -168,7 +170,7 @@ void Character::startPrimaryAnimation(std::vector<Character>::iterator opponent)
 
 void Character::startSecondaryAnimation(std::vector<Character>::iterator opponent)
 {
-	animationRect.top = animationRect.height*4;
+	animationRect.top = animationRect.height*3;
 	animationRect.left = 0;
 	sprite.setTextureRect(animationRect);
 	animating = true;

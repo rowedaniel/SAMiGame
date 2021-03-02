@@ -3,6 +3,7 @@
 #include "MenuItem.h"
 #include "MenuText.h"
 #include "../Battle/Character.h"
+#include "../Battle/EffectGetter.h"
 #include "EffectButton.h"
 
 // TODO: make parent 'clickable' class. Also, consider adding more parent classes.
@@ -35,6 +36,9 @@ private:
 	void loadFileData(LoadInfo & loadInfo);
 	void loadTextureData();
 
+	Effect getEffectInfo(std::vector<EffectGetter::EffectInfo>::iterator effect, int characterType, bool playerOwned);
+	void loadEffectButton(std::list<Effect> effectList, std::list<EffectButton>& effectButtonList);
+
 	MenuText characterName;
 	//MenuText characterDescription;
 	MenuText characterAttack;
@@ -43,7 +47,9 @@ private:
 	sf::Sprite primaryTypeSprite;
 	sf::Sprite secondaryTypeSprite;
 
+	// effects which this character causes
+	std::list<EffectButton> causedEffects;
+
+	// effects active on this character
 	std::list<EffectButton> activeEffects;
-
-
 };
