@@ -108,6 +108,12 @@
     <ClCompile Include="Menus\EffectButton.cpp">
       <Filter>Source Files\Menus</Filter>
     </ClCompile>
+    <ClCompile Include="Menus\CharacterSelect.cpp">
+      <Filter>Source Files\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="Menus\CharacterButtonMenu.cpp">
+      <Filter>Source Files\Menus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -183,6 +189,12 @@
       <Filter>Header Files\Battle\Effects</Filter>
     </ClInclude>
     <ClInclude Include="Menus\EffectButton.h">
+      <Filter>Header Files\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\CharacterSelect.h">
+      <Filter>Header Files\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\CharacterButtonMenu.h">
       <Filter>Header Files\Menus</Filter>
     </ClInclude>
   </ItemGroup>

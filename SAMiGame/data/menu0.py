@@ -9,13 +9,13 @@ menuTextSize = (400, 200)
 menuTextColor = (0, 0, 0)
 menuTextFontSize = 48
 
-mainMenuButtonSize = (200, 40)
+mainMenuButtonSize = (220, 40)
 
-subMenuSize = (mainMenuSize[0]-16, mainMenuSize[1]-menuTextSize[1]-mainMenuButtonSize[1]-32)
+subMenuSize = (mainMenuSize[0]-16, mainMenuSize[1]-menuTextSize[1]-mainMenuButtonSize[1]*2-32)
 subMenuColor = (215, 140, 165)
 subMenuDirection = 1
 
-subMenuButtonSize = ( (subMenuSize[0]-24)//3, 60 )
+subMenuButtonSize = ( (subMenuSize[0]-24)//3, subMenuSize[1]-16 )
 
 
 buttonColor = (255, 200, 220)
@@ -98,6 +98,7 @@ menus = (
         ),
         (
             MenuBuilder.Button(*mainMenuButtonSize, *world1ButtonColor, buttonFontSize, 'Play', 1, 1),
+            MenuBuilder.Button(*mainMenuButtonSize, *world1ButtonColor, buttonFontSize, 'Character Select', 2, 2),
         ),
         (
             MenuBuilder.Menu(*subMenuSize, *world1SubmenuColor, 0, 0,
@@ -118,6 +119,7 @@ menus = (
         ),
         (
             MenuBuilder.Button(*mainMenuButtonSize, *world1ButtonColor, buttonFontSize, 'Play', 1, 2),
+            MenuBuilder.Button(*mainMenuButtonSize, *world1ButtonColor, buttonFontSize, 'Character Select', 2, 4),
         ),
         (
             MenuBuilder.Menu(*subMenuSize, *world1SubmenuColor, 0, subMenuDirection,

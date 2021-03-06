@@ -89,7 +89,7 @@ bool HealthBar::isAnimationFinished()
 
 void HealthBar::updateHealthDisplay(sf::Time elapsedTime)
 {
-	float expectedNextStep = changeSpeed * elapsedTime.asSeconds();
+	const float expectedNextStep = changeSpeed * elapsedTime.asSeconds();
 	if (abs(targetValue - currentValue) < abs(expectedNextStep)) {
 		currentValue = targetValue;
 	}

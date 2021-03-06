@@ -18,7 +18,7 @@ Resource Manager System:                       [Not Started]-
       - list of ids of people using them?
   - more robust error checking
 
-Menu System:                                   [In Progress]*
+Menu System:                                   [In Progress]-
   - Clickable Buttons                          [Done]
   - Basic Layout                               [Done]
       - background                             [Done]
@@ -30,21 +30,21 @@ Menu System:                                   [In Progress]*
       - only unlock under certain conditions   [Done]
           - unlock when level is beaten        [Done]
       - Animation/graphic for locked/unlocked  [Not Started]-
-  - Add party change system                    [In Progress]*
+      - Save different templates               [Not Started]-
   - Figure out how to leave/restart level      [Done]
   - Button locked/unlocked state can be saved  [Done]
   - Beating level unlocks button               [Done]
 
 
-Battle System:                                 [In Progress]+
-  
+Battle System:                                 [Done]
+  - leave level at will                        [Done]
   - select order/matchups/etc.:                [Done]
   - physical attack system                     [Done]
-      - defense? Decide on this                [Done]
-      - attack                                 [Done]
-      - health                                 [Done]
-          - decide where to keep track of it   [Done]
-      - make attack take effects into account  [Done]
+      - defense? Decide on this                
+      - attack                                 
+      - health                                 
+          - decide where to keep track of it   
+      - make attack take effects into account
   
   - secondary effect system:                   [In Progress]+
       - every character has a list of effects, [Done]
@@ -54,30 +54,36 @@ Battle System:                                 [In Progress]+
           - cooldown
           - amount (exact effect varies)
       - rig up effect trigger scenarios:       [Done]
-          - before round                       [Done]
-          - after round                        [Done]
-          - apply during defense               [Done]
-          - before attack                      [Done]
-          - after attack                       [Done]
-          - apply during attack                [Done]
-          - apply during new effects           [Done]
+          - before round                       
+          - after round                        
+          - apply during defense               
+          - before attack                      
+          - after attack                       
+          - apply during attack                
+          - apply during new effects           
       - give effects access to other chrs      [Not Started]+
       - display inactive effect description    [Done]
       - display active character effects       [Done]
       - display active player effects          [Done]
+      - improve opponent AI                    [Not Started]+
   
-  - win/loss system:                           [Done]
+  - win/loss system:                           [In Progress]+
       - when you win, unlock stuff             [Done]
       - decide where to keep track of it       [Done]
-      - decide if health carries over          [Done]
+      - decide if health carries over          [In Progress]+
 
 Character System:                              [In Progress]+
   - Character Templates                        [In Progress]+
   - Characters                                 [In Progress]+
-  - Switching characters:                      [Not Started]+
-      - Menu interactions
-      - Change gamestate stuff
+  - Switching characters:                      [In Progress]-
+      - Menu interactions                      [Done]
+      - Change gamestate stuff                 [Done
+      - Display character buttons              [Done]
+      - Display character info                 [Done]
+      - Display character sprite               [Done]
+      - Choose characters                      [Done]
   - Items                                      [Not Started]-
+  - Level up system                            [Not Started]+
 
 
 Levels:                                        [In Progress]+
@@ -87,8 +93,15 @@ Levels:                                        [In Progress]+
   - add more (some) levels                     [Not Started]+
   - event stages                               [Not Started]-
 
+Gacha:                                         [Not Started]+
+  - Decide how this will work
+  - pity?
+  - xorshift RNG, probably
+  - events?
+
 Misc.:                                         [Not Started]-
   - Better error checking overall
       - don't crash when loading text (stoi)
   - Unload things when not in use              [Not Started]+
   - Add Gacha menu color customizations        [Not Started]-
+  - Change effect system to use interfaces     [Not Started]-

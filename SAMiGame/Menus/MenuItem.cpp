@@ -209,11 +209,12 @@ void MenuItem::drawSubitem(sf::RenderWindow & window, sf::Sprite & item, sf::Flo
 
 			// sometimes, the scaling makes the subitem go out of position, and this moves it back.
 			itemBounds = item.getGlobalBounds();
-			std::cout << "intersection left: " << intersection.left << " itemBounds left: " << itemBounds.left << std::endl;
+			//std::cout << "intersection left: " << intersection.left << " itemBounds left: " << itemBounds.left << std::endl;
 			item.move(sf::Vector2f(intersection.left - itemBounds.left + (intersection.left == boundBox.left ? borderSpriteSize / 2.0 : 0),
 				intersection.top - itemBounds.top + (intersection.top == boundBox.top ? borderSpriteSize / 2.0 : 0)
 			));
 		}
+		else
 		window.draw(item);
 	}
 }

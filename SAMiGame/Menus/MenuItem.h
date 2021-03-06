@@ -17,7 +17,6 @@ public:
 	void isLoaded();
 	void updatePos(sf::Vector2f pos);
 
-
 protected:
 	bool loaded = false;
 

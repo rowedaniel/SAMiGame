@@ -15,6 +15,7 @@ Exit
 0
 0
 // character button bg and shape
+328
 40
 80
 160
@@ -46,6 +47,16 @@ Exit
 0
 0
 11
+// left/right button text
+40
+40
+80
+160
+200
+20
++
+0
+0
 // go button
 64
 32
@@ -56,11 +67,3 @@ Exit
 GO
 0
 0
-// what to unlock on win
-11
-// enemy health
-1000.0f
-// 1 Characters
-2
-1
-1

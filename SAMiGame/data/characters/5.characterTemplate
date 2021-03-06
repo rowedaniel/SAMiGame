@@ -1,0 +1,30 @@
+Lonsdale
+Students tremble at his battle cry ("Limpits!"), before drowning in his abundant love for everything aquatic.
+// sprite data placeholder
+// attack stat (at max level)
+200.0f
+// primary type (0-groundcover, 1-fern, 2-tree, 3-shrub)
+3
+// secondary type (0-empathy, 1-community, 2-balance, 3-thinking, 4-adventure)
+0
+// secondary effect cooldown:
+4
+// number of each type of effect:
+// influences this character:
+0
+// influences the opposing character:
+0
+// influences this character's player:
+0
+// influences the opposing character's player:
+1
+//
+// for each effect:
+// number of lines:
+3
+// effect type
+7
+// effect duration (in turns)
+3
+// effect amount
+50.0f;

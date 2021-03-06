@@ -2,12 +2,14 @@
 #include "../stdafx.h"
 #include "Menu.h"
 #include "LevelMenu.h"
+#include "CharacterSelect.h"
 
 
 class MenuManager
 {
 public:
-	enum ActionType { Swapmenu = 0, StartLevel = 1 };
+	enum ActionType { Swapmenu = 0, StartLevel = 1, StartCharacterSelect = 2 };
+	enum State { InMenu, InLevel, InCharacterSelect };
 
 	MenuManager(float x, float y);
 	~MenuManager();
@@ -19,11 +21,17 @@ public:
 	void checkMouseUp(sf::Vector2f pos);
 	void checkMouseMove(sf::Vector2f pos);
 
+protected:
+
 	void executeButton(int actionType, int actionArg);
+
 	void swapMenus(int id);
 	void startLevel(int id);
 	void stopLevel();
-protected:
+	void startCharacterSelect(int numberOfCharacters);
+
+
+
 	float top;
 	float left;
 
@@ -31,7 +39,8 @@ protected:
 	std::vector<Menu>::iterator activeMenu;
 
 	LevelMenu activeLevel;
-	bool inLevel = false;
+	CharacterSelect characterSelect;
+	State state = InMenu;
 
 	struct LoadInfo
 	{

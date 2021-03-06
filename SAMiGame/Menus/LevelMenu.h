@@ -2,6 +2,7 @@
 #include "../stdafx.h"
 #include "MenuItem.h"
 #include "CharacterButton.h"
+#include "CharacterButtonMenu.h"
 #include "CharacterInfoDisplay.h"
 #include "HealthBar.h"
 #include "LockableMenuButton.h"
@@ -22,6 +23,7 @@ public:
 	void checkMouseDown(sf::Vector2f pos);
 	void checkMouseUp(sf::Vector2f pos);
 	void checkMouseMove(sf::Vector2f pos);
+
 	void updatePos(sf::Vector2f pos);
 	void updateItemPos();
 
@@ -48,6 +50,7 @@ private:
 	{
 	public:
 		MenuItem::LoadInfo oldInfo;
+		std::string exitButtonText;
 		std::string characterButtonMenuText;
 		std::string characterInfoMenuText;
 		std::string goButtonText;
@@ -79,9 +82,9 @@ private:
 
 	// character select stuff
 
-	MenuItem enemyCharacterButtonBackground;
-	MenuItem playerCharacterButtonBackground;
-	MenuItem selectedPlayerCharacterButtonBackground;
+	CharacterButtonMenu enemyCharacterButtonBackground;
+	CharacterButtonMenu playerCharacterButtonBackground;
+	CharacterButtonMenu selectedPlayerCharacterButtonBackground;
 	std::vector<CharacterButton> enemyCharacterButtons;
 	std::vector<CharacterButton> playerCharacterButtons;
 	std::vector<CharacterButton> selectedPlayerCharacterButtons;
@@ -98,6 +101,7 @@ private:
 
 
 	LockableMenuButton goButton;
+	MenuButton exitButton;
 
 	Player player;
 	Player enemy;

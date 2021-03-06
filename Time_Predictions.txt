@@ -4,7 +4,7 @@
 | Effect Mechanics            | 3 hours       | 2 hours     |
 | Effect Display              | 5 hours       | 3 hours     |
 | Menu Locking                | 4 hours       | 2 hours     |
-| Character Selection         | 4 hours       | 
+| Character Selection         | 4 hours       | 5 hours     |
 | Character Levelling         | 1 hours       | 
 | Clean up Code               | 7 hours       | 
 | Fancy Level Things          | 3 hours       | 
@@ -13,7 +13,7 @@
 +=====================+=================+===================+
 |                     | Recurring Tasks |                   |
 +=====================+=================+===================+
-| Build a Character (10+)     | 7 hours       | 
+| Build a Character (10+)     | 7 hours       | 3 hours
 | Build a Level (40+)         | 20 min        |
 | Build a World (5+Events)    | 1.5 hours     |
 
@@ -29,6 +29,6 @@ Estimated time for system completion: 29 hours
 Estimated time for total completion: 113 hours
 
 
-Current time total: 38 hours
-Estimated time until system completion: 19 hours
-Estimated time until total completion: 101 hours
+Current time total: 46 hours
+Estimated time until system completion: 14 hours
+Estimated time until total completion: 93 hours

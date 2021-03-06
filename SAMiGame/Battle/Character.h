@@ -19,6 +19,8 @@ public:
 	void draw(sf::RenderWindow & window, sf::FloatRect boundBox, sf::Time elapsedTime);
 	void updatePos(sf::Vector2f pos);
 
+	sf::FloatRect getBounds();
+
 
 	// animation controllers
 	void resetAnimation();
@@ -89,7 +91,7 @@ private:
 	sf::Sprite sprite;
 
 	sf::Time animationTime = sf::milliseconds(0);
-	const sf::Time timestep = sf::milliseconds(100);
+	const sf::Time timestep = sf::milliseconds(50);
 	bool animating = false;
 
 

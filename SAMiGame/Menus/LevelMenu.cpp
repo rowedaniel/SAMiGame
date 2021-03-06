@@ -38,7 +38,7 @@ bool LevelMenu::load(int id)
 	file.open("data/levels/" + std::to_string(id) + "/.level", std::ios::in);
 	if (!file.is_open()) 
 	{
-		std::cout << "error opening file: data / levels" + std::to_string(id) + ".level" << std::endl;
+		std::cout << "error opening file: data/levels/" + std::to_string(id) + "/.level" << std::endl;
 		return false;
 	}
 
@@ -121,11 +121,19 @@ void LevelMenu::getFileLineData(int i, std::string & line, LoadInfo & loadInfo)
 	}
 	i -= 5;
 
-	if (i < 6) {
+
+	if (i < 10)
+	{
+		loadInfo.exitButtonText.append(line + "\n");
+		return;
+	}
+	i -= 9;
+
+	if (i < 5) {
 		loadInfo.characterButtonMenuText.append(line + "\n");
 		return;
 	}
-	i -= 5;
+	i -= 4;
 
 	if (i < 24) {
 		loadInfo.characterInfoMenuText.append(line + "\n");
@@ -184,39 +192,50 @@ bool LevelMenu::loadFileData(LoadInfo & loadInfo)
 
 	if (loadInfo.playerCharacterButtons.totalNumberOfCharacters != loadInfo.enemyCharacterButtons.totalNumberOfCharacters) {
 		// mismatch between number of player characters and number of level characters.
-		std::cout << "player/level character number mismatch" << std::endl;
+		std::cout << "player/level character number mismatch: " << loadInfo.playerCharacterButtons.totalNumberOfCharacters << " and " << \
+			loadInfo.enemyCharacterButtons.totalNumberOfCharacters << std::endl;
 		return false;
 	}
 
 	// reset anything (in case of previous load)
+	// TODO: put this in better place
 	enemyCharacterButtons.clear();
 	playerCharacterButtons.clear();
 	selectedPlayerCharacterButtons.clear();
 	selectedEnemyCharacterButtons.clear();
+	playerCharacterButtonBackground.unload();
+	enemyCharacterButtonBackground.unload();
+	selectedPlayerCharacterButtonBackground.unload();
 	enemyCharacters.clear();
 	playerCharacters.clear();
 
 
 	// character button backgrounds
 	{
-		std::istringstream textStream(loadInfo.characterButtonMenuText);
+		std::istringstream textStream(std::to_string(loadInfo.playerCharacterButtons.totalNumberOfCharacters * 32 + 8) + "\n" + loadInfo.characterButtonMenuText);
 		playerCharacterButtonBackground.load(textStream);
 	}
 	{
-		std::istringstream textStream(loadInfo.characterButtonMenuText);
+		std::istringstream textStream(std::to_string(loadInfo.playerCharacterButtons.totalNumberOfCharacters * 32 + 8) + "\n" + loadInfo.characterButtonMenuText);
 		enemyCharacterButtonBackground.load(textStream);
 	}
 	{
-		std::istringstream textStream(loadInfo.characterButtonMenuText);
+		std::istringstream textStream(std::to_string(loadInfo.playerCharacterButtons.totalNumberOfCharacters * 32 + 8) + "\n" + loadInfo.characterButtonMenuText);
 		selectedPlayerCharacterButtonBackground.load(textStream);
 	}
 
-	// character info background
+	// character info
 	{
 		std::istringstream textStream(loadInfo.characterInfoMenuText);
 		characterInfoDisplay.load(textStream);
 	}
 
+
+	// exit Button
+	{
+		std::istringstream textStream(loadInfo.exitButtonText);
+		exitButton.load(textStream);
+	}
 	// go Button
 	{
 		std::istringstream textStream(loadInfo.goButtonText);
@@ -247,6 +266,8 @@ bool LevelMenu::loadFileData(LoadInfo & loadInfo)
 	for (auto it = playerCharacterButtons.begin(); it != playerCharacterButtons.end(); ++it)
 	{
 		it->load();
+		// add to appropriate button backgroung menu
+		playerCharacterButtonBackground.addCharacter(it);
 	}
 
 
@@ -272,6 +293,8 @@ bool LevelMenu::loadFileData(LoadInfo & loadInfo)
 	for (auto it = enemyCharacterButtons.begin(); it != enemyCharacterButtons.end(); ++it)
 	{
 		it->load();
+		// add to appropriate button backgroung menu
+		enemyCharacterButtonBackground.addCharacter(it);
 	}
 
 
@@ -284,6 +307,8 @@ bool LevelMenu::loadFileData(LoadInfo & loadInfo)
 	for (auto it = selectedPlayerCharacterButtons.begin(); it != selectedPlayerCharacterButtons.end(); ++it)
 	{
 		it->load();
+		// add to appropriate button backgroung menu
+		selectedPlayerCharacterButtonBackground.addCharacter(it);
 	}
 	latestSelectedPlayerCharacter = selectedPlayerCharacterButtons.begin();
 
@@ -310,8 +335,8 @@ bool LevelMenu::loadFileData(LoadInfo & loadInfo)
 
 
 			std::string line;
-			float playerMaxHealth = 100.0f;
-			float playerHealth = 100.0f;
+			float playerMaxHealth = 0.0f;
+			float playerHealth;
 
 			// line 1
 			while (getline(file, line)) {
@@ -321,6 +346,10 @@ bool LevelMenu::loadFileData(LoadInfo & loadInfo)
 				playerMaxHealth = std::stof(line);
 				break;
 			}
+
+			// by default, set current health to max health
+			playerHealth = playerMaxHealth;
+
 			// line 2
 			while (getline(file, line)) {
 				if (line.substr(0, 2) == "//") {
@@ -399,6 +428,8 @@ void LevelMenu::updateItemPos()
 {
 	float x, y;
 
+	// place exit button
+	exitButton.updatePos(sf::Vector2f(boundingBox.left + 8.0f, boundingBox.top + 8.0f));
 	// place go button
 	goButton.updatePos(sf::Vector2f(boundingBox.left + boundingBox.width / 2.0f - goButton.getWidth() / 2.0f, boundingBox.top + 100.0f));
 
@@ -430,55 +461,27 @@ void LevelMenu::updateItemPos()
 
 
 	// place character buttons
-
-	y = boundingBox.top + boundingBox.height / 2 - 32.0f;
-
-	// Player characters go at the left-middle section
-	x = boundingBox.left + 32.0f;
+	// player and enemy buttons go at middle height
+	y = boundingBox.top + boundingBox.height / 2 - 32.0f -4.0f;
 
 	// place player character button background
-	playerCharacterButtonBackground.updatePos(sf::Vector2f(x - 4.0f, y - 4.0f));
-
-	for (auto it = playerCharacterButtons.begin(); it != playerCharacterButtons.end(); ++it) {
-		it->updatePos(sf::Vector2f(x, y));
-		std::cout << "character of type: " << it->characterType << " positioned at: " << x << std::endl;
-		// move to the right, leaving space between characters
-		x += 32.0f + 4.0f;
-	}
-
-
-	// Enemy characters go at the right-middle section
-	x = boundingBox.left + boundingBox.width - 32.0f - 32.0f;
-
-	for (auto it = enemyCharacterButtons.begin(); it != enemyCharacterButtons.end(); ++it) {
-		it->updatePos(sf::Vector2f(x, y));
-		std::cout << "character positioned at: " << x << std::endl;
-		// move to the left, leaving space between characters
-		x -= 32.0f + 4.0f;
-	}
+	// Player characters go at the left-middle section
+	x = boundingBox.left + 32.0f + 4.0f;
+	playerCharacterButtonBackground.updatePos(sf::Vector2f(x, y));
 
 	// place enemy character button background
-	enemyCharacterButtonBackground.updatePos(sf::Vector2f(x + 28.0f, y - 4.0f));
+	// Enemy characters go at the right-middle section
+	x = boundingBox.left + boundingBox.width - enemyCharacterButtonBackground.getWidth() - 32.0f - 4.0f;
+	enemyCharacterButtonBackground.updatePos(sf::Vector2f(x, y));
 
-
-
-
+	// place selected player character button background
 	// selected player character buttons go at the top-middle section
 	x = boundingBox.left + boundingBox.width / 2.0f - selectedPlayerCharacterButtonBackground.getWidth() / 2.0f + 4.0f;
 	y = 64.0f;
-
-	// place player character button background
 	selectedPlayerCharacterButtonBackground.updatePos(sf::Vector2f(x - 4.0f, y - 4.0f));
 
-	for (auto it = selectedPlayerCharacterButtons.begin(); it != selectedPlayerCharacterButtons.end(); ++it) {
-		it->updatePos(sf::Vector2f(x, y));
-		std::cout << "character of type: " << it->characterType << " positioned at: " << x << std::endl;
-		// move to the right, leaving space between characters
-		x += 32.0f + 4.0f;
-	}
-
 	// place character matchup info section
-	characterInfoDisplay.updatePos(sf::Vector2f(boundingBox.left + 40.0f, boundingBox.top + boundingBox.height / 2 + 32));
+	characterInfoDisplay.updatePos(sf::Vector2f(boundingBox.left + 40.0f, boundingBox.top + boundingBox.height / 2.0f + 32.0f));
 }
 
 
@@ -526,29 +529,15 @@ void LevelMenu::draw(sf::RenderWindow & window, sf::Time elapsedTime)
 	case selecting:
 	{
 		// draw character button backgrounds
-		playerCharacterButtonBackground.draw(window, boundingBox);
-		enemyCharacterButtonBackground.draw(window, boundingBox);
-		selectedPlayerCharacterButtonBackground.draw(window, boundingBox);
-
-
-		// draw player character buttons
-		for (auto it = playerCharacterButtons.begin(); it != playerCharacterButtons.end(); ++it) {
-			it->draw(window, boundingBox);
-			//std::cout << "in levelmenu::draw, charactertype is: " << it->characterType << std::endl;
-		}
-
-		// draw enemy character buttons
-		for (auto it = enemyCharacterButtons.begin(); it != enemyCharacterButtons.end(); ++it) {
-			it->draw(window, boundingBox);
-		}
-
-		// draw selected character buttons
-		for (auto it = selectedPlayerCharacterButtons.begin(); it != selectedPlayerCharacterButtons.end(); ++it) {
-			it->draw(window, boundingBox);
-		}
+		playerCharacterButtonBackground.draw(window, boundingBox, elapsedTime);
+		enemyCharacterButtonBackground.draw(window, boundingBox, elapsedTime);
+		selectedPlayerCharacterButtonBackground.draw(window, boundingBox, elapsedTime);
 
 		// draw character matchup info
 		characterInfoDisplay.draw(window, boundingBox);
+
+		// draw exit button
+		exitButton.draw(window, boundingBox);
 
 		// draw go button
 		goButton.draw(window, boundingBox);
@@ -806,6 +795,7 @@ void LevelMenu::checkMouseDown(sf::Vector2f pos)
 		}
 
 		goButton.checkMouseDown(pos);
+		exitButton.checkMouseDown(pos);
 	}
 	}
 }
@@ -835,6 +825,14 @@ void LevelMenu::checkMouseUp(sf::Vector2f pos)
 		}
 
 		int actionType, actionArg;
+		// check exit button
+		std::tie(actionType, actionArg) = exitButton.checkMouseUp(pos);
+		if (actionType != -1) {
+			done = true;
+			won = false;
+			return;
+		}
+		// check go button
 		std::tie(actionType, actionArg) = goButton.checkMouseUp(pos);
 		if (actionType != -1) {
 			std::cout << "GO GO GO!" << std::endl;

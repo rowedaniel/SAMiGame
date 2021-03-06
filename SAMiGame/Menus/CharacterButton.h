@@ -27,6 +27,8 @@ public:
 
 	void setMatchup(int primaryMatchup, int secondaryMatchup);
 
+	void resetScale();
+
 	int characterType;
 	std::vector<Character>::iterator characterRef;
 

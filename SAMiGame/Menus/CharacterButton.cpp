@@ -97,6 +97,11 @@ void CharacterButton::setMatchup(int primaryMatchup, int secondaryMatchup)
 	secondaryMatchupSprite.setTextureRect(sf::IntRect(secondaryMatchup * 32, 32, 32, 32));
 }
 
+void CharacterButton::resetScale()
+{
+	sprite.setScale(1.0f, 1.0f);
+}
+
 void CharacterButton::loadTextureData()
 {
 	//MenuItem::loadTextureData();

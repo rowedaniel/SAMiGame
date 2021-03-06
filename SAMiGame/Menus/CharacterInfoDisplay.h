@@ -7,7 +7,7 @@
 #include "EffectButton.h"
 
 // TODO: make parent 'clickable' class. Also, consider adding more parent classes.
-class CharacterInfoDisplay : MenuItem
+class CharacterInfoDisplay : public MenuItem
 {
 public:
 	CharacterInfoDisplay();

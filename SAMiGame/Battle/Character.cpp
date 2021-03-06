@@ -72,7 +72,7 @@ void Character::loadFileData(LoadInfo & loadInfo)
 {
 	levelFactor = (loadInfo.level * 1.0f) / 100.0f;
 	// TODO: testing only, change this later
-	cooldownTimer = 0;// secondary_effect_cooldown;
+	cooldownTimer = secondary_effect_cooldown;
 }
 
 void Character::loadTextureData()
@@ -106,6 +106,7 @@ void Character::updatePos(sf::Vector2f pos)
 }
 
 
+
 void Character::updateItemPos()
 {
 	float x = (playerOwned - 1.0f) * 64.0f + 16.0f;
@@ -117,6 +118,14 @@ void Character::updateItemPos()
 	}
 }
 
+
+
+
+
+sf::FloatRect Character::getBounds()
+{
+	return sprite.getGlobalBounds();
+}
 
 
 

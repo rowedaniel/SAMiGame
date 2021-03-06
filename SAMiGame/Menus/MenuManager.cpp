@@ -65,77 +65,135 @@ void MenuManager::load(std::istream & file)
 	}
 
 
+	const sf::Vector2f pos = sf::Vector2f(top, left);
+	activeLevel.updatePos(pos);
+	characterSelect.updatePos(pos);
 
-	activeLevel.updatePos(sf::Vector2f(top, left));
 	activeMenu = menus.begin();
 }
 
 void MenuManager::draw(sf::RenderWindow & window, sf::Time elapsedTime)
 {
 	// TODO: figure out how to do this without the ugly if's
-	if (inLevel) {
-		activeLevel.draw(window, elapsedTime);
-	}
-	else {
+	switch (state)
+	{
+	case InMenu:
+	{
 		activeMenu->draw(window);
+		break;
+	}
+	case InLevel:
+	{
+		activeLevel.draw(window, elapsedTime);
+		break;
+	}
+	case InCharacterSelect:
+	{
+		characterSelect.draw(window, elapsedTime);
+		break;
+	}
 	}
 }
 
 void MenuManager::checkMouseDown(sf::Vector2f pos)  // checks for buttons being clicked
 {
 
-	// TODO: figure out how to do this without the ugly if's
-	if (inLevel) {
-		activeLevel.checkMouseDown(pos);
-	}
-	else {
+	switch (state)
+	{
+	case InMenu:
+	{
 		activeMenu->checkMouseDown(pos);
+		break;
+	}
+	case InLevel:
+	{
+		activeLevel.checkMouseDown(pos);
+		break;
+	}
+	case InCharacterSelect:
+	{
+		characterSelect.checkMouseDown(pos);
+		break;
+	}
 	}
 }
 
 
 void MenuManager::checkMouseUp(sf::Vector2f pos)  // checks for buttons being clicked
 {
-	int actionType, actionArg;
-	// TODO: figure out how to do this without the ugly if's
-	if (inLevel) {
+	switch (state)
+	{
+	case InMenu:
+	{
+		int actionType, actionArg;
+		std::tie(actionType, actionArg) = activeMenu->checkMouseUp(pos);
+		std::cout << "recieved actionType: " << actionType << ", actionArg: " << actionArg << std::endl;
+		executeButton(actionType, actionArg);
+		break;
+	}
+	case InLevel:
+	{
 		//std::tie(actionType, actionArg) = activeLevel.checkMouseUp(pos);
 		// TODO: make this work. For now, just run it.
 		activeLevel.checkMouseUp(pos);
 		if (activeLevel.isDone()) {
 			stopLevel();
 		}
-		return;
+		break;
 	}
-	else {
-		std::tie(actionType, actionArg) = activeMenu->checkMouseUp(pos);
+	case InCharacterSelect:
+	{
+		characterSelect.checkMouseUp(pos);
+		if (characterSelect.isDone()) {
+			// TOOD: stop character select here
+			state = InMenu;
+		}
 	}
-	std::cout << "recieved actionType: " << actionType << ", actionArg: " << actionArg << std::endl;
-	executeButton(actionType, actionArg);
+	}
 }
 
 void MenuManager::checkMouseMove(sf::Vector2f pos)
 {
-	// TODO: figure out how to do this without the ugly if's
-	if (inLevel) {
-		activeLevel.checkMouseMove(pos);
-	}
-	else {
+	switch(state)
+	{
+	case InMenu:
+	{
 		activeMenu->checkMouseMove(pos);
+		break;
+	}
+	case InLevel:
+	{
+		activeLevel.checkMouseMove(pos);
+		break;
+	}
+	case InCharacterSelect:
+	{
+		characterSelect.checkMouseMove(pos);
+		break;
+	}
 	}
 }
 
 void MenuManager::executeButton(int actionType, int actionArg)
 {
+	if (state != InMenu) {
+		// no buttoning unless in menus!
+		return;
+	}
 	switch (static_cast<MenuManager::ActionType>(actionType)) {
-	case MenuManager::Swapmenu:
+	case Swapmenu:
 	{
 		swapMenus(actionArg);
 		break;
 	}
-	case MenuManager::StartLevel:
+	case StartLevel:
 	{
 		startLevel(actionArg);
+		break;
+	}
+	case StartCharacterSelect:
+	{
+		startCharacterSelect(actionArg);
 		break;
 	}
 	}
@@ -143,8 +201,8 @@ void MenuManager::executeButton(int actionType, int actionArg)
 
 void MenuManager::swapMenus(int id)
 {
-	if (inLevel) {
-		std::cout << "Tried to swap menus while still in level. Not sure how to handle this." << std::endl;
+	if (state != InMenu) {
+		std::cout << "Tried to swap menus while not in menu. Not sure how to handle this." << std::endl;
 	}
 	for (auto it = menus.begin(); it != menus.end(); ++it) {
 		if (it->id == id) {
@@ -160,14 +218,15 @@ void MenuManager::swapMenus(int id)
 
 void MenuManager::startLevel(int id)
 {
-
+	// TODO: unload all the unnecessary level stuff when starting level
 	if (activeLevel.load(id)) {
-		inLevel = true;
+		state = InLevel;
 	}
 }
 
 void MenuManager::stopLevel()
 {
+	// TODO: load all the level stuff when ending level
 	// unlock new levels and stuff
 	const int buttonId = activeLevel.getButtonToUnlock();
 	if(buttonId != 0){
@@ -177,7 +236,15 @@ void MenuManager::stopLevel()
 	}
 
 	activeLevel.unload();
-	inLevel = false;
+	state = InMenu;
+}
+
+void MenuManager::startCharacterSelect(int numberOfCharacters)
+{
+	if (characterSelect.load(numberOfCharacters)) {
+		std::cout << "starting character select" << std::endl;
+		state = InCharacterSelect;
+	}
 }
 
 void MenuManager::getFileLineData(int i, std::string line, LoadInfo & loadInfo)
