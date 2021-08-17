@@ -29,7 +29,7 @@ Menu System:                                   [In Progress]-
   - Locked Buttons                             [In Progress]
       - only unlock under certain conditions   [Done]
           - unlock when level is beaten        [Done]
-      - Animation/graphic for locked/unlocked  [Not Started]-
+      - Animation/graphic for locked/unlocked  [Done]
       - Save different templates               [Not Started]-
   - Figure out how to leave/restart level      [Done]
   - Button locked/unlocked state can be saved  [Done]
@@ -45,6 +45,7 @@ Battle System:                                 [Done]
       - health                                 
           - decide where to keep track of it   
       - make attack take effects into account
+  - animation movement keyframes               [Not Started]
   
   - secondary effect system:                   [In Progress]+
       - every character has a list of effects, [Done]
@@ -65,7 +66,8 @@ Battle System:                                 [Done]
       - display inactive effect description    [Done]
       - display active character effects       [Done]
       - display active player effects          [Done]
-      - improve opponent AI                    [Not Started]+
+      - improve opponent AI                    [In Progress]+
+          - not random?
   
   - win/loss system:                           [In Progress]+
       - when you win, unlock stuff             [Done]
@@ -75,15 +77,19 @@ Battle System:                                 [Done]
 Character System:                              [In Progress]+
   - Character Templates                        [In Progress]+
   - Characters                                 [In Progress]+
-  - Switching characters:                      [In Progress]-
+  - Switching characters:                      [In Progress]+
       - Menu interactions                      [Done]
-      - Change gamestate stuff                 [Done
+      - Change gamestate stuff                 [Done]
       - Display character buttons              [Done]
       - Display character info                 [Done]
       - Display character sprite               [Done]
       - Choose characters                      [Done]
+      - Display additional info                [In Progress]+
+          - Level                              [Done]
+          - XP                                 [Not Started]+
+          - Description?                       [Not Started]+
   - Items                                      [Not Started]-
-  - Level up system                            [Not Started]+
+  - Level up system                            [Done]
 
 
 Levels:                                        [In Progress]+

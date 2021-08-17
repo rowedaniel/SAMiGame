@@ -58,9 +58,10 @@ void LockableMenuButton::getFileLineData(int i, std::string line, LoadInfo & loa
 void LockableMenuButton::loadFileData(LoadInfo & loadInfo)
 {
 	MenuButton::loadFileData(loadInfo.oldInfo);
+	unlockedColor = background.getFillColor();
 	id = loadInfo.id;
 	if (id != -1) {
-		locked = true;
+		lock();
 	}
 }
 
@@ -92,12 +93,13 @@ std::tuple<int, int> LockableMenuButton::checkMouseUp(sf::Vector2f pos) {
 void LockableMenuButton::lock()
 {
 	// TODO: put lock/unlock image distinctions
-
+	background.setFillColor(lockedColor);
 	locked = true;
 }
 
 void LockableMenuButton::unlock()
 {
+	background.setFillColor(unlockedColor);
 	locked = false;
 }
 

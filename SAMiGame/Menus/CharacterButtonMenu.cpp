@@ -67,7 +67,7 @@ void CharacterButtonMenu::updateItemPos()
 
 void CharacterButtonMenu::scrollCharacter(int numberOfCharacters)
 {
-	const float w = (*characterRefs.begin())->getWidth();
+	const float w = (float)(*characterRefs.begin())->getWidth();
 	targetCharacterOffset -= numberOfCharacters * w;
 	// don't go too far to the left or right
 	targetCharacterOffset = std::min(0.0f, targetCharacterOffset);

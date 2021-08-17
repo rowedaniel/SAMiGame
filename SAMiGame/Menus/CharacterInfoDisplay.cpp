@@ -19,7 +19,8 @@ void CharacterInfoDisplay::setCharacterData(std::vector<Character>::iterator sou
 	// display various character stats
 	characterName.setText(sourceCharacter->name);
 	// TODO: figure out how to display actual effect info
-	characterAttack.setText("Attack: " + std::to_string((int)std::round(sourceCharacter->getAttack())) + 
+	characterAttack.setText("Level: " + std::to_string(sourceCharacter->getLevel()) + \
+							"   Attack: " + std::to_string((int)std::round(sourceCharacter->getAttack())) + 
 							"   Effect cooldown: " + std::to_string(sourceCharacter->getEffectCooldown())
 							);
 

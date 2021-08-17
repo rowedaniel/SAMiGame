@@ -16,6 +16,11 @@ void Game::start(void)
 	}
 
 
+	// seed random
+	// TODO: make separate random thing
+	srand(424242);
+
+
 	gameState = Game::Playing;
 
 

@@ -59,8 +59,8 @@ GO
 // what to unlock on win
 11
 // enemy health
-1000.0f
+40.0f
 // 1 Characters
 2
-1
-1
+3
+2

@@ -15,6 +15,63 @@ Player::~Player()
 {
 }
 
+void Player::load(std::istream & file)
+{
+	Player::LoadInfo loadInfo;
+
+	// load main text file
+	std::string line;
+	int i = 0;
+	while (getline(file, line)) {
+		if (line.substr(0, 2) == "//") {
+			continue;
+		}
+		getFileLineData(++i, line, loadInfo);
+	}
+
+	loadFileData(loadInfo);
+}
+
+
+void Player::getFileLineData(int i, std::string & line, LoadInfo & loadInfo)
+{
+	switch (i)
+	{
+	case 1:
+	{
+		// TODO: make this safer for crashes
+		loadInfo.maxHealth = std::stof(line);
+		break;
+	}
+	case 2:
+	{
+		loadInfo.currentHealth = std::stof(line);
+		break;
+	}
+	}
+}
+
+void Player::loadFileData(LoadInfo & loadInfo)
+{
+	maxHealth = loadInfo.maxHealth;
+	if (loadInfo.currentHealth == -1.0f) {
+		setHealth(maxHealth);
+	}
+	else {
+		setHealth(loadInfo.currentHealth);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
 float Player::getHealth()
 {
 	return health;

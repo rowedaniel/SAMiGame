@@ -53,16 +53,16 @@ menus = (
     # World 1 menu
     MenuBuilder.Menu(*mainMenuSize, *world1Color, 1, mainMenuDirection,
         (
-            MenuBuilder.Text(*menuTextSize, *menuTextColor, menuTextFontSize, 'World 1'),
+            MenuBuilder.Text(*menuTextSize, *menuTextColor, menuTextFontSize, 'Balance'),
         ),
         (
-            MenuBuilder.Button(*mainMenuButtonSize, *world1ButtonColor, buttonFontSize, 'Play', 0, 10),
+            MenuBuilder.Button(*mainMenuButtonSize, *world1ButtonColor, buttonFontSize, 'Play', 0, 10, 1),
         ),
         (
             MenuBuilder.Menu(*subMenuSize, *world1SubmenuColor, 0, 0,
                 (),
                 (
-                    MenuBuilder.Button(*subMenuButtonSize, *world1ButtonColor, buttonFontSize, 'Next', 0, 2, 1),
+                    MenuBuilder.Button(*subMenuButtonSize, *world1ButtonColor, buttonFontSize, 'Next', 0, 2, 2),
                     MenuBuilder.Button(*subMenuButtonSize, *world1ButtonColor, buttonFontSize, 'Back', 0, 0),
                 ),
                 ()
@@ -72,7 +72,7 @@ menus = (
     # World 2 menu
     MenuBuilder.Menu(*mainMenuSize, *world2Color, 2, mainMenuDirection,
         (
-            MenuBuilder.Text(*menuTextSize, *menuTextColor, menuTextFontSize, 'World 2'),
+            MenuBuilder.Text(*menuTextSize, *menuTextColor, menuTextFontSize, 'Thinking'),
         ),
         (
             MenuBuilder.Button(*mainMenuButtonSize, *world2ButtonColor, buttonFontSize, 'Play', 0, 20),
@@ -83,7 +83,7 @@ menus = (
                 (
                     MenuBuilder.Button(*subMenuButtonSize, *world2ButtonColor, buttonFontSize, 'Prev', 0, 1),
                     MenuBuilder.Button(*subMenuButtonSize, *world2ButtonColor, buttonFontSize, 'Back', 0, 0),
-                    MenuBuilder.Button(*subMenuButtonSize, *world2ButtonColor, buttonFontSize, 'Next', 0, 3, 2),
+                    MenuBuilder.Button(*subMenuButtonSize, *world2ButtonColor, buttonFontSize, 'Next', 0, 3, 3),
                 ),
                 ()
             ),

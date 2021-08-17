@@ -5,7 +5,8 @@
 | Effect Display              | 5 hours       | 3 hours     |
 | Menu Locking                | 4 hours       | 2 hours     |
 | Character Selection         | 4 hours       | 5 hours     |
-| Character Levelling         | 1 hours       | 
+| Character Levelling         | 1 hours       | 1 hours     |
+| Player levelling            | 1 hours       | 
 | Clean up Code               | 7 hours       | 
 | Fancy Level Things          | 3 hours       | 
 | Finish Kevin Character      | 4 hours       | 
@@ -13,7 +14,7 @@
 +=====================+=================+===================+
 |                     | Recurring Tasks |                   |
 +=====================+=================+===================+
-| Build a Character (10+)     | 7 hours       | 3 hours
+| Build a Character (10+)     | 7 hours       | 4 hours
 | Build a Level (40+)         | 20 min        |
 | Build a World (5+Events)    | 1.5 hours     |
 

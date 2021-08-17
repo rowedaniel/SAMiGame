@@ -35,4 +35,7 @@ private:
 
 	bool locked = true;
 	int id;
+
+	const sf::Color lockedColor = sf::Color(80, 80, 80);
+	sf::Color unlockedColor;
 };

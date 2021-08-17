@@ -59,6 +59,9 @@ public:
 	// for displaying active effects
 	void checkMouseMove(sf::Vector2f pos);
 
+	void updateXp(std::vector<Character> & opponents);
+	int getLevel();
+
 private:
 
 	bool playerOwned = false; // determines if this character is owned by the player, or a CPU
@@ -68,6 +71,7 @@ private:
 	struct LoadInfo
 	{
 		unsigned int level = 0;
+		float xp = 0.0f;
 	};
 
 
@@ -80,7 +84,7 @@ private:
 	void loadFileData(LoadInfo & loadInfo);
 	void loadTextureData();
 
-
+	void updateSpritePos();
 	void updateItemPos();
 
 
@@ -90,9 +94,14 @@ private:
 	sf::IntRect animationRect = sf::IntRect(0, 64*3, 64, 64);
 	sf::Sprite sprite;
 
+	sf::Vector2f position;
+
 	sf::Time animationTime = sf::milliseconds(0);
-	const sf::Time timestep = sf::milliseconds(50);
+	const sf::Time timestep = sf::milliseconds(55);
 	bool animating = false;
+	
+	// used to move sprite around when animating
+	float animationOffset = 0.0f;
 
 
 	
@@ -105,41 +114,8 @@ private:
 
 	int cooldownTimer = 0;
 
-
+	int level;
+	float xp;
 
 
 };
-
-
-
-/* 
-// Old code to load character templates:
-
-// TODO: move this to resource management system?
-std::list<CharacterTemplate> loadedCharacterTemplates;
-std::list<CharacterTemplate>::iterator getCharacterTemplate(int type);
-
-// load Character Templates
-std::set<int> added_character_templates;
-// load templates for player character buttons
-for (std::list<CharacterButton>::iterator it = playerCharacterButtons.begin(); it != playerCharacterButtons.end(); ++it) {
-	if (added_character_templates.find(it->characterType) == added_character_templates.end()) {
-		// new character, add it to template list
-		loadedCharacterTemplates.push_back(CharacterTemplate(it->characterType));
-		loadedCharacterTemplates.back().load();
-		added_character_templates.insert(it->characterType);
-	}
-}
-// load templates for enemy character buttons
-for (std::list<CharacterButton>::iterator it = enemyCharacterButtons.begin(); it != enemyCharacterButtons.end(); ++it) {
-	if (added_character_templates.find(it->characterType) == added_character_templates.end()) {
-		// new character, add it to template list
-		loadedCharacterTemplates.push_back(CharacterTemplate(it->characterType));
-		loadedCharacterTemplates.back().load();
-		added_character_templates.insert(it->characterType);
-	}
-}
-
-
-
-*/

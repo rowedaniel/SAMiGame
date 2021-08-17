@@ -186,7 +186,7 @@ bool CharacterSelect::loadFileData(LoadInfo & loadInfo)
 
 	// load selected character container
 	selectedCharacterButtons.reserve(loadInfo.numberOfOutputCharacters);
-	for (int i = 0; i < loadInfo.numberOfOutputCharacters; ++i) {
+	for (unsigned int i = 0; i < loadInfo.numberOfOutputCharacters; ++i) {
 		selectedCharacterButtons.push_back(CharacterButton());
 	} 
 	// load all selected character buttons

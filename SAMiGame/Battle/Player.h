@@ -9,6 +9,9 @@ public:
 	Player();
 	Player(float maxHealth);
 	~Player();
+	
+	void load(std::istream & file);
+
 
 
 	float getHealth();
@@ -29,6 +32,17 @@ public:
 	void incrementEffectTimer();
 
 private:
+
+	struct LoadInfo
+	{
+	public:
+		float maxHealth = 0.0f;
+		float currentHealth = -1.0f;
+	};
+
+	void getFileLineData(int i, std::string & line, LoadInfo & loadInfo);
+	void loadFileData(LoadInfo & loadInfo);
+
 
 	float maxHealth;
 	float health;

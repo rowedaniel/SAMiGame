@@ -65,13 +65,19 @@ void Character::getFileLineData(int i, std::string & line, LoadInfo & loadInfo)
 		loadInfo.level = std::stoi(line);
 		break;
 	}
+	case 2:
+	{
+		loadInfo.xp = std::stof(line);
+		break;
+	}
 	}
 }
 
 void Character::loadFileData(LoadInfo & loadInfo)
 {
+	level = loadInfo.level;
+	xp = loadInfo.xp;
 	levelFactor = (loadInfo.level * 1.0f) / 100.0f;
-	// TODO: testing only, change this later
 	cooldownTimer = secondary_effect_cooldown;
 }
 
@@ -101,11 +107,17 @@ void Character::loadTextureData()
 
 void Character::updatePos(sf::Vector2f pos)
 {
-	sprite.setPosition(pos);
+	position = pos;
+	updateSpritePos();
 	updateItemPos();
 }
 
 
+
+void Character::updateSpritePos()
+{
+	sprite.setPosition(position + sf::Vector2f(animationOffset, 0.0f));
+}
 
 void Character::updateItemPos()
 {
@@ -113,7 +125,7 @@ void Character::updateItemPos()
 	const float y = 96.0f;
 	const float xIncrement = 32.0f * (playerOwned * 2.0f - 1.0f);
 	for (auto it = activeEffectButtons.begin(); it != activeEffectButtons.end(); ++it) {
-		it->updatePos(sprite.getPosition() + sf::Vector2f(x, y));
+		it->updatePos(position + sf::Vector2f(x, y));
 		x += xIncrement;
 	}
 }
@@ -147,6 +159,10 @@ void Character::draw(sf::RenderWindow & window, sf::FloatRect boundBox, sf::Time
 			}
 			sprite.setTextureRect(animationRect);
 		}
+		// TODO: figure out how to deal with animation movement
+		// TODO: testing only, remove later
+		//animationOffset += 550.0f * elapsedTime.asSeconds() * (playerOwned * 2.0f - 1.0f);
+		updateSpritePos();
 	}
 
 	window.draw(sprite);
@@ -160,6 +176,7 @@ void Character::draw(sf::RenderWindow & window, sf::FloatRect boundBox, sf::Time
 
 void Character::resetAnimation()
 {
+	animationOffset = 0.0f;
 	animationRect.top = animationRect.height * 3;
 	animationRect.left = 0;
 	sprite.setTextureRect(animationRect);
@@ -168,7 +185,7 @@ void Character::resetAnimation()
 
 void Character::startPrimaryAnimation(std::vector<Character>::iterator opponent)
 {
-	// TODO: make this do different animations, instead of just the one
+	animationOffset = 0.0f;
 	animationRect.top = (int)(getPrimaryMatchup(opponent) * animationRect.height);
 	animationRect.left = 0;
 	sprite.setTextureRect(animationRect);
@@ -179,6 +196,7 @@ void Character::startPrimaryAnimation(std::vector<Character>::iterator opponent)
 
 void Character::startSecondaryAnimation(std::vector<Character>::iterator opponent)
 {
+	animationOffset = 0.0f;
 	animationRect.top = animationRect.height*3;
 	animationRect.left = 0;
 	sprite.setTextureRect(animationRect);
@@ -343,4 +361,39 @@ void Character::checkMouseMove(sf::Vector2f pos)
 	for (auto it = activeEffectButtons.begin(); it != activeEffectButtons.end(); ++it) {
 		it->checkMouseMove(pos);
 	}
+}
+
+
+
+
+
+
+
+
+
+
+void Character::updateXp(std::vector<Character>& opponents)
+{
+	for (auto it = opponents.begin(); it != opponents.end(); ++it) {
+		xp += (it->getLevel() * 1.0f) / (level * 1.0f) / 3.0f / std::pow(1.01f, level);
+		if (xp > 1.0f) {
+			xp = 0;
+			level += 1;
+		}
+	}
+
+	// assume player character, because enemies don't level up
+	std::fstream unlockedButtonFile("gamestate/characters/" + std::to_string(type) + ".character", std::ios::out);
+	if (unlockedButtonFile.is_open()) {
+		unlockedButtonFile << std::to_string(level) << std::endl;
+		unlockedButtonFile << std::to_string(xp) << std::endl;
+	}
+	else {
+		std::cout << "error opening file: gamestate/characters/" + std::to_string(type) + ".character";
+	}
+}
+
+int Character::getLevel()
+{
+	return level;
 }

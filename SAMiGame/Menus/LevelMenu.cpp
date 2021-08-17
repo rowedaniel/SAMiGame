@@ -103,6 +103,7 @@ bool LevelMenu::load(int id)
 
 
 
+
 	std::cout << "finished load()" << std::endl;
 	return true;
 }
@@ -334,32 +335,9 @@ bool LevelMenu::loadFileData(LoadInfo & loadInfo)
 		if (file.is_open()) {
 
 
-			std::string line;
-			float playerMaxHealth = 0.0f;
-			float playerHealth;
-
-			// line 1
-			while (getline(file, line)) {
-				if (line.substr(0, 2) == "//") {
-					continue;
-				}
-				playerMaxHealth = std::stof(line);
-				break;
-			}
-
-			// by default, set current health to max health
-			playerHealth = playerMaxHealth;
-
-			// line 2
-			while (getline(file, line)) {
-				if (line.substr(0, 2) == "//") {
-					continue;
-				}
-				playerHealth = std::stof(line);
-				break;
-			}
-			player = Player(playerMaxHealth);
-			player.setHealth(playerHealth);
+			
+			player = Player();
+			player.load(file);
 		}
 	}
 	enemy = Player(loadInfo.enemyHealth);
@@ -382,6 +360,13 @@ bool LevelMenu::loadFileData(LoadInfo & loadInfo)
 void LevelMenu::onWin()
 {
 	won = true;
+
+	// update character xp
+	std::cout << "updating character xp" << std::endl;
+	for (auto it = playerCharacters.begin(); it != playerCharacters.end(); ++it) {
+		it->updateXp(enemyCharacters);
+	}
+
 	{
 		// first, check if the button is already unlocked:
 		std::fstream unlockedButtonFile("gamestate/unlocked.buttons", std::ios::in);
@@ -402,6 +387,7 @@ void LevelMenu::onWin()
 			unlockedButtonFile << std::to_string(winButtonId) << std::endl;
 		}
 	}
+
 
 }
 
@@ -1033,8 +1019,19 @@ void LevelMenu::startAnimationState()
 
 void LevelMenu::chooseEnemyCharacters()
 {
-	latestSelectedEnemyCharacter = selectedEnemyCharacterButtons.begin();
+	// TODO: make smarter AI than this
+	std::vector<std::vector<CharacterButton>::iterator> randomSelection;
+	randomSelection.reserve(enemyCharacterButtons.size());
 	for (auto it = enemyCharacterButtons.begin(); it != enemyCharacterButtons.end(); ++it)
+	{
+		randomSelection.push_back(it);
+	}
+
+	// TODO: implement own random system
+	std::random_shuffle(randomSelection.begin(), randomSelection.end());
+	
+	latestSelectedEnemyCharacter = selectedEnemyCharacterButtons.begin();
+	for (auto it : randomSelection)
 	{
 		latestSelectedEnemyCharacter->setCharacterData(it->characterRef);
 		++latestSelectedEnemyCharacter;
